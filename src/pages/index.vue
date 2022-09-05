@@ -1,15 +1,12 @@
 <template>
-  <div
-    flex="~ wrap"
-    p="x-12 y-10"
-    items="start"
-    justify="around"
-    gap="8"
-    bg="dark-500"
-  ></div>
+  <div bg="dark-500">
+    <FactoryModel></FactoryModel>
+  </div>
 </template>
 
-<script setup></script>
+<script setup>
+import FactoryModel from "~/digital-twin/FactoryModel.vue";
+</script>
 
 <style lang="scss" scoped>
 .router-link {

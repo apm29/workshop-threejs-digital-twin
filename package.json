@@ -1,5 +1,5 @@
 {
-  "name": "workshop-nodered-editor",
+  "name": "workshop-threejs-digital-twin",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -18,12 +18,14 @@
     "lodash": "^4.17.21",
     "nprogress": "^0.2.0",
     "qs": "^6.11.0",
+    "three": "^0.144.0",
     "vue": "2.7.8",
     "vue-router": "3"
   },
   "devDependencies": {
     "@iconify-json/carbon": "^1.1.7",
     "@iconify-json/mdi": "^1.1.7",
+    "@types/three": "^0.144.0",
     "@unocss/reset": "^0.45.6",
     "@vitejs/plugin-legacy": "^2.0.1",
     "@vitejs/plugin-vue2": "^1.1.2",

@@ -1,0 +1,3 @@
+const TOKEN_KEY = "$ATCC_DINGDING_TOKEN_KEY";
+
+export const localToken = useLocalStorage(TOKEN_KEY, "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpblR5cGUiOiJ1c2VyIiwibG9naW5JZCI6IjExMzA0MTQ4MTAyMzkxODQ5NiIsImRldmljZSI6ImRlZmF1bHQtZGV2aWNlIiwiZWZmIjoxNjY0NDI4NjU4MjMyfQ.kSAp6_u2wFewpVAXD85agon-xu06fzOHlJzErQPrO7A");

@@ -1,0 +1,46 @@
+{
+  "name": "workshop-nodered-editor",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "cross-env NODE_OPTIONS=--max-old-space-size=4096 vite build",
+    "buildWTF": "node --max_old_space_size=16384 ./node_modules/vite/bin/vite.js build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@vueuse/core": "^9.1.0",
+    "axios": "^0.27.2",
+    "dayjs": "^1.11.4",
+    "echarts": "^5.3.3",
+    "element-ui": "^2.15.9",
+    "lodash": "^4.17.21",
+    "nprogress": "^0.2.0",
+    "qs": "^6.11.0",
+    "vue": "2.7.8",
+    "vue-router": "3"
+  },
+  "devDependencies": {
+    "@iconify-json/carbon": "^1.1.7",
+    "@iconify-json/mdi": "^1.1.7",
+    "@unocss/reset": "^0.45.6",
+    "@vitejs/plugin-legacy": "^2.0.1",
+    "@vitejs/plugin-vue2": "^1.1.2",
+    "@vue/runtime-dom": "^3.2.37",
+    "cross-env": "^7.0.3",
+    "generate-source-map": "^0.0.5",
+    "jsdom": "^20.0.0",
+    "rollup-plugin-require-context": "^1.0.1",
+    "sass": "^1.54.4",
+    "sass-loader": "^13.0.2",
+    "terser": "^5.4.0",
+    "unocss": "^0.45.6",
+    "unplugin-auto-import": "^0.11.1",
+    "unplugin-vue-components": "^0.22.4",
+    "vite": "^3.0.6",
+    "vite-plugin-pages": "^0.25.0",
+    "vue-demi": "^0.13.8",
+    "webpack": "5"
+  }
+}

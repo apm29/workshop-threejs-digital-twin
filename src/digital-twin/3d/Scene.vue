@@ -21,10 +21,20 @@ import {
   mountSelectListener,
   loadGTLFModel,
 } from "./helpers/core.js";
+import { makeLabel } from "./helpers/label.js";
 //容器
 const sceneWrapper = ref();
 //获取容器宽高
-const { width, height } = useElementSize(sceneWrapper);
+const { width: wrapperWidth, height: wrapperHeight } = useElementSize(sceneWrapper);
+
+const cameraRef = ref();
+const sceneRef = ref();
+const rendererRef = ref();
+const selectableGroupRef = ref();
+const composerRef = ref();
+const effectFXAARef = ref();
+
+const emit = defineEmits(["object:selected"]);
 
 let generated = false;
 //等元素挂载后,获取宽高完成时,生成scene,camera
@@ -73,7 +83,8 @@ function generateSceneAndCamera(height, width) {
     renderer,
     composer,
     height,
-    width
+    width,
+    emit
   );
 
   loadGTLFModel("/model/回转窑-20220904.glb").then((gltf) => {
@@ -84,34 +95,43 @@ function generateSceneAndCamera(height, width) {
         child.name = "回转窑";
       }
     });
+    const text = makeLabel(
+      {
+        x: 1,
+        y: 5,
+        z: -15,
+      },
+      "回转窑"
+    );
+    scene.add(text);
   });
   loadGTLFModel("/model/窑尾箱-20220904.glb").then((gltf) => {
     selectableGroup.add(gltf.scene);
+    gltf.scene.position.z = 10;
     gltf.scene.traverse(function (child) {
       if (child instanceof THREE.Mesh) {
         child.castShadow = true;
         child.name = "窑尾箱";
-        gltf.scene.position.z = 10;
       }
     });
+    const text = makeLabel(
+      {
+        x: 1,
+        y: 5,
+        z: 10,
+      },
+      "窑尾箱"
+    );
+    scene.add(text);
   });
 
+  sceneRef.value = scene;
+  cameraRef.value = camera;
+  rendererRef.value = renderer;
+  selectableGroupRef.value = selectableGroup;
+  composerRef.value = composer;
+  effectFXAARef.value = effectFXAA;
   generated = true;
-
-  window.document.addEventListener("resize", handleResizeWrapper);
-  //宽高变化
-  function handleResizeWrapper() {
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-
-    renderer.setSize(width, height);
-    composer.setSize(width, height);
-
-    effectFXAA.uniforms["resolution"].value.set(
-      1 / window.innerWidth,
-      1 / window.innerHeight
-    );
-  }
 
   function animate() {
     requestAnimationFrame(animate);
@@ -124,11 +144,32 @@ function generateSceneAndCamera(height, width) {
   animate();
 }
 
+//宽高变化
+function handleResizeWrapper() {
+  const width = wrapperWidth.value;
+  const height = wrapperHeight.value;
+  const camera = cameraRef.value;
+  const renderer = rendererRef.value;
+  const composer = composerRef.value;
+  const effectFXAA = effectFXAARef.value;
+
+  camera.aspect = width / height;
+  camera.updateProjectionMatrix();
+
+  renderer.setSize(width, height);
+  composer.setSize(width, height);
+
+  effectFXAA.uniforms["resolution"].value.set(1 / width, 1 / height);
+}
+
+const throttledResize = useDebounceFn(handleResizeWrapper, 500);
 //监听宽高
-watch([height, width], ([height, width]) => {
+watch([wrapperHeight, wrapperWidth], ([height, width]) => {
   if (height && width) {
     if (!generated) {
       generateSceneAndCamera(height, width);
+    } else {
+      throttledResize();
     }
   }
 });

@@ -231,7 +231,7 @@ export function createPostProcess(scene, camera, renderer, height, width) {
   };
 }
 
-export function mountSelectListener(scene, camera, renderer, composer, height, width) {
+export function mountSelectListener(scene, camera, renderer, composer, height, width, emit) {
   const outlinePass = new OutlinePass(new THREE.Vector2(width, height), scene, camera);
   outlinePass.visibleEdgeColor.set("#ff5500");
   outlinePass.hiddenEdgeColor.set("#303030");
@@ -284,7 +284,6 @@ export function mountSelectListener(scene, camera, renderer, composer, height, w
 
   function onObjectSelect(event) {
     // if (event.isPrimary === false) return;
-
     mouse.x = (event.clientX / width) * 2 - 1;
     mouse.y = -(event.clientY / height) * 2 + 1;
 
@@ -294,10 +293,11 @@ export function mountSelectListener(scene, camera, renderer, composer, height, w
 
     if (intersects.length > 0) {
       const selectedObject = intersects[0].object;
-      console.log("选择:", selectedObject);
       outlinePass.selectedObjects = [selectedObject];
+      emit("object:selected", selectedObject)
     } else {
-      // outlinePass.selectedObjects = [];
+      outlinePass.selectedObjects = [];
+      emit("object:unselected")
     }
   }
 

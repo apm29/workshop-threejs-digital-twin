@@ -16,6 +16,7 @@ import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { TextGeometry } from "three/addons/geometries/TextGeometry.js";
 import { FontLoader } from "three/addons/loaders/FontLoader.js";
+import { Sky } from "three/addons/objects/Sky.js";
 //容器
 const sceneWrapper = ref();
 //获取容器宽高
@@ -25,14 +26,20 @@ let generated = false;
 //等元素挂载后,获取宽高完成时,生成scene,camera
 function generateSceneAndCamera(height, width) {
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+  scene.background = new THREE.Color().setHSL(0.6, 0, 1);
+  scene.fog = new THREE.Fog(scene.background, 1, 5000);
 
-  const renderer = new THREE.WebGLRenderer();
+  const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 5000);
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.shadowMap.enabled = true;
+  renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(width, height);
+  renderer.outputEncoding = THREE.sRGBEncoding;
   sceneWrapper.value.appendChild(renderer.domElement);
 
-  scene.add(new THREE.AxesHelper(20));
+  const axesHelper = new THREE.AxesHelper(20);
+  axesHelper.position.y = 0.1;
+  scene.add(axesHelper);
 
   const materials = [
     new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true }), // front
@@ -74,7 +81,7 @@ function generateSceneAndCamera(height, width) {
     const textMeshZ = new THREE.Mesh(textZGeo, materials);
 
     textMeshX.position.x = 20;
-    textMeshX.position.y = 0;
+    textMeshX.position.y = 0.5;
     textMeshX.position.z = 0;
 
     textMeshX.rotation.x = 0;
@@ -98,24 +105,86 @@ function generateSceneAndCamera(height, width) {
     scene.add(textMeshY);
     scene.add(textMeshZ);
   });
+  //LIGHTS
+  const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6);
+  hemiLight.color.setHSL(0.6, 1, 0.6);
+  hemiLight.groundColor.setHSL(0.095, 1, 0.75);
+  hemiLight.position.set(0, 50, 0);
+  hemiLight.visible = true;
+  scene.add(hemiLight);
 
-  scene.add(new THREE.AmbientLight(0xaaaaaa, 0.2));
-  const light = new THREE.DirectionalLight(0xddffdd, 0.6);
-  light.position.set(1, 1, 1);
-  light.castShadow = true;
-  light.shadow.mapSize.width = 1024;
-  light.shadow.mapSize.height = 1024;
+  // const hemiLightHelper = new THREE.HemisphereLightHelper(hemiLight, 10);
+  // scene.add(hemiLightHelper);
 
-  const d = 10;
+  const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+  dirLight.color.setHSL(0.1, 1, 0.95);
+  dirLight.position.set(-1, 1.75, 1);
+  dirLight.position.multiplyScalar(30);
+  dirLight.visible = true;
+  scene.add(dirLight);
 
-  light.shadow.camera.left = -d;
-  light.shadow.camera.right = d;
-  light.shadow.camera.top = d;
-  light.shadow.camera.bottom = -d;
-  light.shadow.camera.far = 1000;
+  dirLight.castShadow = true;
+  dirLight.shadow.mapSize.width = 2048;
+  dirLight.shadow.mapSize.height = 2048;
 
-  scene.add(light);
+  const d2 = 50;
 
+  dirLight.shadow.camera.left = -d2;
+  dirLight.shadow.camera.right = d2;
+  dirLight.shadow.camera.top = d2;
+  dirLight.shadow.camera.bottom = -d2;
+
+  dirLight.shadow.camera.far = 3500;
+  dirLight.shadow.bias = 0;
+
+  // const dirLightHelper = new THREE.DirectionalLightHelper(dirLight, 10);
+  // scene.add(dirLightHelper);
+
+  //GROUND
+  const groundGeo = new THREE.PlaneGeometry(5000, 5000);
+  const groundMat = new THREE.MeshLambertMaterial({ color: 0xffffff });
+  groundMat.color.setHSL(0.095, 1, 0.75);
+
+  const ground = new THREE.Mesh(groundGeo, groundMat);
+  ground.position.y = -0;
+  ground.rotation.x = -Math.PI / 2;
+  ground.receiveShadow = true;
+  scene.add(ground);
+
+  const helper = new THREE.GridHelper(10000, 200);
+  helper.position.y = -0;
+  helper.material.opacity = 0.25;
+  helper.material.transparent = true;
+  // scene.add(helper);
+
+  //SKY;
+  const uniforms = {
+    topColor: { value: new THREE.Color(0x0077ff) },
+    bottomColor: { value: new THREE.Color(0xffffff) },
+    offset: { value: 33 },
+    exponent: { value: 0.6 },
+  };
+  uniforms["topColor"].value.copy(hemiLight.color);
+
+  scene.fog.color.copy(uniforms["bottomColor"].value);
+
+  const skyGeo = new THREE.SphereGeometry(4000, 32, 16);
+  const skyMat = new THREE.ShaderMaterial({
+    uniforms: uniforms,
+    vertexShader: `varying vec3 vWorldPosition; void main() { vec4 worldPosition = modelMatrix * vec4(
+      position, 1.0 ); vWorldPosition = worldPosition.xyz; gl_Position = projectionMatrix
+      * modelViewMatrix * vec4( position, 1.0 ); }`,
+    fragmentShader: ` uniform vec3 topColor; uniform vec3 bottomColor; uniform float offset; uniform float
+      exponent; varying vec3 vWorldPosition; void main() { float h = normalize(
+      vWorldPosition + offset ).y; gl_FragColor = vec4( mix( bottomColor, topColor, max(
+      pow( max( h , 0.0), exponent ), 0.0 ) ), 1.0 ); }`,
+    side: THREE.BackSide,
+  });
+
+  const sky = new THREE.Mesh(skyGeo, skyMat);
+  scene.add(sky);
+
+  //CONTROL
   const controls = new OrbitControls(camera, renderer.domElement);
 
   controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
@@ -141,12 +210,12 @@ function generateSceneAndCamera(height, width) {
   composer.addPass(renderPass);
 
   const outlinePass = new OutlinePass(new THREE.Vector2(width, height), scene, camera);
+  outlinePass.visibleEdgeColor.set("#ff5500");
+  outlinePass.hiddenEdgeColor.set("#303030");
+  outlinePass.edgeStrength = 10;
+  outlinePass.edgeGlow = 0;
+  outlinePass.edgeThickness = 1;
   composer.addPass(outlinePass);
-  outlinePass.visibleEdgeColor.set("#ffffff");
-  outlinePass.hiddenEdgeColor.set("#190a05");
-  outlinePass.edgeStrength = 2;
-  outlinePass.edgeGlow = 1;
-  outlinePass.edgeThickness = 2;
 
   const effectFXAA = new ShaderPass(FXAAShader);
   effectFXAA.uniforms["resolution"].value.set(1 / width, 1 / height);
@@ -168,7 +237,6 @@ function generateSceneAndCamera(height, width) {
 
       gltf.scene.traverse(function (child) {
         if (child instanceof THREE.Mesh) {
-          child.receiveShadow = true;
           child.castShadow = true;
           child.name = "回转窑";
         }
@@ -186,9 +254,8 @@ function generateSceneAndCamera(height, width) {
       gltf.scene.position.z = 10;
       gltf.scene.traverse(function (child) {
         if (child instanceof THREE.Mesh) {
-          child.receiveShadow = true;
           child.castShadow = true;
-          child.name = "回转窑";
+          child.name = "窑尾箱";
         }
       });
     },
@@ -204,6 +271,13 @@ function generateSceneAndCamera(height, width) {
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
   });
+
+  const geometry = new THREE.BoxGeometry(1, 1, 1);
+  const torusMaterial = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
+  const cube = new THREE.Mesh(geometry, torusMaterial);
+  cube.castShadow = true;
+  cube.position.y = 0.5;
+  obj3d.add(cube);
 
   scene.add(group);
 
@@ -227,7 +301,7 @@ function generateSceneAndCamera(height, width) {
 
     raycaster.setFromCamera(mouse, camera);
 
-    const intersects = raycaster.intersectObject(scene, true);
+    const intersects = raycaster.intersectObject(obj3d, true);
 
     if (intersects.length > 0) {
       const selectedObject = intersects[0].object;

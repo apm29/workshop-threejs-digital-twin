@@ -34,9 +34,31 @@ const selectableGroupRef = ref();
 const composerRef = ref();
 const effectFXAARef = ref();
 
+provide("getCamera", () => cameraRef.value);
+provide("getScene", () => sceneRef.value);
+provide("getRenderer", () => rendererRef.value);
+provide("getSelectableGroup", () => selectableGroupRef.value);
+provide("getComposer", () => composerRef.value);
+provide("getEffectFXAA", () => effectFXAARef.value);
+
 const emit = defineEmits(["object:selected"]);
 
+const sceneCreatedListeners = [];
+provide("registerSceneReadyCallback", function (callback) {
+  if (
+    callback &&
+    callback instanceof Function &&
+    sceneCreatedListeners.indexOf(callback) < 0
+  ) {
+    sceneCreatedListeners.push(callback);
+    if (generated) {
+      callback();
+    }
+  }
+});
+
 let generated = false;
+
 //等元素挂载后,获取宽高完成时,生成scene,camera
 function generateSceneAndCamera(height, width) {
   const scene = createScene();
@@ -86,45 +108,6 @@ function generateSceneAndCamera(height, width) {
     width,
     emit
   );
-
-  loadGTLFModel("/model/回转窑-20220904.glb").then((gltf) => {
-    selectableGroup.add(gltf.scene);
-    gltf.scene.traverse(function (child) {
-      if (child instanceof THREE.Mesh) {
-        child.castShadow = true;
-        child.name = "回转窑";
-      }
-    });
-    const text = makeLabel(
-      {
-        x: 1,
-        y: 5,
-        z: -15,
-      },
-      "回转窑"
-    );
-    scene.add(text);
-  });
-  loadGTLFModel("/model/窑尾箱-20220904.glb").then((gltf) => {
-    selectableGroup.add(gltf.scene);
-    gltf.scene.position.z = 10;
-    gltf.scene.traverse(function (child) {
-      if (child instanceof THREE.Mesh) {
-        child.castShadow = true;
-        child.name = "窑尾箱";
-      }
-    });
-    const text = makeLabel(
-      {
-        x: 1,
-        y: 5,
-        z: 10,
-      },
-      "窑尾箱"
-    );
-    scene.add(text);
-  });
-
   sceneRef.value = scene;
   cameraRef.value = camera;
   rendererRef.value = renderer;
@@ -132,6 +115,8 @@ function generateSceneAndCamera(height, width) {
   composerRef.value = composer;
   effectFXAARef.value = effectFXAA;
   generated = true;
+  //触发场景生成完成的回调
+  sceneCreatedListeners.forEach((callback) => callback());
 
   function animate() {
     requestAnimationFrame(animate);
@@ -173,6 +158,15 @@ watch([wrapperHeight, wrapperWidth], ([height, width]) => {
     }
   }
 });
+
+//摄像机
+function setCameraPosition() {
+  const camera = cameraRef.value;
+  camera.position.x = 30;
+  camera.position.y = 30;
+  camera.position.z = 50;
+}
+provide("setCameraPosition", setCameraPosition);
 </script>
 
 <style lang="scss" scoped></style>

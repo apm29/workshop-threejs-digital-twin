@@ -150,9 +150,18 @@ export function createLight(scene) {
 }
 
 export function createGround(scene) {
+  const grassTexture = new THREE.TextureLoader().load('/textures/grass.jpeg');
+  grassTexture.wrapS = grassTexture.wrapT = THREE.RepeatWrapping;
+  grassTexture.encoding = THREE.sRGBEncoding;
+  //texture重复次数,5000 / 200 每张素材250 * 250 像素
+  grassTexture.repeat.set(200, 200);
+  grassTexture.anisotropy = 16;
   //GROUND
   const groundGeo = new THREE.PlaneGeometry(5000, 5000);
-  const groundMat = new THREE.MeshLambertMaterial({ color: 0xffffff });
+  const groundMat = new THREE.MeshBasicMaterial({
+    map: grassTexture,
+    //color: 0xffffff,
+  });
   groundMat.color.setHSL(0.095, 1, 0.75);
 
   const ground = new THREE.Mesh(groundGeo, groundMat);
@@ -174,8 +183,7 @@ export function createGround(scene) {
 export function createSky(scene) {
   const uniforms = {
     topColor: { value: new THREE.Color(0x0077ff) },
-    bottomColor: { value: new THREE.Color(0xffffff) },
-    offset: { value: 33 },
+    bottomColor: { value: new THREE.Color(0xffffff) }, offset: { value: 33 },
     exponent: { value: 0.6 },
   };
   uniforms["topColor"].value.copy(new THREE.Color().setHSL(0.6, 1, 0.6));

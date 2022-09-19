@@ -1,8 +1,8 @@
 import * as THREE from "three";
-const ctx = document.createElement('canvas').getContext('2d');
-const labelGeometry = new THREE.PlaneGeometry(1, 1);
+
+// const labelGeometry = new THREE.PlaneGeometry(1, 1);
 export function makeLabel({ x, y, z }, name, size = 100) {
-  console.log(x, y, z);
+  const ctx = document.createElement('canvas').getContext('2d');
   const borderSize = 3;
   const font = `${size}px bold sans-serif`;
   ctx.font = font;

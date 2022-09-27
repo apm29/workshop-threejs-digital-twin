@@ -12,9 +12,11 @@
   "dependencies": {
     "@vueuse/core": "^9.1.0",
     "axios": "^0.27.2",
+    "dat.gui": "^0.7.9",
     "dayjs": "^1.11.4",
     "echarts": "^5.3.3",
     "element-ui": "^2.15.9",
+    "lil-gui": "^0.17.0",
     "lodash": "^4.17.21",
     "nprogress": "^0.2.0",
     "qs": "^6.11.0",

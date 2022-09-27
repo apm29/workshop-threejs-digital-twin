@@ -11,11 +11,13 @@ specifiers:
   '@vueuse/core': ^9.1.0
   axios: ^0.27.2
   cross-env: ^7.0.3
+  dat.gui: ^0.7.9
   dayjs: ^1.11.4
   echarts: ^5.3.3
   element-ui: ^2.15.9
   generate-source-map: ^0.0.5
   jsdom: ^20.0.0
+  lil-gui: ^0.17.0
   lodash: ^4.17.21
   nprogress: ^0.2.0
   qs: ^6.11.0
@@ -37,9 +39,11 @@ specifiers:
 dependencies:
   '@vueuse/core': registry.npmmirror.com/@vueuse/core/9.1.0_vue@2.7.8
   axios: registry.npmmirror.com/axios/0.27.2
+  dat.gui: registry.npmmirror.com/dat.gui/0.7.9
   dayjs: registry.npmmirror.com/dayjs/1.11.4
   echarts: registry.npmmirror.com/echarts/5.3.3
   element-ui: registry.npmmirror.com/element-ui/2.15.9_vue@2.7.8
+  lil-gui: registry.npmmirror.com/lil-gui/0.17.0
   lodash: registry.npmmirror.com/lodash/4.17.21
   nprogress: registry.npmmirror.com/nprogress/0.2.0
   qs: registry.npmmirror.com/qs/6.11.0
@@ -1168,6 +1172,12 @@ packages:
     resolution: {integrity: sha512-uX1KG+x9h5hIJsaKR9xHUeUraxf8IODOwq9JLNPq6BwB04a/xgpq3rcx47l5BZu5zBPlgD342tdke3Hom/nJRA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/csstype/-/csstype-3.1.0.tgz}
     name: csstype
     version: 3.1.0
+
+  registry.npmmirror.com/dat.gui/0.7.9:
+    resolution: {integrity: sha512-sCNc1OHobc+Erc1HqiswYgHdVNpSJUlk/Hz8vzOCsER7rl+oF/4+v8GXFUyCgtXpoCX6+bnmg07DedLvBLwYKQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/dat.gui/-/dat.gui-0.7.9.tgz}
+    name: dat.gui
+    version: 0.7.9
+    dev: false
 
   registry.npmmirror.com/data-urls/3.0.2:
     resolution: {integrity: sha512-Jy/tj3ldjZJo63sVAvg6LHt2mHvl4V6AgRAmNDtLdm7faqtsx+aJG42rsyCo9JCoRVKwPFzKlIPx3DIibwSIaQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/data-urls/-/data-urls-3.0.2.tgz}
@@ -2403,6 +2413,12 @@ packages:
       prelude-ls: registry.npmmirror.com/prelude-ls/1.1.2
       type-check: registry.npmmirror.com/type-check/0.3.2
     dev: true
+
+  registry.npmmirror.com/lil-gui/0.17.0:
+    resolution: {integrity: sha512-MVBHmgY+uEbmJNApAaPbtvNh1RCAeMnKym82SBjtp5rODTYKWtM+MXHCifLe2H2Ti1HuBGBtK/5SyG4ShQ3pUQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/lil-gui/-/lil-gui-0.17.0.tgz}
+    name: lil-gui
+    version: 0.17.0
+    dev: false
 
   registry.npmmirror.com/loader-runner/4.3.0:
     resolution: {integrity: sha512-3R/1M+yS3j5ou80Me59j7F9IMs4PXs3VqRrm0TU3AbKPxlmpoY1TNscJV/oGJXo8qCatFGTfDbY6W6ipGOYXfg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/loader-runner/-/loader-runner-4.3.0.tgz}

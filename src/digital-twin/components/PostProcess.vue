@@ -21,23 +21,25 @@ const scene = inject(SceneInjectKey)
 
 const composer = new EffectComposer(renderer);
 const effectFXAA = new ShaderPass(FXAAShader);
+const renderPass = new RenderPass(scene, camera);
 
+
+function handleSizeChange(width, height) {
+  composer.setSize(width, height);
+  effectFXAA.uniforms["resolution"].value.set(1 / width, 1 / height);
+}
 onMounted(() => {
   const width = widthRef.value;
   const height = heightRef.value;
 
-  composer.setSize(width, height);
-  const renderPass = new RenderPass(scene, camera);
+  handleSizeChange(width, height);
   composer.addPass(renderPass);
-
-
-  effectFXAA.uniforms["resolution"].value.set(1 / width, 1 / height);
   composer.addPass(effectFXAA);
+
 })
 
 watch([heightRef, widthRef], (height, width) => {
-  composer.setSize(width, height);
-  effectFXAA.uniforms["resolution"].value.set(1 / width, 1 / height);
+  handleSizeChange(width, height);
 })
 
 </script>

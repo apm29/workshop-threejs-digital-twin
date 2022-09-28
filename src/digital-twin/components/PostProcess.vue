@@ -19,17 +19,25 @@ const widthRef = inject(WidthInjectKey)
 const heightRef = inject(HeightInjectKey)
 const scene = inject(SceneInjectKey)
 
+const composer = new EffectComposer(renderer);
+const effectFXAA = new ShaderPass(FXAAShader);
+
 onMounted(() => {
   const width = widthRef.value;
   const height = heightRef.value;
-  const composer = new EffectComposer(renderer);
+
   composer.setSize(width, height);
   const renderPass = new RenderPass(scene, camera);
   composer.addPass(renderPass);
 
-  const effectFXAA = new ShaderPass(FXAAShader);
+
   effectFXAA.uniforms["resolution"].value.set(1 / width, 1 / height);
   composer.addPass(effectFXAA);
+})
+
+watch([heightRef, widthRef], (height, width) => {
+  composer.setSize(width, height);
+  effectFXAA.uniforms["resolution"].value.set(1 / width, 1 / height);
 })
 
 </script>

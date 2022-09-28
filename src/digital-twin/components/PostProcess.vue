@@ -23,6 +23,8 @@ const composer = new EffectComposer(renderer);
 const effectFXAA = new ShaderPass(FXAAShader);
 const renderPass = new RenderPass(scene, camera);
 
+composer.addPass(renderPass);
+composer.addPass(effectFXAA);
 
 function handleSizeChange(width, height) {
   composer.setSize(width, height);
@@ -33,9 +35,6 @@ onMounted(() => {
   const height = heightRef.value;
 
   handleSizeChange(width, height);
-  composer.addPass(renderPass);
-  composer.addPass(effectFXAA);
-
 })
 
 watch([heightRef, widthRef], (height, width) => {

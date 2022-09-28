@@ -23,8 +23,8 @@ import Camera from '~/digital-twin/components/Camera.vue';
 import AxesHelper from '~/digital-twin/components/AxesHelper.vue';
 import Sky from '~/digital-twin/components/Sky.vue';
 import Light from '~/digital-twin/components/Light.vue';
-import Ground from '../digital-twin/components/Ground.vue';
-import PostProcess from '../digital-twin/components/PostProcess.vue';
+import Ground from '~/digital-twin/components/Ground.vue';
+import PostProcess from '~/digital-twin/components/PostProcess.vue';
 import GltfModel from '~/digital-twin/components/GltfModel.vue';
 </script>
 

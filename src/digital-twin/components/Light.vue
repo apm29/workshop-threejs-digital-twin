@@ -10,7 +10,6 @@ import { SceneInjectKey } from "./inject-keys"
 import GUI from 'lil-gui'
 
 const scene = inject(SceneInjectKey)
-console.log(scene);
 const hemiLight = new THREE.HemisphereLight(0xffffff, 0x808080, 0.6);
 hemiLight.position.set(0, 500, 0);
 hemiLight.visible = true;

@@ -6,9 +6,10 @@
 
 <script setup>
 import * as THREE from "three";
-import { SceneInjectKey } from "./inject-keys"
+import { SceneInjectKey, SelectableGroupInjectKey } from "./inject-keys"
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-
+const selectableGroup = inject(SelectableGroupInjectKey)
+const scene = inject(SceneInjectKey)
 
 const props = defineProps({
   path: {
@@ -16,14 +17,14 @@ const props = defineProps({
     required: true
   }
 })
-const scene = inject(SceneInjectKey)
+
 const gltfLoader = new GLTFLoader();
 gltfLoader.load(props.path, (gltf) => {
   const root = gltf.scene;
 
   gltf.scene.traverse(function (obj) {
     if (obj instanceof THREE.Mesh) {
-      console.log(obj);
+      // console.log(obj);
       const oldTexture = obj.material.map
       const defaultMaterial = new THREE.MeshLambertMaterial({
         color: obj.material.color,
@@ -36,7 +37,7 @@ gltfLoader.load(props.path, (gltf) => {
     }
   });
 
-  scene.add(root);
+  selectableGroup.add(root);
 });
 
 

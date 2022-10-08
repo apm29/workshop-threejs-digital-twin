@@ -1,5 +1,7 @@
 export const RendererInjectKey = Symbol("renderer")
+export const RenderLoopInjectKey = Symbol("render-loop")
 export const WidthInjectKey = Symbol("width")
 export const HeightInjectKey = Symbol("height")
 export const SceneInjectKey = Symbol("scene")
+export const SelectableGroupInjectKey = Symbol("selectable-group")
 export const CameraInjectKey = Symbol("camera")

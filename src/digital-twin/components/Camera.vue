@@ -5,7 +5,6 @@
 </template>
 
 <script setup>
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import * as THREE from "three";
 import { CameraInjectKey, RendererInjectKey, WidthInjectKey, HeightInjectKey } from "./inject-keys"
 import { useThree } from "./three";
@@ -13,7 +12,6 @@ import { useThree } from "./three";
 const { setCamera } = useThree()
 
 
-const renderer = inject(RendererInjectKey)
 const width = inject(WidthInjectKey)
 const height = inject(HeightInjectKey)
 

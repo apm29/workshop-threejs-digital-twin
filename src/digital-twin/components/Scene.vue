@@ -76,7 +76,7 @@ function initOutlinePass() {
   composer.addPass(effectFXAA);
   //outline
   const outlinePass = new OutlinePass(new THREE.Vector2(width, height), scene, camera)
-  outlinePass.visibleEdgeColor.set("#ff5500");
+  outlinePass.visibleEdgeColor.set("#0022ff");
   outlinePass.hiddenEdgeColor.set("#303030");
   outlinePass.edgeStrength = 10;
   outlinePass.edgeGlow = 0;

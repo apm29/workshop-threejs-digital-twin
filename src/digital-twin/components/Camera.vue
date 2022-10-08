@@ -6,7 +6,7 @@
 
 <script setup>
 import * as THREE from "three";
-import { CameraInjectKey, RendererInjectKey, WidthInjectKey, HeightInjectKey } from "./inject-keys"
+import { CameraInjectKey, WidthInjectKey, HeightInjectKey } from "./inject-keys"
 import { useThree } from "./three";
 
 const { setCamera } = useThree()

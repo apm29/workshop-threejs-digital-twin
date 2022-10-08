@@ -26,12 +26,13 @@ gltfLoader.load(props.path, (gltf) => {
       console.log(obj);
       const oldTexture = obj.material.map
       const defaultMaterial = new THREE.MeshLambertMaterial({
-        // color: 0x3355aa,
+        color: obj.material.color,
       });
       obj.material = defaultMaterial
       obj.material.map = oldTexture
       obj.material.side = THREE.DoubleSide;
       obj.castShadow = true;
+      // obj.receiveShadow = true;
     }
   });
 

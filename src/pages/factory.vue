@@ -7,7 +7,7 @@
         <Ground></Ground>
         <Light></Light>
         <!-- 工厂 -->
-        <GltfModel path="/model/生产组件.glb"></GltfModel>
+        <GltfModel path="/model/生产组件3着色.glb"></GltfModel>
 
         <!-- 后处理 -->
         <PostProcess></PostProcess>

@@ -17,16 +17,18 @@ grassTexture.encoding = THREE.sRGBEncoding;
 grassTexture.repeat.set(200, 200);
 grassTexture.anisotropy = 16;
 //GROUND
-const groundGeo = new THREE.PlaneGeometry(5000, 5000);
-const groundMat = new THREE.MeshBasicMaterial({
-  map: grassTexture,
+const groundGeo = new THREE.PlaneGeometry(2000, 2000, 400, 400);
+const groundMat = new THREE.MeshPhongMaterial({
+  color: 0x031643,
+  wireframe: true,
+  // map: grassTexture,
+  wireframeLinejoin: 'bevel'
 });
-groundMat.color.setHSL(0.095, 1, 0.75);
 
 const ground = new THREE.Mesh(groundGeo, groundMat);
 ground.position.y = -0.1;
 ground.rotation.x = -Math.PI / 2;
-ground.receiveShadow = true;
+ground.receiveShadow = false;
 
 scene.add(ground);
 

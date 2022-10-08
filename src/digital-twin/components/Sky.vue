@@ -12,7 +12,7 @@ const scene = inject(SceneInjectKey)
 
 const uniforms = {
   topColor: { value: new THREE.Color(0x0077ff) },
-  bottomColor: { value: new THREE.Color(0xffffff) }, offset: { value: 33 },
+  bottomColor: { value: new THREE.Color(0x000000) }, offset: { value: 33 },
   exponent: { value: 0.6 },
 };
 uniforms["topColor"].value.copy(new THREE.Color().setHSL(0.6, 1, 0.6));

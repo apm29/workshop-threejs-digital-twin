@@ -37,6 +37,8 @@ gltfLoader.load(props.path, (gltf) => {
     }
   });
 
+  root.position.z = 35
+
   selectableGroup.add(root);
 });
 

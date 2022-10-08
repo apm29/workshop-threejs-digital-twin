@@ -24,9 +24,10 @@ const camera = new THREE.PerspectiveCamera(
   5000, //far
 )
 
-camera.position.x = 20
-camera.position.y = 20
-camera.position.z = 20
+camera.position.x = -15
+camera.position.y = 5
+camera.position.z = 0
+
 
 //监听视窗大小变化
 watch([width, height], () => {
@@ -37,16 +38,10 @@ watch([width, height], () => {
 provide(CameraInjectKey, camera)
 setCamera(camera)
 
+window.camera = camera
 
-//control
-const controls = new OrbitControls(camera, renderer.domElement)
-controls.listenToKeyEvents(window); // optional
-controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
-controls.dampingFactor = 0.05;
-controls.screenSpacePanning = false;
-controls.minDistance = 0.1;
-controls.maxDistance = 1000;
-controls.maxPolarAngle = (Math.PI) / 2 * 0.99;
+
+
 </script>
 
 <style lang="scss" scoped>

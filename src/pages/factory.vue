@@ -10,7 +10,7 @@
         <GltfModel path="/model/生产组件3着色.glb"></GltfModel>
 
         <!-- 后处理 -->
-        <PostProcess></PostProcess>
+        <!-- <PostProcess></PostProcess> -->
       </Scene>
     </Camera>
   </Renderer>

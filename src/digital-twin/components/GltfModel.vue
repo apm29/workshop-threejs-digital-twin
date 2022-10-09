@@ -22,6 +22,12 @@ const gltfLoader = new GLTFLoader();
 gltfLoader.load(props.path, (gltf) => {
   const root = gltf.scene;
 
+  const wireframeMaterial = new THREE.MeshBasicMaterial({
+    color: 0x5356ff,
+    wireframe: true,
+    transparent: true
+  })
+
   gltf.scene.traverse(function (obj) {
     if (obj instanceof THREE.Mesh) {
       // console.log(obj);
@@ -29,15 +35,19 @@ gltfLoader.load(props.path, (gltf) => {
       const defaultMaterial = new THREE.MeshLambertMaterial({
         color: obj.material.color,
       });
-      obj.material = defaultMaterial
-      obj.material.map = oldTexture
+      // obj.material = defaultMaterial
+      // obj.material.map = oldTexture
       obj.material.side = THREE.DoubleSide;
       obj.castShadow = true;
       // obj.receiveShadow = true;
+
+      //线框
+      const frameObj = new THREE.Mesh(obj.geometry, wireframeMaterial)
+      selectableGroup.add(frameObj)
     }
   });
 
-  root.position.z = 35
+  root.position.z = 65
 
   selectableGroup.add(root);
 });

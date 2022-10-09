@@ -111,7 +111,6 @@ function initOutlinePass() {
     raycaster.setFromCamera(mouse, camera);
 
     const intersects = raycaster.intersectObject(group, true);
-    console.log(intersects);
     if (intersects.length > 0) {
       const selectedObject = intersects[0].object;
       outlinePass.selectedObjects = [selectedObject];
@@ -121,6 +120,13 @@ function initOutlinePass() {
       emit("object:unselected")
     }
   }
+}
+
+function measure(func) {
+  const before = new Date().getTime()
+  func()
+  const after = new Date().getTime()
+  console.log("函数耗时:", after - before);
 }
 
 

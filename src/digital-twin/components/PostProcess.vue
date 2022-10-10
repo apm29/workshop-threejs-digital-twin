@@ -58,7 +58,7 @@ onMounted(() => {
 
   //选择材质
   const textureLoader = new THREE.TextureLoader();
-  textureLoader.load("/textures/tri_pattern.jpg", function (texture) {
+  textureLoader.load("./textures/tri_pattern.jpg", function (texture) {
     outlinePass.patternTexture = texture;
     outlinePass.usePatternTexture = true;
     texture.wrapS = THREE.RepeatWrapping;

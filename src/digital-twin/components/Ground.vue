@@ -10,7 +10,7 @@ import { SceneInjectKey } from "./inject-keys"
 
 const scene = inject(SceneInjectKey)
 
-const grassTexture = new THREE.TextureLoader().load('/textures/grass.jpeg');
+const grassTexture = new THREE.TextureLoader().load('./textures/grass.jpeg');
 grassTexture.wrapS = grassTexture.wrapT = THREE.MirroredRepeatWrapping;
 grassTexture.encoding = THREE.sRGBEncoding;
 //texture重复次数,5000 / 200 每张素材250 * 250 像素

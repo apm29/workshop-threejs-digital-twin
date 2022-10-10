@@ -82,7 +82,7 @@ function initOutlinePass() {
   outlinePass.edgeGlow = 0;
   outlinePass.edgeThickness = 1;
   const textureLoader = new THREE.TextureLoader();
-  const texture = textureLoader.load("/textures/tri_pattern.jpg");
+  const texture = textureLoader.load("./textures/tri_pattern.jpg");
   outlinePass.patternTexture = texture;
   outlinePass.usePatternTexture = true;
   texture.wrapS = THREE.RepeatWrapping;

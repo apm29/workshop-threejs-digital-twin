@@ -6,39 +6,32 @@
 
 <script setup>
 import * as THREE from "three";
-import { RendererInjectKey, WidthInjectKey, HeightInjectKey } from "./inject-keys"
+import { RendererInjectKey, WidthInjectKey, HeightInjectKey } from "./inject-keys";
 import { useThree } from "./three";
-const { setRenderer } = useThree()
+const { setRenderer } = useThree();
 
-const wrapper = ref()
-const { width, height } = useElementSize(wrapper)
+const wrapper = ref();
+const { width, height } = useElementSize(wrapper);
 const renderer = new THREE.WebGLRenderer({
   antialias: true,
-})
+});
 renderer.shadowMap.enabled = true;
 onMounted(() => {
-  renderer.setPixelRatio(window.devicePixelRatio)
-  renderer.setSize(
-    width.value,
-    height.value
-  )
+  renderer.setClearColor(new THREE.Color(0x000000));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(width.value, height.value);
   renderer.outputEncoding = THREE.sRGBEncoding;
-  wrapper.value.appendChild(renderer.domElement)
-})
+  wrapper.value.appendChild(renderer.domElement);
+});
 //监听视窗大小变化
 watch([width, height], () => {
-  renderer.setSize(
-    width.value,
-    height.value
-  )
-})
+  renderer.setSize(width.value, height.value);
+});
 
-provide(RendererInjectKey, renderer)
-provide(WidthInjectKey, width)
-provide(HeightInjectKey, height)
-setRenderer(renderer)
+provide(RendererInjectKey, renderer);
+provide(WidthInjectKey, width);
+provide(HeightInjectKey, height);
+setRenderer(renderer);
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

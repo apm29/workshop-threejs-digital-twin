@@ -6,13 +6,14 @@
 
 <script setup>
 import * as THREE from "three";
-import { SceneInjectKey } from "./inject-keys"
+import { SceneInjectKey } from "./inject-keys";
 
-const scene = inject(SceneInjectKey)
+const scene = inject(SceneInjectKey);
 
 const uniforms = {
   topColor: { value: new THREE.Color(0x0077ff) },
-  bottomColor: { value: new THREE.Color(0x000000) }, offset: { value: 33 },
+  bottomColor: { value: new THREE.Color(0xffffff) },
+  offset: { value: 33 },
   exponent: { value: 0.6 },
 };
 uniforms["topColor"].value.copy(new THREE.Color().setHSL(0.6, 1, 0.6));
@@ -34,9 +35,6 @@ const skyMat = new THREE.ShaderMaterial({
 
 const sky = new THREE.Mesh(skyGeo, skyMat);
 scene.add(sky);
-
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

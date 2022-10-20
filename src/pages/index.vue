@@ -168,7 +168,7 @@ function handleSelect({ event, selectedObject, camera, controls }) {
   console.log(vector.x, vector.y, vector.z);
   //向量缩放到3-6m
   vector.clampLength(3, 6);
-  console.log(vector.x, vector.y, vector.z);
+  //修改camera和control的目标位置
   camera.lookAt(
     selectedObject.position.x,
     selectedObject.position.y,

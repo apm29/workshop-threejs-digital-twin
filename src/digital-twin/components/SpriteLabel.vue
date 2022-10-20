@@ -6,10 +6,15 @@
 
 <script setup>
 import * as THREE from "three";
-import { SceneInjectKey, SelectableGroupInjectKey } from "./inject-keys";
+import {
+  SceneInjectKey,
+  SelectableGroupInjectKey,
+  RenderLoopInjectKey,
+} from "./inject-keys";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 const scene = inject(SceneInjectKey);
-
+const selectableGroup = inject(SelectableGroupInjectKey);
+const registerLoopFunc = inject(RenderLoopInjectKey);
 const props = defineProps({
   path: {
     type: String,
@@ -46,8 +51,35 @@ textureLoader.load(props.path, function (texture) {
     label.position.y = BASE_Y;
     label.position.z = BASE_Z;
   }
-  scene.add(label);
+  selectableGroup.add(label);
+  const oldY = label.position.y;
+  let down = true;
+  const clock = new THREE.Clock();
+  const downY = 0.2;
+  registerLoopFunc(() => {
+    const delta = clock.getDelta();
+    if (label.position.y <= oldY - downY) {
+      down = false;
+    } else if (label.position.y >= oldY) {
+      down = true;
+    }
+    if (down) {
+      label.position.y = clamp(label.position.y - downY * delta, oldY - downY, oldY);
+    } else {
+      label.position.y = clamp(label.position.y + downY * delta, oldY - downY, oldY);
+    }
+  });
 });
+
+function clamp(value, min, max) {
+  if (value < min) {
+    return min;
+  }
+  if (value > max) {
+    return max;
+  }
+  return value;
+}
 </script>
 
 <style lang="scss" scoped></style>

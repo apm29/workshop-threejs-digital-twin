@@ -62,9 +62,8 @@ function initOutlinePass() {
   const height = heightRef.value;
 
   const renderPass = new RenderPass(scene, camera);
-  renderPass.clear = false;
+  renderPass.clear = true;
   composer.addPass(renderPass);
-
   composer.setSize(width, height);
 
   const filmPass = new FilmPass(
@@ -76,12 +75,18 @@ function initOutlinePass() {
   filmPass.renderToScreen = true;
   // composer.addPass(filmPass);
 
-  console.log(width, height);
   const effectFXAA = new ShaderPass(FXAAShader);
-  effectFXAA.uniforms["resolution"].value.set(1 / width, 1 / height);
-  composer.addPass(effectFXAA);
+  const pixelRatio = renderer.getPixelRatio();
+  console.log(width, height, pixelRatio);
+  effectFXAA.uniforms["resolution"].value.x = 1 / (width * pixelRatio);
+  effectFXAA.uniforms["resolution"].value.x = 1 / (height * pixelRatio);
+  // composer.addPass(effectFXAA);
   //outline
-  const outlinePass = new OutlinePass(new THREE.Vector2(width, height), scene, camera);
+  const outlinePass = new OutlinePass(
+    new THREE.Vector2(width * pixelRatio, height * pixelRatio),
+    scene,
+    camera
+  );
   outlinePass.visibleEdgeColor.set("#0022ff");
   outlinePass.hiddenEdgeColor.set("#303030");
   outlinePass.edgeStrength = 10;
@@ -93,8 +98,8 @@ function initOutlinePass() {
   outlinePass.usePatternTexture = true;
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
-
-  composer.addPass(outlinePass);
+  outlinePass.renderToScreen = true;
+  // composer.addPass(outlinePass);
 
   outlinePass.selectedObjects = [];
 
@@ -142,9 +147,17 @@ controls.minDistance = 0.1;
 controls.maxDistance = 100;
 controls.maxPolarAngle = (Math.PI / 2) * 0.99;
 
+const loopFunc = [];
+function registerLoopFunc(func) {
+  loopFunc.push(func);
+}
+provide(RenderLoopInjectKey, registerLoopFunc);
+
 function animate() {
   requestAnimationFrame(animate);
-
+  loopFunc.forEach((func) => {
+    func();
+  });
   stats.begin();
   controls.update();
   // renderer.render(scene, camera);

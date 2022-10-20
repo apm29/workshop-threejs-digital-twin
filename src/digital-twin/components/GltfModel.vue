@@ -31,9 +31,10 @@ const BASE_Z = 40;
 const BASE_Y = 0;
 const BASE_X = 0;
 
+const model = ref();
 gltfLoader.load(props.path, (gltf) => {
   const root = gltf.scene;
-
+  model.value = root;
   // const wireframeMaterial = new THREE.MeshBasicMaterial({
   //   color: 0x5356ff,
   //   wireframe: true,
@@ -43,16 +44,16 @@ gltfLoader.load(props.path, (gltf) => {
   gltf.scene.traverse(function (obj) {
     if (obj instanceof THREE.Mesh) {
       // console.log(obj);
-      // const oldTexture = obj.material.map;
-      // const defaultMaterial = new THREE.MeshLambertMaterial({
-      //   color: obj.material.color,
-      // });
-      // obj.material = defaultMaterial
-      // obj.material.map = oldTexture
-      // obj.material.side = THREE.DoubleSide;
+      const oldTexture = obj.material.map;
+      const defaultMaterial = new THREE.MeshStandardMaterial({
+        color: obj.material.color,
+        // transparent: false,
+      });
+      obj.material = defaultMaterial;
+      obj.material.map = oldTexture;
+      obj.material.side = THREE.DoubleSide;
       obj.castShadow = true;
       // obj.receiveShadow = true;
-
       //线框
       // const frameObj = new THREE.Mesh(obj.geometry, wireframeMaterial);
       // selectableGroup.add(frameObj)
@@ -73,6 +74,17 @@ gltfLoader.load(props.path, (gltf) => {
     selectableGroup.add(root);
   } else {
     scene.add(root);
+  }
+});
+
+onBeforeUnmount(() => {
+  if (model.value) {
+    const root = model.value;
+    if (props.selectable) {
+      selectableGroup.remove(root);
+    } else {
+      scene.remove(root);
+    }
   }
 });
 </script>

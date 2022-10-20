@@ -41,6 +41,14 @@
             }"
             selectable
           ></GltfModel>
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 8,
+              y: 5,
+              z: -48.3,
+            }"
+          ></SpriteLabel>
           <GltfModel
             path="./glb/P3.glb"
             :position="{
@@ -49,6 +57,14 @@
             }"
             selectable
           ></GltfModel>
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 8.5,
+              y: 5,
+              z: -50.3,
+            }"
+          ></SpriteLabel>
           <GltfModel
             path="./glb/P4.glb"
             :position="{
@@ -57,6 +73,14 @@
             }"
             selectable
           ></GltfModel>
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 11.5,
+              y: 10,
+              z: -46.75,
+            }"
+          ></SpriteLabel>
           <GltfModel
             path="./glb/P5.glb"
             :position="{
@@ -117,6 +141,7 @@
 </template>
 
 <script setup>
+import * as THREE from "three";
 import Renderer from "~/digital-twin/components/Renderer.vue";
 import Scene from "~/digital-twin/components/Scene.vue";
 import Camera from "~/digital-twin/components/Camera.vue";
@@ -127,9 +152,43 @@ import Ground from "~/digital-twin/components/Ground.vue";
 // import PostProcess from '~/digital-twin/components/PostProcess.vue';
 import GltfModel from "~/digital-twin/components/GltfModel.vue";
 import SpriteLabel from "~/digital-twin/components/SpriteLabel.vue";
+import TWEEN from "@tweenjs/tween.js";
 
-function handleSelect(object) {
-  console.log(object);
+function handleSelect({ event, selectedObject, camera, controls }) {
+  if (!(selectedObject instanceof THREE.Sprite)) {
+    return;
+  }
+  //向量计算
+  //物体位置--> 相机位置向量
+  const vector = new THREE.Vector3(
+    camera.position.x - selectedObject.position.x,
+    camera.position.y - selectedObject.position.y,
+    camera.position.z - selectedObject.position.z
+  );
+  console.log(vector.x, vector.y, vector.z);
+  //向量缩放到3-6m
+  vector.clampLength(3, 6);
+  console.log(vector.x, vector.y, vector.z);
+  camera.lookAt(
+    selectedObject.position.x,
+    selectedObject.position.y,
+    selectedObject.position.z
+  );
+  controls.target.x = selectedObject.position.x;
+  controls.target.y = selectedObject.position.y;
+  controls.target.z = selectedObject.position.z;
+  controls.update();
+  //动画
+  const tween = new TWEEN.Tween(camera.position);
+  tween.to(
+    {
+      x: selectedObject.position.x + vector.x,
+      y: selectedObject.position.y + vector.y,
+      z: selectedObject.position.z + vector.z,
+    },
+    1000
+  );
+  tween.start();
 }
 const showOther = ref(true);
 const showAxesHelper = ref(true);

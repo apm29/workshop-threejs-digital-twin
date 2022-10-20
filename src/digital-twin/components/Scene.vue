@@ -15,6 +15,7 @@ import {
   SelectableGroupInjectKey,
   WidthInjectKey,
   HeightInjectKey,
+  OrbitControlInjectKey,
 } from "./inject-keys";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
@@ -25,6 +26,8 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
 import { FilmPass } from "three/addons/postprocessing/FilmPass.js";
 import { useThree } from "./three";
+import TWEEN from "@tweenjs/tween.js";
+
 const { setScene } = useThree();
 const scene = new THREE.Scene();
 //背景色
@@ -122,7 +125,14 @@ function initOutlinePass() {
     if (intersects.length > 0) {
       const selectedObject = intersects[0].object;
       outlinePass.selectedObjects = [selectedObject];
-      emit("object:selected", selectedObject);
+      emit("object:selected", {
+        event,
+        camera,
+        renderer,
+        scene,
+        selectedObject,
+        controls,
+      });
     } else {
       outlinePass.selectedObjects = [];
       emit("object:unselected");
@@ -147,6 +157,8 @@ controls.minDistance = 0.1;
 controls.maxDistance = 100;
 controls.maxPolarAngle = (Math.PI / 2) * 0.99;
 
+provide(OrbitControlInjectKey, controls);
+
 const loopFunc = [];
 function registerLoopFunc(func) {
   loopFunc.push(func);
@@ -155,6 +167,7 @@ provide(RenderLoopInjectKey, registerLoopFunc);
 
 function animate() {
   requestAnimationFrame(animate);
+  TWEEN.update();
   loopFunc.forEach((func) => {
     func();
   });

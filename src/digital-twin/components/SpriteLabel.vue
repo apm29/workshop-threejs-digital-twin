@@ -27,6 +27,10 @@ const props = defineProps({
     type: Number,
     default: 1,
   },
+  viewData: {
+    type: Object,
+    default: () => ({}),
+  },
 });
 
 const textureLoader = new THREE.TextureLoader();
@@ -35,41 +39,48 @@ const BASE_Z = 40;
 const BASE_Y = 0;
 const BASE_X = 0;
 
-textureLoader.load(props.path, function (texture) {
-  const material = new THREE.SpriteMaterial({
-    map: texture,
-  });
-  const label = new THREE.Sprite(material);
-  label.center.set(0.0, 1.0);
-  label.scale.set(props.size, props.size, 1);
-  if (props.position) {
-    label.position.x = (props.position.x || 0) + BASE_X;
-    label.position.y = (props.position.y || 0) + BASE_Y;
-    label.position.z = (props.position.z || 0) + BASE_Z;
-  } else {
-    label.position.x = BASE_X;
-    label.position.y = BASE_Y;
-    label.position.z = BASE_Z;
-  }
-  selectableGroup.add(label);
-  const oldY = label.position.y;
-  let down = true;
-  const clock = new THREE.Clock();
-  const downY = 0.2;
-  registerLoopFunc(() => {
-    const delta = clock.getDelta();
-    if (label.position.y <= oldY - downY) {
-      down = false;
-    } else if (label.position.y >= oldY) {
-      down = true;
-    }
-    if (down) {
-      label.position.y = clamp(label.position.y - downY * delta, oldY - downY, oldY);
-    } else {
-      label.position.y = clamp(label.position.y + downY * delta, oldY - downY, oldY);
-    }
-  });
+const texture = textureLoader.load(props.path);
+const material = new THREE.SpriteMaterial({
+  map: texture,
 });
+const label = new THREE.Sprite(material);
+label.center.set(0.5, 1);
+label.scale.set(props.size, props.size, 1);
+if (props.position) {
+  label.position.x = (props.position.x || 0) + BASE_X;
+  label.position.y = (props.position.y || 0) + BASE_Y;
+  label.position.z = (props.position.z || 0) + BASE_Z;
+} else {
+  label.position.x = BASE_X;
+  label.position.y = BASE_Y;
+  label.position.z = BASE_Z;
+}
+label.userData.viewData = props.viewData;
+selectableGroup.add(label);
+const oldY = label.position.y;
+let down = true;
+const clock = new THREE.Clock();
+const downY = 0.2;
+registerLoopFunc(() => {
+  const delta = clock.getDelta();
+  if (label.position.y <= oldY - downY) {
+    down = false;
+  } else if (label.position.y >= oldY) {
+    down = true;
+  }
+  if (down) {
+    label.position.y = clamp(label.position.y - downY * delta, oldY - downY, oldY);
+  } else {
+    label.position.y = clamp(label.position.y + downY * delta, oldY - downY, oldY);
+  }
+});
+watch(
+  () => props.viewData,
+  (viewData) => {
+    label.userData.viewData = viewData;
+  },
+  { deep: true }
+);
 
 function clamp(value, min, max) {
   if (value < min) {

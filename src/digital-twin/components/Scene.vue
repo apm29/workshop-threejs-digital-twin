@@ -155,7 +155,7 @@ controls.dampingFactor = 0.05;
 controls.screenSpacePanning = false;
 controls.minDistance = 0.1;
 controls.maxDistance = 100;
-controls.maxPolarAngle = (Math.PI / 2) * 0.99;
+controls.maxPolarAngle = (Math.PI / 2) * 1.5;
 
 provide(OrbitControlInjectKey, controls);
 

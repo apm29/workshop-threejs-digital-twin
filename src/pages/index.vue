@@ -13,8 +13,11 @@
             path="./sprite/3.png"
             :position="{
               x: 8,
-              y: 5,
+              y: 5.5,
               z: -44.5,
+            }"
+            :viewData="{
+              title: '工艺配料-P1',
             }"
           ></SpriteLabel>
           <GltfModel
@@ -29,8 +32,11 @@
             path="./sprite/3.png"
             :position="{
               x: 8,
-              y: 5,
+              y: 5.5,
               z: -46.5,
+            }"
+            :viewData="{
+              title: '工艺配料-P2',
             }"
           ></SpriteLabel>
           <GltfModel
@@ -45,8 +51,11 @@
             path="./sprite/3.png"
             :position="{
               x: 8,
-              y: 5,
+              y: 5.5,
               z: -48.9,
+            }"
+            :viewData="{
+              title: '工艺配料-P3',
             }"
           ></SpriteLabel>
           <GltfModel
@@ -61,8 +70,11 @@
             path="./sprite/3.png"
             :position="{
               x: 8.5,
-              y: 5,
+              y: 5.5,
               z: -50.9,
+            }"
+            :viewData="{
+              title: '工艺配料-P4',
             }"
           ></SpriteLabel>
           <GltfModel
@@ -80,6 +92,9 @@
               y: 10,
               z: -46.95,
             }"
+            :viewData="{
+              title: '工艺配料-P5',
+            }"
           ></SpriteLabel>
           <GltfModel
             path="./glb/P5.glb"
@@ -91,6 +106,17 @@
             selectable
           ></GltfModel>
 
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 11.3,
+              y: 6.2,
+              z: -45,
+            }"
+            :viewData="{
+              title: '原料混合-犁刀机电流',
+            }"
+          ></SpriteLabel>
           <GltfModel
             path="./glb/犁刀机.glb"
             :position="{
@@ -101,20 +127,120 @@
             selectable
           ></GltfModel>
 
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 15.5,
+              y: 3.5,
+              z: -47,
+            }"
+            :viewData="{
+              title: '原料混合-致密机电流',
+            }"
+          ></SpriteLabel>
           <GltfModel
             path="./glb/致密机.glb"
             :position="{
-              x: 13.5,
-              z: -46,
+              x: 13.2,
+              z: -46.2,
               y: 0,
             }"
             selectable
           ></GltfModel>
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 19.5,
+              z: -50.5,
+              y: 7,
+            }"
+            :viewData="{
+              title: '原料混合-致密机除尘器电流',
+            }"
+          ></SpriteLabel>
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 23.5,
+              z: -50.2,
+              y: 12.5,
+            }"
+            :viewData="{
+              title: '原料混合-给料电振机电流',
+            }"
+          ></SpriteLabel>
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 24.5,
+              z: -50.2,
+              y: 10.5,
+            }"
+            :viewData="{
+              title: '原料混合-双轴搅拌机电流',
+            }"
+          ></SpriteLabel>
+          <GltfModel
+            path="./glb/致密机后输送.glb"
+            :position="{
+              x: 21,
+              z: -49.6,
+              y: 1.2,
+            }"
+            selectable
+          ></GltfModel>
 
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 23.5,
+              z: -50.2,
+              y: 7.8,
+            }"
+            :viewData="{
+              title: '造球区-造球机电流',
+            }"
+          ></SpriteLabel>
+          <GltfModel
+            path="./glb/造球盘.glb"
+            :position="{
+              x: 23.5,
+              z: -49,
+              y: 6.5,
+            }"
+            selectable
+          ></GltfModel>
+
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 23.5,
+              z: -47,
+              y: 9.2,
+            }"
+            :viewData="{
+              title: '造球区-皮带机电流',
+            }"
+          ></SpriteLabel>
+          <GltfModel
+            path="./glb/皮带机.glb"
+            :position="{
+              x: 23,
+              z: -43,
+              y: 6,
+            }"
+            selectable
+          ></GltfModel>
           <!-- 后处理 -->
           <!-- <PostProcess></PostProcess> -->
 
-          <AttachDialog v-if="selectedPosition" :attach="selectedPosition" />
+          <AttachDialog
+            v-if="selectedPosition"
+            :attach="selectedPosition"
+            :viewData="selectedViewData"
+            @close="selectedPosition = null"
+          >
+          </AttachDialog>
         </Scene>
       </Camera>
     </Renderer>
@@ -158,6 +284,7 @@ import AttachDialog from "~/digital-twin/components/AttachDialog.vue";
 import TWEEN from "@tweenjs/tween.js";
 
 const selectedPosition = ref(null);
+const selectedViewData = ref(null);
 function handleSelect({ event, selectedObject, camera, controls }) {
   if (!(selectedObject instanceof THREE.Sprite)) {
     return;
@@ -173,18 +300,21 @@ function handleSelect({ event, selectedObject, camera, controls }) {
   //向量缩放到3-6m
   vector.clampLength(3, 6);
   //修改camera和control的目标位置
-  camera.lookAt(
-    selectedObject.position.x,
-    selectedObject.position.y,
-    selectedObject.position.z
-  );
+  // camera.lookAt(
+  //   selectedObject.position.x,
+  //   selectedObject.position.y,
+  //   selectedObject.position.z
+  // );
+  console.log("viewData", selectedObject.userData.viewData);
   selectedPosition.value = selectedObject.position;
-  controls.target.x = selectedObject.position.x;
-  controls.target.y = selectedObject.position.y;
-  controls.target.z = selectedObject.position.z;
-  controls.update();
+  selectedViewData.value = selectedObject.userData.viewData;
+  // controls.target.x = selectedObject.position.x;
+  // controls.target.y = selectedObject.position.y;
+  // controls.target.z = selectedObject.position.z;
+  // controls.update();
   //动画
   const tween = new TWEEN.Tween(camera.position);
+  const tweenControl = new TWEEN.Tween(controls.target);
   tween.to(
     {
       x: selectedObject.position.x + vector.x,
@@ -193,10 +323,24 @@ function handleSelect({ event, selectedObject, camera, controls }) {
     },
     1000
   );
+  tweenControl.to(
+    {
+      x: selectedObject.position.x,
+      y: selectedObject.position.y,
+      z: selectedObject.position.z,
+    },
+    1000
+  );
   tween.start();
+  tweenControl.start();
 }
 const showOther = ref(true);
 const showAxesHelper = ref(true);
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+.el-form-item__label {
+  color: white;
+  @apply text-shadow-lg;
+}
+</style>

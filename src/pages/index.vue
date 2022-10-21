@@ -14,14 +14,14 @@
             :position="{
               x: 8,
               y: 5,
-              z: -44.3,
+              z: -44.5,
             }"
           ></SpriteLabel>
           <GltfModel
             path="./glb/P1.glb"
             :position="{
-              x: 7,
-              z: -43,
+              x: 6.9,
+              z: -43.36,
             }"
             selectable
           ></GltfModel>
@@ -30,14 +30,14 @@
             :position="{
               x: 8,
               y: 5,
-              z: -46.3,
+              z: -46.5,
             }"
           ></SpriteLabel>
           <GltfModel
             path="./glb/P2.glb"
             :position="{
-              x: 7,
-              z: -45,
+              x: 6.9,
+              z: -45.2,
             }"
             selectable
           ></GltfModel>
@@ -46,14 +46,14 @@
             :position="{
               x: 8,
               y: 5,
-              z: -48.3,
+              z: -48.9,
             }"
           ></SpriteLabel>
           <GltfModel
             path="./glb/P3.glb"
             :position="{
-              x: 7,
-              z: -47,
+              x: 6.9,
+              z: -47.35,
             }"
             selectable
           ></GltfModel>
@@ -62,14 +62,14 @@
             :position="{
               x: 8.5,
               y: 5,
-              z: -50.3,
+              z: -50.9,
             }"
           ></SpriteLabel>
           <GltfModel
             path="./glb/P4.glb"
             :position="{
-              x: 7.5,
-              z: -49,
+              x: 7.4,
+              z: -49.35,
             }"
             selectable
           ></GltfModel>
@@ -78,14 +78,14 @@
             :position="{
               x: 11.5,
               y: 10,
-              z: -46.75,
+              z: -46.95,
             }"
           ></SpriteLabel>
           <GltfModel
             path="./glb/P5.glb"
             :position="{
               x: 9.6,
-              z: -42.75,
+              z: -42.95,
               y: 6.7,
             }"
             selectable
@@ -113,6 +113,8 @@
 
           <!-- 后处理 -->
           <!-- <PostProcess></PostProcess> -->
+
+          <AttachDialog v-if="selectedPosition" :attach="selectedPosition" />
         </Scene>
       </Camera>
     </Renderer>
@@ -152,8 +154,10 @@ import Ground from "~/digital-twin/components/Ground.vue";
 // import PostProcess from '~/digital-twin/components/PostProcess.vue';
 import GltfModel from "~/digital-twin/components/GltfModel.vue";
 import SpriteLabel from "~/digital-twin/components/SpriteLabel.vue";
+import AttachDialog from "~/digital-twin/components/AttachDialog.vue";
 import TWEEN from "@tweenjs/tween.js";
 
+const selectedPosition = ref(null);
 function handleSelect({ event, selectedObject, camera, controls }) {
   if (!(selectedObject instanceof THREE.Sprite)) {
     return;
@@ -174,6 +178,7 @@ function handleSelect({ event, selectedObject, camera, controls }) {
     selectedObject.position.y,
     selectedObject.position.z
   );
+  selectedPosition.value = selectedObject.position;
   controls.target.x = selectedObject.position.x;
   controls.target.y = selectedObject.position.y;
   controls.target.z = selectedObject.position.z;

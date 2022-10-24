@@ -27,9 +27,9 @@ const props = defineProps({
 
 const gltfLoader = new GLTFLoader();
 
-const BASE_Z = 30;
+const BASE_Z = 35;
 const BASE_Y = 0;
-const BASE_X = 0;
+const BASE_X = -5;
 
 const model = ref();
 gltfLoader.load(props.path, (gltf) => {

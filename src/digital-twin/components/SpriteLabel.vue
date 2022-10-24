@@ -12,6 +12,7 @@ import {
   RenderLoopInjectKey,
 } from "./inject-keys";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { useModels } from "~/digital-twin/components/models.js";
 const scene = inject(SceneInjectKey);
 const selectableGroup = inject(SelectableGroupInjectKey);
 const registerLoopFunc = inject(RenderLoopInjectKey);
@@ -35,9 +36,9 @@ const props = defineProps({
 
 const textureLoader = new THREE.TextureLoader();
 
-const BASE_Z = 30;
+const BASE_Z = 35;
 const BASE_Y = 0;
-const BASE_X = 0;
+const BASE_X = -5;
 
 const texture = textureLoader.load(props.path);
 const material = new THREE.SpriteMaterial({
@@ -74,6 +75,11 @@ registerLoopFunc(() => {
     label.position.y = clamp(label.position.y + downY * delta, oldY - downY, oldY);
   }
 });
+
+//注册模型数据和位置
+const { registerModel } = useModels();
+registerModel(label.userData.viewData, label.position);
+
 watch(
   () => props.viewData,
   (viewData) => {
@@ -97,6 +103,10 @@ watch(
   },
   { deep: true }
 );
+
+onBeforeUnmount(() => {
+  selectableGroup.remove(label);
+});
 
 function clamp(value, min, max) {
   if (value < min) {

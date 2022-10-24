@@ -28,7 +28,7 @@ import { FilmPass } from "three/addons/postprocessing/FilmPass.js";
 import { useThree } from "./three";
 import TWEEN from "@tweenjs/tween.js";
 
-const { setScene } = useThree();
+const { setScene, setControl } = useThree();
 const scene = new THREE.Scene();
 //背景色
 scene.background = new THREE.Color().setHex(0x000000);
@@ -156,7 +156,7 @@ controls.screenSpacePanning = false;
 controls.minDistance = 0.1;
 controls.maxDistance = 100;
 controls.maxPolarAngle = (Math.PI / 2) * 1.5;
-
+setControl(controls);
 provide(OrbitControlInjectKey, controls);
 
 const loopFunc = [];

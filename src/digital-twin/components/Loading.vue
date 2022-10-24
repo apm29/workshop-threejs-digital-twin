@@ -32,15 +32,15 @@ const loading = ref();
 const loaded = ref(0);
 const total = ref(0);
 THREE.DefaultLoadingManager.onStart = function (url, itemsLoaded, itemsTotal) {
-  console.log(
-    "Started loading file: " +
-      url +
-      ".\nLoaded " +
-      itemsLoaded +
-      " of " +
-      itemsTotal +
-      " files."
-  );
+  // console.log(
+  //   "Started loading file: " +
+  //     url +
+  //     ".\nLoaded " +
+  //     itemsLoaded +
+  //     " of " +
+  //     itemsTotal +
+  //     " files."
+  // );
   loading.value = true;
   loaded.value = itemsLoaded;
   total.value = itemsTotal;
@@ -52,9 +52,9 @@ THREE.DefaultLoadingManager.onLoad = function () {
 };
 
 THREE.DefaultLoadingManager.onProgress = function (url, itemsLoaded, itemsTotal) {
-  console.log(
-    "Loading file: " + url + ".\nLoaded " + itemsLoaded + " of " + itemsTotal + " files."
-  );
+  // console.log(
+  //   "Loading file: " + url + ".\nLoaded " + itemsLoaded + " of " + itemsTotal + " files."
+  // );
   loading.value = true;
   loaded.value = itemsLoaded;
   total.value = itemsTotal;

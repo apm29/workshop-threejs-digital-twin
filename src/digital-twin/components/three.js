@@ -1,6 +1,7 @@
 const renderer = ref()
 const scene = ref()
 const camera = ref()
+const control = ref()
 export function useThree() {
   function setScene(value) {
     scene.value = value
@@ -11,6 +12,9 @@ export function useThree() {
   function setCamera(value) {
     camera.value = value
   }
+  function setControl(value) {
+    control.value = value
+  }
 
   return {
     renderer,
@@ -18,6 +22,8 @@ export function useThree() {
     scene,
     setScene,
     camera,
-    setCamera
+    setCamera,
+    control,
+    setControl
   }
 }

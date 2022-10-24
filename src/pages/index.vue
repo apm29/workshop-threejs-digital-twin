@@ -549,6 +549,7 @@
       from="transparent"
       to="dark-600"
       style="pointer-events: none"
+      size="mini"
     >
       <el-form-item label="显示坐标轴" style="pointer-events: auto">
         <el-switch v-model="showAxesHelper"></el-switch>
@@ -556,7 +557,34 @@
       <el-form-item label="显示建筑" style="pointer-events: auto">
         <el-switch v-model="showOther"></el-switch>
       </el-form-item>
+      <el-form-item label="" style="pointer-events: auto">
+        <el-button @click="resetCamera">重置视角</el-button>
+      </el-form-item>
     </el-form>
+    <div
+      fixed="!~"
+      bottom="0"
+      p="x-3 y-4"
+      w="full"
+      right="0"
+      z="30"
+      bg="gradient-to-b"
+      from="transparent"
+      to="dark-600"
+      style="pointer-events: none"
+      flex="~ wrap"
+      gap="x-2 y-2"
+      items="center"
+    >
+      <el-button
+        size="mini"
+        @click="handleViewModel(model)"
+        style="pointer-events: auto"
+        v-for="model of models"
+      >
+        {{ model.viewData.title }}
+      </el-button>
+    </div>
   </div>
 </template>
 
@@ -575,7 +603,8 @@ import SpriteLabel from "~/digital-twin/components/SpriteLabel.vue";
 import AttachDialog from "~/digital-twin/components/AttachDialog.vue";
 import Loading from "~/digital-twin/components/Loading.vue";
 import TWEEN from "@tweenjs/tween.js";
-
+import { useThree } from "~/digital-twin/components/three";
+import { useModels } from "~/digital-twin/components/models.js";
 const selectedPosition = ref(null);
 const selectedViewData = ref(null);
 function handleSelect({ event, selectedObject, camera, controls }) {
@@ -629,6 +658,78 @@ function handleSelect({ event, selectedObject, camera, controls }) {
 }
 const showOther = ref(true);
 const showAxesHelper = ref(true);
+
+function resetCamera() {
+  //清空数据
+  selectedPosition.value = null;
+  selectedViewData.value = null;
+  const { camera: cameraRef, control: controlRef } = useThree();
+  const camera = cameraRef.value;
+  const controls = controlRef.value;
+  //视角动画
+  const tween = new TWEEN.Tween(camera.position);
+  const tweenControl = new TWEEN.Tween(controls.target);
+  tween.to(
+    {
+      x: -20,
+      y: 10,
+      z: 0,
+    },
+    1000
+  );
+  tweenControl.to(
+    {
+      x: 0,
+      y: 0,
+      z: 0,
+    },
+    1000
+  );
+  tween.start();
+  tweenControl.start();
+}
+
+//模型数据和位置
+const { models } = useModels();
+
+function handleViewModel({ viewData, position }) {
+  console.log(position);
+  const { camera: cameraRef, control: controlRef } = useThree();
+  const camera = cameraRef.value;
+  const controls = controlRef.value;
+  //向量计算
+  //物体位置--> 相机位置向量
+  const vector = new THREE.Vector3(
+    camera.position.x - position.x,
+    camera.position.y - position.y,
+    camera.position.z - position.z
+  );
+  //向量缩放到3-6m
+  vector.clampLength(3, 6);
+  selectedPosition.value = position;
+  selectedViewData.value = viewData;
+  //视角动画
+  const tween = new TWEEN.Tween(camera.position);
+  const tweenControl = new TWEEN.Tween(controls.target);
+  tween.to(
+    {
+      x: position.x + vector.x,
+      y: position.y + vector.y,
+      z: position.z + vector.z,
+    },
+    1000
+  );
+  tweenControl.to(
+    {
+      x: position.x,
+      y: position.y,
+      z: position.z,
+    },
+    1000
+  );
+  tween.start();
+  tweenControl.start();
+}
 </script>
 
 <style lang="scss">

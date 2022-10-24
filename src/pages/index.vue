@@ -1,5 +1,5 @@
 <template>
-  <div h="screen" w="screen">
+  <div h="screen" w="screen" class="atcc-workshop">
     <Renderer h="screen" w="screen">
       <Camera>
         <Scene @object:selected="handleSelect">
@@ -548,11 +548,12 @@
       bg="gradient-to-r"
       from="transparent"
       to="dark-600"
+      style="pointer-events: none"
     >
-      <el-form-item label="显示坐标轴">
+      <el-form-item label="显示坐标轴" style="pointer-events: auto">
         <el-switch v-model="showAxesHelper"></el-switch>
       </el-form-item>
-      <el-form-item label="显示建筑">
+      <el-form-item label="显示建筑" style="pointer-events: auto">
         <el-switch v-model="showOther"></el-switch>
       </el-form-item>
     </el-form>
@@ -631,8 +632,10 @@ const showAxesHelper = ref(true);
 </script>
 
 <style lang="scss">
-.el-form-item__label {
-  color: white;
-  @apply text-shadow-lg;
+.atcc-workshop {
+  .el-form-item__label {
+    color: white !important;
+    @apply text-shadow-lg;
+  }
 }
 </style>

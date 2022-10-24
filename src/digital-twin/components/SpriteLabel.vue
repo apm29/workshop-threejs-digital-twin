@@ -35,7 +35,7 @@ const props = defineProps({
 
 const textureLoader = new THREE.TextureLoader();
 
-const BASE_Z = 40;
+const BASE_Z = 30;
 const BASE_Y = 0;
 const BASE_X = 0;
 

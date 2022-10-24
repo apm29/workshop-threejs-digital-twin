@@ -14,7 +14,7 @@
             :position="{
               x: 8,
               y: 5.5,
-              z: -44.5,
+              z: -44.2,
             }"
             :viewData="{
               title: '工艺配料-P1',
@@ -33,7 +33,7 @@
             :position="{
               x: 8,
               y: 5.5,
-              z: -46.5,
+              z: -46.2,
             }"
             :viewData="{
               title: '工艺配料-P2',
@@ -52,7 +52,7 @@
             :position="{
               x: 8,
               y: 5.5,
-              z: -48.9,
+              z: -48.2,
             }"
             :viewData="{
               title: '工艺配料-P3',
@@ -71,7 +71,7 @@
             :position="{
               x: 8.5,
               y: 5.5,
-              z: -50.9,
+              z: -50.2,
             }"
             :viewData="{
               title: '工艺配料-P4',
@@ -161,9 +161,9 @@
           <SpriteLabel
             path="./sprite/3.png"
             :position="{
-              x: 23.5,
+              x: 23.4,
               z: -50.2,
-              y: 12.5,
+              y: 10.5,
             }"
             :viewData="{
               title: '原料混合-给料电振机电流',
@@ -226,13 +226,303 @@
             path="./glb/皮带机.glb"
             :position="{
               x: 23,
-              z: -43,
+              z: -43.2,
               y: 6,
             }"
             selectable
           ></GltfModel>
-          <!-- 后处理 -->
-          <!-- <PostProcess></PostProcess> -->
+
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 24.5,
+              z: -50.2,
+              y: 3.5,
+            }"
+            :viewData="{
+              title: '回转窑-引风机电流',
+            }"
+          ></SpriteLabel>
+          <GltfModel
+            path="./glb/引风机.glb"
+            :position="{
+              x: 23.8,
+              z: -42.7,
+              y: 0,
+            }"
+            selectable
+          ></GltfModel>
+
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 31.3,
+              z: -50.8,
+              y: 18.5,
+            }"
+            :viewData="{
+              title: '冷却-喷淋塔',
+            }"
+          ></SpriteLabel>
+          <GltfModel
+            path="./glb/喷淋塔.glb"
+            :position="{
+              x: 29.2,
+              z: -48.7,
+              y: 0,
+            }"
+            selectable
+          ></GltfModel>
+
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 23.2,
+              z: -43,
+              y: 12.5,
+            }"
+            :viewData="{
+              title: '回转窑-关风机电流',
+            }"
+          ></SpriteLabel>
+          <GltfModel
+            path="./glb/关风机.glb"
+            :position="{
+              x: 22.9,
+              z: -42.3,
+              y: 8.5,
+            }"
+            selectable
+          ></GltfModel>
+
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 23.2,
+              z: -6.5,
+              y: 9.5,
+            }"
+            :viewData="{
+              title: '回转窑-红外',
+            }"
+          ></SpriteLabel>
+
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 23.2,
+              z: -10.5,
+              y: 9.5,
+            }"
+            :viewData="{
+              title: '回转窑-T2',
+            }"
+          ></SpriteLabel>
+
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 29.2,
+              z: -7,
+              y: 9,
+            }"
+            :viewData="{
+              title: '回转窑-天然气',
+            }"
+          ></SpriteLabel>
+
+          <GltfModel
+            path="./glb/大窑.glb"
+            :position="{
+              x: 22,
+              z: -4.5,
+              y: 5.35,
+            }"
+            selectable
+          ></GltfModel>
+
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 25,
+              z: -41.5,
+              y: 12.5,
+            }"
+            :viewData="{
+              title: '回转窑-T12',
+            }"
+          ></SpriteLabel>
+          <GltfModel
+            path="./glb/引风大窑连接管.glb"
+            :position="{
+              x: 23.1,
+              z: -41.2,
+              y: 8.2,
+            }"
+            selectable
+          ></GltfModel>
+
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 23.5,
+              z: -1.8,
+              y: 2.5,
+            }"
+            :viewData="{
+              title: '回转窑-鼓风机',
+            }"
+          ></SpriteLabel>
+
+          <GltfModel
+            path="./glb/鼓风机.glb"
+            :position="{
+              x: 23.2,
+              z: -1,
+              y: 0,
+            }"
+            selectable
+          ></GltfModel>
+
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 27,
+              z: -13.5,
+              y: 5.5,
+            }"
+            :viewData="{
+              title: '冷却-冷却桶',
+            }"
+          ></SpriteLabel>
+
+          <GltfModel
+            path="./glb/冷却桶.glb"
+            :position="{
+              x: 23.2,
+              z: -6.5,
+              y: 1.5,
+            }"
+            selectable
+          ></GltfModel>
+
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 24.3,
+              z: -22.5,
+              y: 4.5,
+            }"
+            :viewData="{
+              title: '外加籽料',
+            }"
+          ></SpriteLabel>
+          <GltfModel
+            path="./glb/外加籽料.glb"
+            :position="{
+              x: 23.65,
+              z: -21.4,
+              y: 1.7,
+            }"
+            selectable
+          ></GltfModel>
+
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 24.3,
+              z: -26.5,
+              y: 4.5,
+            }"
+            :viewData="{
+              title: '干磨机',
+            }"
+          ></SpriteLabel>
+
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 24.3,
+              z: -31.5,
+              y: 3.5,
+            }"
+            :viewData="{
+              title: '振动筛',
+            }"
+          ></SpriteLabel>
+          <GltfModel
+            path="./glb/干磨机.glb"
+            :position="{
+              x: 23.5,
+              z: -24.5,
+              y: 0,
+            }"
+            selectable
+          ></GltfModel>
+
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 19,
+              z: -32.8,
+              y: 3.8,
+            }"
+            :viewData="{
+              title: '称量包装机',
+            }"
+          ></SpriteLabel>
+          <GltfModel
+            path="./glb/称量包装机.glb"
+            :position="{
+              x: 18.1,
+              z: -32,
+              y: 1.5,
+            }"
+            selectable
+          ></GltfModel>
+
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 20,
+              z: -31.7,
+              y: 2,
+            }"
+            :viewData="{
+              title: '输送',
+            }"
+          ></SpriteLabel>
+          <GltfModel
+            path="./glb/干磨机后输送.glb"
+            :position="{
+              x: 20,
+              z: -31.3,
+              y: 0.5,
+            }"
+            selectable
+          ></GltfModel>
+
+          <SpriteLabel
+            path="./sprite/3.png"
+            :position="{
+              x: 18,
+              z: -31.7,
+              y: 10,
+            }"
+            :viewData="{
+              title: '除尘机',
+            }"
+          ></SpriteLabel>
+
+          <GltfModel
+            path="./glb/干磨机的除尘机.glb"
+            :position="{
+              x: 17.3,
+              z: -31.2,
+              y: 6.3,
+            }"
+            selectable
+          ></GltfModel>
 
           <AttachDialog
             v-if="selectedPosition"

@@ -82,6 +82,22 @@ watch(
   { deep: true }
 );
 
+watch(
+  () => props.position,
+  () => {
+    if (props.position) {
+      label.position.x = (props.position.x || 0) + BASE_X;
+      label.position.y = (props.position.y || 0) + BASE_Y;
+      label.position.z = (props.position.z || 0) + BASE_Z;
+    } else {
+      label.position.x = BASE_X;
+      label.position.y = BASE_Y;
+      label.position.z = BASE_Z;
+    }
+  },
+  { deep: true }
+);
+
 function clamp(value, min, max) {
   if (value < min) {
     return min;

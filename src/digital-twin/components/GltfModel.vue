@@ -87,6 +87,25 @@ onBeforeUnmount(() => {
     }
   }
 });
+
+watch(
+  () => props.position,
+  () => {
+    if (model.value) {
+      const root = model.value;
+      if (props.position) {
+        root.position.x = (props.position.x || 0) + BASE_X;
+        root.position.y = (props.position.y || 0) + BASE_Y;
+        root.position.z = (props.position.z || 0) + BASE_Z;
+      } else {
+        root.position.x = BASE_X;
+        root.position.y = BASE_Y;
+        root.position.z = BASE_Z;
+      }
+    }
+  },
+  { deep: true }
+);
 </script>
 
 <style lang="scss" scoped></style>

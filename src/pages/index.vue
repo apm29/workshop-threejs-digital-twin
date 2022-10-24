@@ -7,6 +7,7 @@
           <Sky></Sky>
           <Ground></Ground>
           <Light></Light>
+          <Loading />
           <!-- 工厂 -->
           <GltfModel v-if="showOther" path="./glb/其他.glb"></GltfModel>
           <SpriteLabel
@@ -571,6 +572,7 @@ import Ground from "~/digital-twin/components/Ground.vue";
 import GltfModel from "~/digital-twin/components/GltfModel.vue";
 import SpriteLabel from "~/digital-twin/components/SpriteLabel.vue";
 import AttachDialog from "~/digital-twin/components/AttachDialog.vue";
+import Loading from "~/digital-twin/components/Loading.vue";
 import TWEEN from "@tweenjs/tween.js";
 
 const selectedPosition = ref(null);

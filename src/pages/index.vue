@@ -529,7 +529,7 @@
             v-if="selectedPosition"
             :attach="selectedPosition"
             :viewData="selectedViewData"
-            @close="selectedPosition = null"
+            @close="resetCamera()"
           >
           </AttachDialog>
         </Scene>

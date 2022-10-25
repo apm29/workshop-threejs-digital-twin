@@ -6,10 +6,11 @@
           <AxesHelper v-if="showAxesHelper"></AxesHelper>
           <Sky></Sky>
           <Ground></Ground>
+          <CementGround></CementGround>
           <Light></Light>
           <Loading />
           <!-- 工厂 -->
-          <GltfModel v-if="showOther" path="./glb/其他.glb"></GltfModel>
+          <CustomGltfModel v-if="showOther" path="./glb/建筑.glb"></CustomGltfModel>
           <SpriteLabel
             path="./sprite/3.png"
             :position="{
@@ -597,8 +598,10 @@ import AxesHelper from "~/digital-twin/components/AxesHelper.vue";
 import Sky from "~/digital-twin/components/Sky.vue";
 import Light from "~/digital-twin/components/Light.vue";
 import Ground from "~/digital-twin/components/Ground.vue";
+import CementGround from "~/digital-twin/components/CementGround.vue";
 // import PostProcess from '~/digital-twin/components/PostProcess.vue';
 import GltfModel from "~/digital-twin/components/GltfModel.vue";
+import CustomGltfModel from "~/digital-twin/components/CustomGltfModel.vue";
 import SpriteLabel from "~/digital-twin/components/SpriteLabel.vue";
 import AttachDialog from "~/digital-twin/components/AttachDialog.vue";
 import Loading from "~/digital-twin/components/Loading.vue";
@@ -657,7 +660,7 @@ function handleSelect({ event, selectedObject, camera, controls }) {
   tweenControl.start();
 }
 const showOther = ref(true);
-const showAxesHelper = ref(true);
+const showAxesHelper = ref(false);
 
 function resetCamera() {
   //清空数据

@@ -45,16 +45,14 @@ gltfLoader.load(props.path, (gltf) => {
   gltf.scene.traverse(function (obj) {
     if (obj instanceof THREE.Mesh) {
       // console.log(obj);
-      const oldTexture = obj.material.map;
-      const defaultMaterial = new THREE.MeshStandardMaterial({
-        color: obj.material.color,
+      const defaultMaterial = new THREE.MeshPhongMaterial({
+        color: 0xffffff,
         // transparent: false,
       });
       obj.material = defaultMaterial;
-      obj.material.map = oldTexture;
-      obj.material.side = THREE.DoubleSide;
+      // obj.material.side = THREE.DoubleSide;
       obj.castShadow = true;
-      // obj.receiveShadow = true;
+      obj.receiveShadow = true;
       //线框
       // const frameObj = new THREE.Mesh(obj.geometry, wireframeMaterial);
       // selectableGroup.add(frameObj)

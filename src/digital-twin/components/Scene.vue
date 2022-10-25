@@ -25,6 +25,7 @@ import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js"
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
 import { FilmPass } from "three/addons/postprocessing/FilmPass.js";
+import { GammaCorrectionShader } from "three/addons/shaders/GammaCorrectionShader.js";
 import { useThree } from "./three";
 import TWEEN from "@tweenjs/tween.js";
 
@@ -63,7 +64,7 @@ watch([widthRef, heightRef], (width, height) => {
 function initOutlinePass() {
   const width = widthRef.value;
   const height = heightRef.value;
-
+  const pixelRatio = renderer.getPixelRatio();
   const renderPass = new RenderPass(scene, camera);
   renderPass.clear = true;
   composer.addPass(renderPass);
@@ -78,12 +79,6 @@ function initOutlinePass() {
   filmPass.renderToScreen = true;
   // composer.addPass(filmPass);
 
-  const effectFXAA = new ShaderPass(FXAAShader);
-  const pixelRatio = renderer.getPixelRatio();
-  console.log(width, height, pixelRatio);
-  effectFXAA.uniforms["resolution"].value.x = 1 / (width * pixelRatio);
-  effectFXAA.uniforms["resolution"].value.x = 1 / (height * pixelRatio);
-  // composer.addPass(effectFXAA);
   //outline
   const outlinePass = new OutlinePass(
     new THREE.Vector2(width * pixelRatio, height * pixelRatio),
@@ -102,15 +97,31 @@ function initOutlinePass() {
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
   outlinePass.renderToScreen = true;
-  // composer.addPass(outlinePass);
-
   outlinePass.selectedObjects = [];
+  composer.addPass(outlinePass);
+
+  //抗锯齿
+  const effectFXAA = new ShaderPass(FXAAShader);
+
+  console.log(width, height, pixelRatio);
+  effectFXAA.uniforms["resolution"].value.x = 1 / (width * pixelRatio);
+  effectFXAA.uniforms["resolution"].value.y = 1 / (height * pixelRatio);
+  // effectFXAA.uniforms["resolution"].value.set(
+  //   1 / (width * pixelRatio),
+  //   1 / (height * pixelRatio)
+  // );
+  composer.addPass(effectFXAA);
+
+  //伽马校正
+  const gammaCorrection = new ShaderPass(GammaCorrectionShader);
+  composer.addPass(gammaCorrection);
 
   //计算用射线
   const raycaster = new THREE.Raycaster();
   //记录鼠标位置
   const mouse = new THREE.Vector2(-1000000, -100000);
   //事件监听
+  renderer.domElement.style.touchAction = "none";
   renderer.domElement.addEventListener("click", onModelClick);
   function onModelClick(event) {
     const width = widthRef.value;

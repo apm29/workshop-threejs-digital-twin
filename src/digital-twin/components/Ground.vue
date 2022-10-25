@@ -10,14 +10,13 @@ import { SceneInjectKey } from "./inject-keys";
 
 const scene = inject(SceneInjectKey);
 
-const grassTexture = new THREE.TextureLoader().load("./textures/grass.jpeg");
+const grassTexture = new THREE.TextureLoader().load("./textures/grass02.png");
 grassTexture.wrapS = grassTexture.wrapT = THREE.MirroredRepeatWrapping;
 grassTexture.encoding = THREE.sRGBEncoding;
-//texture重复次数,5000 / 200 每张素材250 * 250 像素
-grassTexture.repeat.set(200, 200);
+grassTexture.repeat.set(100, 100);
 grassTexture.anisotropy = 16;
 //GROUND
-const groundGeo = new THREE.PlaneGeometry(2000, 2000, 400, 400);
+const groundGeo = new THREE.PlaneGeometry(2000, 2000, 100, 100);
 const groundMat = new THREE.MeshPhongMaterial({
   // color: 0x031643,
   // wireframe: true,
@@ -26,7 +25,7 @@ const groundMat = new THREE.MeshPhongMaterial({
 });
 
 const ground = new THREE.Mesh(groundGeo, groundMat);
-ground.position.y = -0.1;
+ground.position.y = -0.15;
 ground.rotation.x = -Math.PI / 2;
 ground.receiveShadow = false;
 

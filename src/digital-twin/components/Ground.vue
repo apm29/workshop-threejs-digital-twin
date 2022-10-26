@@ -18,7 +18,7 @@ grassTexture.anisotropy = 16;
 //GROUND
 const groundGeo = new THREE.PlaneGeometry(2000, 2000, 100, 100);
 const groundMat = new THREE.MeshPhongMaterial({
-  // color: 0x031643,
+  // color: 0x000,
   // wireframe: true,
   map: grassTexture,
   // wireframeLinejoin: 'bevel'

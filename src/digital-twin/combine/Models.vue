@@ -1,0 +1,364 @@
+<template>
+  <div>
+    <!-- 工厂 -->
+    <CustomGltfModel v-if="showOther" path="./glb/建筑.glb"></CustomGltfModel>
+    <AxesHelper v-if="showAxesHelper"></AxesHelper>
+    <template v-for="modelData of ViewModelData">
+      <GltfModel
+        :key="modelData.key + '_model'"
+        :name="modelData.key"
+        :path="modelData.path"
+        :position="modelData.position"
+        selectable
+        :model.sync="modelObject3dMap[modelData.key]"
+      ></GltfModel>
+    </template>
+    <template v-for="spriteData of ViewSpriteData">
+      <SpriteLabel
+        :key="spriteData.viewData.key + '_sprite'"
+        :path="spriteData.path"
+        :position="spriteData.position"
+        :viewData="spriteData.viewData"
+      ></SpriteLabel>
+    </template>
+
+    <AttachDialog
+      v-if="selectedPosition"
+      :attach="selectedPosition"
+      :viewData="selectedViewData"
+      @close="resetCamera()"
+      v-loading="loading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+    >
+      <template #option>
+        <el-select v-model="selectedViewData.range" size="mini">
+          <el-option
+            v-for="option of rangeOptions"
+            :label="option.label"
+            :value="option.value"
+          ></el-option>
+        </el-select>
+      </template>
+      <BasicLineCharts h="full" :data="data" :dataAxisX="dataAxisX" />
+    </AttachDialog>
+
+    <el-form
+      fixed="!~"
+      top="0"
+      p="x-3 y-4"
+      h="full"
+      min="w-12rem"
+      right="0"
+      z="30"
+      label-position="left"
+      label-width="6rem"
+      bg="gradient-to-r"
+      from="transparent"
+      to="dark-600"
+      style="pointer-events: none"
+      size="mini"
+    >
+      <el-form-item label="显示坐标轴" style="pointer-events: auto">
+        <el-switch v-model="showAxesHelper"></el-switch>
+      </el-form-item>
+      <el-form-item label="显示建筑" style="pointer-events: auto">
+        <el-switch v-model="showOther"></el-switch>
+      </el-form-item>
+      <el-form-item label="" style="pointer-events: auto">
+        <el-button @click="resetCamera">重置视角</el-button>
+      </el-form-item>
+    </el-form>
+    <div
+      fixed="!~"
+      bottom="0"
+      p="x-3 y-4"
+      w="full"
+      right="0"
+      z="30"
+      bg="gradient-to-b"
+      from="transparent"
+      to="dark-600"
+      style="pointer-events: none"
+      flex="~ wrap"
+      gap="x-2 y-2"
+      items="center"
+      v-if="false"
+    >
+      <el-button
+        size="mini"
+        @click="handleViewModel(model)"
+        style="pointer-events: auto"
+        m="!0"
+        v-for="model of models"
+        :key="model.viewData.title"
+      >
+        {{ model.viewData.title }}
+      </el-button>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import {
+  HighlightedGroups,
+  RegisterSelectHandler,
+} from "~/digital-twin/components/inject-keys.js";
+import * as THREE from "three";
+import GltfModel from "~/digital-twin/components/GltfModel.vue";
+import CustomGltfModel from "~/digital-twin/components/CustomGltfModel.vue";
+import SpriteLabel from "~/digital-twin/components/SpriteLabel.vue";
+import AttachDialog from "~/digital-twin/components/AttachDialog.vue";
+import AxesHelper from "~/digital-twin/components/AxesHelper.vue";
+import BasicLineCharts from "~/components/charts/BasicLineCharts.vue";
+import dayjs from "dayjs";
+import TWEEN from "@tweenjs/tween.js";
+import { useThree } from "~/digital-twin/components/three";
+import { useModels } from "~/digital-twin/components/models.js";
+import { ModelData, SpriteData } from "./data.js";
+import { queryInfluxDb } from "~/api/influx";
+import {
+  INITIAL_CAMERA_X,
+  INITIAL_CAMERA_Y,
+  INITIAL_CAMERA_Z,
+} from "~/digital-twin/components/axes.js";
+//数据部分
+const ViewModelData = ref(ModelData);
+const ViewSpriteData = ref(SpriteData);
+const rangeOptions = [
+  {
+    label: "最近1分钟",
+    value: "-1m",
+  },
+  {
+    label: "最近5分钟",
+    value: "-5m",
+  },
+  {
+    label: "最近15分钟",
+    value: "-15m",
+  },
+  {
+    label: "最近1小时",
+    value: "-1h",
+  },
+  {
+    label: "最近3小时",
+    value: "-3h",
+  },
+  {
+    label: "最近6小时",
+    value: "-6h",
+  },
+  {
+    label: "最近12小时",
+    value: "-12h",
+  },
+  {
+    label: "最近24小时",
+    value: "-24h",
+  },
+  {
+    label: "最近2天",
+    value: "-2d",
+  },
+  {
+    label: "最近7天",
+    value: "-7d",
+  },
+];
+const animateDuration = 2000;
+const selectedPosition = ref(null);
+const selectedViewData = ref(null);
+const selectedModel = ref(null);
+const modelObject3dMap = shallowReactive({});
+const loading = ref(false);
+const rawData = ref([]);
+const data = computed(() => {
+  return [
+    {
+      data: rawData.value.map((it) => it._value),
+      name: "数据值",
+    },
+  ];
+});
+watch(() => selectedViewData.value?.range, queryModelData);
+watch(() => selectedViewData.value?.org, queryModelData);
+watch(() => selectedViewData.value?.bucket, queryModelData);
+watch(() => selectedViewData.value?.measurement, queryModelData);
+
+function queryModelData() {
+  const viewData = selectedViewData.value;
+  if (!viewData) {
+    return;
+  }
+  //查询数据
+  rawData.value = [];
+  loading.value = true;
+  queryInfluxDb({
+    org: viewData.org,
+    bucket: viewData.bucket,
+    measurement: viewData.measurement,
+    range: viewData.range,
+  })
+    .then((res) => {
+      rawData.value = res.data ?? [];
+    })
+    .finally(() => (loading.value = false));
+}
+const dataAxisX = computed(() => {
+  return rawData.value.map((it) => dayjs(it._time).format("YYYY/MM/DD HH:mm:ss"));
+});
+
+const registerSelectHandler = inject(RegisterSelectHandler);
+const highlighted = inject(HighlightedGroups);
+registerSelectHandler(({ event, camera, renderer, scene, selectedObject, controls }) => {
+  handleSelect({
+    event,
+    camera,
+    renderer,
+    scene,
+    selectedObject,
+    controls,
+  });
+});
+
+function handleSelect({ event, selectedObject, camera, controls }) {
+  if (!(selectedObject instanceof THREE.Sprite)) {
+    return;
+  }
+  const viewData = selectedObject.userData.viewData;
+  //高亮
+  // console.log(modelObject3dMap[viewData.key]);
+  if (modelObject3dMap[viewData.key]) {
+    highlighted.value = [modelObject3dMap[viewData.key]];
+  }
+  //向量计算
+  //物体位置--> 相机位置向量
+  const vector = new THREE.Vector3(
+    camera.position.x - selectedObject.position.x,
+    camera.position.y - selectedObject.position.y,
+    camera.position.z - selectedObject.position.z
+  );
+  console.log(vector.x, vector.y, vector.z);
+  //向量缩放到3-6m
+  vector.clampLength(3, 6);
+  //修改camera和control的目标位置
+  // camera.lookAt(
+  //   selectedObject.position.x,
+  //   selectedObject.position.y,
+  //   selectedObject.position.z
+  // );
+  selectedPosition.value = selectedObject.position;
+  selectedViewData.value = viewData;
+  // controls.target.x = selectedObject.position.x;
+  // controls.target.y = selectedObject.position.y;
+  // controls.target.z = selectedObject.position.z;
+  // controls.update();
+  //动画
+  const tween = new TWEEN.Tween(camera.position);
+  const tweenControl = new TWEEN.Tween(controls.target);
+  tween.to(
+    {
+      x: selectedObject.position.x + vector.x,
+      y: selectedObject.position.y + vector.y,
+      z: selectedObject.position.z + vector.z,
+    },
+    animateDuration
+  );
+  tweenControl.to(
+    {
+      x: selectedObject.position.x,
+      y: selectedObject.position.y,
+      z: selectedObject.position.z,
+    },
+    animateDuration
+  );
+  tween.start();
+  tweenControl.start();
+}
+const showOther = ref(true);
+const showAxesHelper = ref(false);
+
+function resetCamera() {
+  //清空数据
+  selectedPosition.value = null;
+  selectedViewData.value = null;
+  highlighted.value = [];
+  const { camera: cameraRef, control: controlRef } = useThree();
+  const camera = cameraRef.value;
+  const controls = controlRef.value;
+  //视角动画
+  const tween = new TWEEN.Tween(camera.position);
+  const tweenControl = new TWEEN.Tween(controls.target);
+  tween.to(
+    {
+      x: INITIAL_CAMERA_X,
+      y: INITIAL_CAMERA_Y,
+      z: INITIAL_CAMERA_Z,
+    },
+    animateDuration
+  );
+  tweenControl.to(
+    {
+      x: 0,
+      y: 0,
+      z: 0,
+    },
+    animateDuration
+  );
+  tween.start();
+  tweenControl.start();
+}
+
+//模型数据和位置
+const { models } = useModels();
+
+function handleViewModel({ viewData, position }) {
+  console.log(position);
+  const { camera: cameraRef, control: controlRef } = useThree();
+  const camera = cameraRef.value;
+  const controls = controlRef.value;
+  //向量计算
+  //物体位置--> 相机位置向量
+  const vector = new THREE.Vector3(
+    camera.position.x - position.x,
+    camera.position.y - position.y,
+    camera.position.z - position.z
+  );
+  //向量缩放到3-6m
+  vector.clampLength(3, 6);
+  selectedPosition.value = position;
+  selectedViewData.value = viewData;
+  //视角动画
+  const tween = new TWEEN.Tween(camera.position);
+  const tweenControl = new TWEEN.Tween(controls.target);
+  tween.to(
+    {
+      x: position.x + vector.x,
+      y: position.y + vector.y,
+      z: position.z + vector.z,
+    },
+    animateDuration
+  );
+  tweenControl.to(
+    {
+      x: position.x,
+      y: position.y,
+      z: position.z,
+    },
+    animateDuration
+  );
+  tween.start();
+  tweenControl.start();
+}
+</script>
+
+<style lang="scss">
+.atcc-workshop {
+  .el-form-item__label {
+    color: white !important;
+    @apply text-shadow-lg;
+  }
+}
+</style>

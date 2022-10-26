@@ -8,6 +8,9 @@
 import * as THREE from "three";
 import { SceneInjectKey, SelectableGroupInjectKey } from "./inject-keys";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { BASE_X, BASE_Y, BASE_Z } from "./axes.js"
+
+
 const selectableGroup = inject(SelectableGroupInjectKey);
 const scene = inject(SceneInjectKey);
 
@@ -27,10 +30,6 @@ const props = defineProps({
 
 const gltfLoader = new GLTFLoader();
 const textureLoader = new THREE.TextureLoader();
-
-const BASE_Z = 35;
-const BASE_Y = 0;
-const BASE_X = -5;
 
 const model = ref();
 gltfLoader.load(props.path, (gltf) => {

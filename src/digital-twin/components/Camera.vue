@@ -8,7 +8,7 @@
 import * as THREE from "three";
 import { CameraInjectKey, WidthInjectKey, HeightInjectKey } from "./inject-keys";
 import { useThree } from "./three";
-
+import { INITIAL_CAMERA_X, INITIAL_CAMERA_Y, INITIAL_CAMERA_Z } from "./axes.js";
 const { setCamera } = useThree();
 
 const width = inject(WidthInjectKey);
@@ -21,9 +21,9 @@ const camera = new THREE.PerspectiveCamera(
   5000 //far
 );
 
-camera.position.x = -20;
-camera.position.y = 10;
-camera.position.z = 0;
+camera.position.x = INITIAL_CAMERA_X;
+camera.position.y = INITIAL_CAMERA_Y;
+camera.position.z = INITIAL_CAMERA_Z;
 
 //监听视窗大小变化
 watch([width, height], () => {

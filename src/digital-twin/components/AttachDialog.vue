@@ -3,17 +3,18 @@
     class="attach-dialog-wrapper"
     :style="{
       left: `${screenVector.x - width / 2 + screenProjectWidth / 2}px`,
-      top: `${screenVector.y - height - 30}px`,
+      top: `${Math.max(screenVector.y - height - 30, 0)}px`,
     }"
     ref="dialog"
     absolute="~"
-    w="80"
-    h="60"
+    w="160"
+    h="100"
     z="100"
   >
     <div class="attach-dialog" text="sm gray-200" flex="~ col" p="x-6 y-4" h="full">
       <h1 text="lg" font="bold" relative="~">
         {{ viewData.title }}
+        <slot name="option"></slot>
         <button @click="$emit('close')" absolute="~" right="2" top="1">
           <i i-mdi-close></i>
         </button>

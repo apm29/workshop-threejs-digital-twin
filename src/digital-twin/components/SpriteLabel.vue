@@ -13,6 +13,8 @@ import {
 } from "./inject-keys";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { useModels } from "~/digital-twin/components/models.js";
+import { BASE_X, BASE_Y, BASE_Z } from "./axes.js";
+
 const scene = inject(SceneInjectKey);
 const selectableGroup = inject(SelectableGroupInjectKey);
 const registerLoopFunc = inject(RenderLoopInjectKey);
@@ -36,13 +38,10 @@ const props = defineProps({
 
 const textureLoader = new THREE.TextureLoader();
 
-const BASE_Z = 35;
-const BASE_Y = 0;
-const BASE_X = -5;
-
 const texture = textureLoader.load(props.path);
 const material = new THREE.SpriteMaterial({
   map: texture,
+  transparent: true,
 });
 const label = new THREE.Sprite(material);
 label.center.set(0.5, 1);

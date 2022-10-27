@@ -1,22 +1,25 @@
-const renderer = ref()
-const scene = ref()
-const camera = ref()
-const control = ref()
+const renderer = ref();
+const scene = ref();
+const camera = ref();
+const control = ref();
+const loading = ref(false);
 export function useThree() {
   function setScene(value) {
-    scene.value = value
+    scene.value = value;
   }
   function setRenderer(value) {
-    renderer.value = value
+    renderer.value = value;
   }
   function setCamera(value) {
-    camera.value = value
+    camera.value = value;
   }
   function setControl(value) {
-    control.value = value
+    control.value = value;
   }
 
   return {
+    loading,
+
     renderer,
     setRenderer,
     scene,
@@ -24,6 +27,6 @@ export function useThree() {
     camera,
     setCamera,
     control,
-    setControl
-  }
+    setControl,
+  };
 }

@@ -27,10 +27,10 @@
 
 <script setup>
 import * as THREE from "three";
-
-const loading = ref();
+import { useThree } from "./three";
 const loaded = ref(0);
 const total = ref(0);
+const { loading } = useThree();
 THREE.DefaultLoadingManager.onStart = function (url, itemsLoaded, itemsTotal) {
   // console.log(
   //   "Started loading file: " +

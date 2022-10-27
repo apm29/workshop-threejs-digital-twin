@@ -8,5 +8,7 @@ export const CameraInjectKey = Symbol("camera")
 export const OrbitControlInjectKey = Symbol("orbit-control")
 //高亮的Object3D数组
 export const HighlightedGroups = Symbol("HighlightedGroups")
+export const ErrorDeviceGroups = Symbol("ErrorDeviceGroups")
+export const ClosedDeviceGroups = Symbol("ClosedDeviceGroups")
 //注册选择事件
 export const RegisterSelectHandler = Symbol("RegisterSelectHandler")

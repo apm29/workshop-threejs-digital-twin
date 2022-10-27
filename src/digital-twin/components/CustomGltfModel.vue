@@ -8,8 +8,7 @@
 import * as THREE from "three";
 import { SceneInjectKey, SelectableGroupInjectKey } from "./inject-keys";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { BASE_X, BASE_Y, BASE_Z } from "./axes.js"
-
+import { BASE_X, BASE_Y, BASE_Z } from "./axes.js";
 
 const selectableGroup = inject(SelectableGroupInjectKey);
 const scene = inject(SceneInjectKey);
@@ -45,7 +44,7 @@ gltfLoader.load(props.path, (gltf) => {
     if (obj instanceof THREE.Mesh) {
       // console.log(obj);
       const defaultMaterial = new THREE.MeshPhongMaterial({
-        color: 0xffffff,
+        color: 0x363433,
         // transparent: false,
       });
       obj.material = defaultMaterial;

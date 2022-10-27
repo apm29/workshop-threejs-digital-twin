@@ -37,6 +37,7 @@
             v-for="option of rangeOptions"
             :label="option.label"
             :value="option.value"
+            :key="option.value"
           ></el-option>
         </el-select>
       </template>
@@ -65,6 +66,9 @@
       <el-form-item label="显示建筑" style="pointer-events: auto">
         <el-switch v-model="showOther"></el-switch>
       </el-form-item>
+      <el-form-item label="自动旋转" style="pointer-events: auto">
+        <el-switch v-model="autoRotate"></el-switch>
+      </el-form-item>
       <el-form-item label="" style="pointer-events: auto">
         <el-button @click="resetCamera">重置视角</el-button>
       </el-form-item>
@@ -72,7 +76,7 @@
     <div
       fixed="!~"
       bottom="0"
-      p="x-3 y-4"
+      p="x-3 b-4 t-12"
       w="full"
       right="0"
       z="30"
@@ -83,15 +87,26 @@
       flex="~ wrap"
       gap="x-2 y-2"
       items="center"
-      v-if="false"
     >
+      <h3 w="full" text="white sm">
+        <span text="red-500">红色</span>:数据异常,<span text="blue-500">蓝色</span>
+        :设备关闭,<span text="green-500">绿色</span>:运行正常
+      </h3>
       <el-button
         size="mini"
         @click="handleViewModel(model)"
         style="pointer-events: auto"
+        :type="
+          errorDeviceKeys.includes(model.viewData.key)
+            ? 'danger'
+            : closedDeviceKeys.includes(model.viewData.key)
+            ? 'primary'
+            : 'success'
+        "
         m="!0"
         v-for="model of models"
         :key="model.viewData.title"
+        plain
       >
         {{ model.viewData.title }}
       </el-button>
@@ -103,6 +118,8 @@
 import {
   HighlightedGroups,
   RegisterSelectHandler,
+  ErrorDeviceGroups,
+  ClosedDeviceGroups,
 } from "~/digital-twin/components/inject-keys.js";
 import * as THREE from "three";
 import GltfModel from "~/digital-twin/components/GltfModel.vue";
@@ -115,7 +132,7 @@ import dayjs from "dayjs";
 import TWEEN from "@tweenjs/tween.js";
 import { useThree } from "~/digital-twin/components/three";
 import { useModels } from "~/digital-twin/components/models.js";
-import { ModelData, SpriteData } from "./data.js";
+import { ModelData, SpriteData, DeviceStatus } from "./data.js";
 import { queryInfluxDb } from "~/api/influx";
 import {
   INITIAL_CAMERA_X,
@@ -170,7 +187,6 @@ const rangeOptions = [
 const animateDuration = 2000;
 const selectedPosition = ref(null);
 const selectedViewData = ref(null);
-const selectedModel = ref(null);
 const modelObject3dMap = shallowReactive({});
 const loading = ref(false);
 const rawData = ref([]);
@@ -212,6 +228,8 @@ const dataAxisX = computed(() => {
 
 const registerSelectHandler = inject(RegisterSelectHandler);
 const highlighted = inject(HighlightedGroups);
+const errorDevices = inject(ErrorDeviceGroups);
+const closedDevices = inject(ClosedDeviceGroups);
 registerSelectHandler(({ event, camera, renderer, scene, selectedObject, controls }) => {
   handleSelect({
     event,
@@ -278,7 +296,15 @@ function handleSelect({ event, selectedObject, camera, controls }) {
   tweenControl.start();
 }
 const showOther = ref(true);
+const autoRotate = ref(true);
 const showAxesHelper = ref(false);
+
+//自动旋转开关
+watch(autoRotate, (autoRotate) => {
+  const { control } = useThree();
+  control.value.autoRotate = autoRotate;
+  // control.value.update();
+});
 
 function resetCamera() {
   //清空数据
@@ -319,6 +345,13 @@ function handleViewModel({ viewData, position }) {
   const { camera: cameraRef, control: controlRef } = useThree();
   const camera = cameraRef.value;
   const controls = controlRef.value;
+
+  //高亮
+  // console.log(modelObject3dMap[viewData.key]);
+  if (modelObject3dMap[viewData.key]) {
+    highlighted.value = [modelObject3dMap[viewData.key]];
+  }
+
   //向量计算
   //物体位置--> 相机位置向量
   const vector = new THREE.Vector3(
@@ -352,6 +385,108 @@ function handleViewModel({ viewData, position }) {
   tween.start();
   tweenControl.start();
 }
+
+const NodeStatusClassMap = {
+  1: "green-node", //绿色
+  2: "blue-node", //蓝色
+  3: "gray-node", //灰色
+  "-1": "red-node", //红色
+};
+const DataTextStatusClassMap = {
+  1: "green-text", //绿色
+  2: "blue-text", //蓝色
+  3: "gray-text", //灰色
+  "-1": "red-text", //红色
+};
+//
+//1:设备开: 绿色
+//2:设备关: 蓝色
+//3:设备数据异常: 灰色
+//
+//1:工艺状态正常: 绿色
+//2:工艺状态过高: 红色
+//3:工艺状态过低: 红色
+//4:工艺数据异常: 灰色
+//
+function getDeviceStateNodeClass(deviceStatus, craftStatus) {
+  //工艺状态异常时显示红色
+  if (craftStatus == 3 || craftStatus == 2) {
+    return NodeStatusClassMap[-1];
+  } else if (craftStatus == 4) {
+    return NodeStatusClassMap[3];
+  } else {
+    return NodeStatusClassMap[deviceStatus];
+  }
+}
+function getDeviceStateTextClass(deviceStatus, craftStatus) {
+  //工艺状态异常时显示红色
+  if (craftStatus == 3 || craftStatus == 2) {
+    return DataTextStatusClassMap[-1];
+  } else if (craftStatus == 4) {
+    return DataTextStatusClassMap[3];
+  } else {
+    return DataTextStatusClassMap[deviceStatus];
+  }
+}
+//设备状态
+const { loading: loadingModel } = useThree();
+const deviceStatus = ref([]);
+const closedDeviceKeys = computed(() => {
+  return deviceStatus.value.filter((d) => d.status === 2).map((it) => it.key);
+});
+const errorDeviceKeys = computed(() => {
+  return deviceStatus.value.filter((d) => d.status === 3).map((it) => it.key);
+});
+watch([errorDeviceKeys, loadingModel], ([keys]) => {
+  console.log("error keys", keys);
+  errorDevices.value = keys
+    .map((key) => {
+      const model = modelObject3dMap[key];
+      console.log("get", key, model);
+      return model;
+    })
+    .filter((it) => it);
+});
+watch([closedDeviceKeys, loadingModel], ([keys]) => {
+  console.log("closed keys", keys);
+  closedDevices.value = keys
+    .map((key) => {
+      const model = modelObject3dMap[key];
+      console.log("get", key, model);
+      return model;
+    })
+    .filter((it) => it);
+});
+function getDevicesStatus() {
+  return Promise.all(
+    DeviceStatus.map((device) => {
+      return queryInfluxDb({
+        org: device.org,
+        bucket: device.bucket,
+        measurement: device.measurement,
+        range: -1, //只查一条
+      })
+        .then((res) => {
+          return {
+            ...device,
+            status: res?.data?.[0]?._value ?? 4,
+          };
+        })
+        .catch((err) => {
+          console.log(err);
+          return {
+            ...device,
+            status: 4,
+          };
+        });
+    })
+  ).then((res) => {
+    console.log(res);
+    deviceStatus.value = res;
+  });
+}
+onMounted(getDevicesStatus);
+useIntervalFn(getDevicesStatus, 60_000);
 </script>
 
 <style lang="scss">

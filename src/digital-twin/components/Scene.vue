@@ -18,6 +18,8 @@ import {
   OrbitControlInjectKey,
   HighlightedGroups,
   RegisterSelectHandler,
+  ErrorDeviceGroups,
+  ClosedDeviceGroups,
 } from "./inject-keys";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
@@ -28,6 +30,9 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
 import { FilmPass } from "three/addons/postprocessing/FilmPass.js";
 import { GammaCorrectionShader } from "three/addons/shaders/GammaCorrectionShader.js";
+import { LuminosityShader } from "three/addons/shaders/LuminosityShader.js";
+import { SobelOperatorShader } from "three/addons/shaders/SobelOperatorShader.js";
+
 import { useThree } from "./three";
 import TWEEN from "@tweenjs/tween.js";
 
@@ -61,7 +66,7 @@ const composer = new EffectComposer(renderer);
 
 watch([widthRef, heightRef], (width, height) => {
   if (width && height) {
-    initOutlinePass();
+    createPostProcess();
   }
 });
 
@@ -77,7 +82,15 @@ provide(RegisterSelectHandler, function (func) {
 const selectedGroup = shallowRef([]);
 provide(HighlightedGroups, selectedGroup);
 
-function initOutlinePass() {
+//设备数据异常部分
+const errorDeviceGroup = shallowRef([]);
+provide(ErrorDeviceGroups, errorDeviceGroup);
+
+//设备关闭部分
+const closedDeviceGroup = shallowRef([]);
+provide(ClosedDeviceGroups, closedDeviceGroup);
+
+function createPostProcess() {
   const width = widthRef.value;
   const height = heightRef.value;
   const pixelRatio = renderer.getPixelRatio();
@@ -95,21 +108,34 @@ function initOutlinePass() {
   filmPass.renderToScreen = true;
   // composer.addPass(filmPass);
 
+  const effectGrayScale = new ShaderPass(LuminosityShader);
+  // composer.addPass(effectGrayScale);
+  const effectSobel = new ShaderPass(SobelOperatorShader);
+  effectSobel.uniforms["resolution"].value.x = width * pixelRatio;
+  effectSobel.uniforms["resolution"].value.y = height * pixelRatio;
+  // composer.addPass(effectSobel);
   //outline
   const outlinePass = new OutlinePass(
     new THREE.Vector2(width * pixelRatio, height * pixelRatio),
     scene,
     camera
   );
+
+  const bloomPass = new UnrealBloomPass(new THREE.Vector2(width, height), 1.5, 0.4, 0.85);
+  bloomPass.threshold = 0;
+  bloomPass.strength = 0.2;
+  bloomPass.radius = 0;
+  // composer.addPass(bloomPass);
+
   //选择部分
   watch(selectedGroup, (selected) => {
     outlinePass.selectedObjects = selected;
   });
 
-  outlinePass.visibleEdgeColor.set("#0022ff");
-  outlinePass.hiddenEdgeColor.set("#ff3366");
-  outlinePass.edgeStrength = 30;
-  outlinePass.edgeGlow = 1;
+  outlinePass.visibleEdgeColor.set("#33ff44");
+  outlinePass.hiddenEdgeColor.set("#33ff44");
+  outlinePass.edgeStrength = 10;
+  outlinePass.edgeGlow = 0.5;
   outlinePass.edgeThickness = 1;
   const textureLoader = new THREE.TextureLoader();
   const texture = textureLoader.load("./textures/tri_pattern.jpg");
@@ -120,6 +146,57 @@ function initOutlinePass() {
   outlinePass.renderToScreen = true;
   outlinePass.selectedObjects = [];
   composer.addPass(outlinePass);
+
+  //设备数据错误
+  const errorDeviceOutlinePass = new OutlinePass(
+    new THREE.Vector2(width * pixelRatio, height * pixelRatio),
+    scene,
+    camera
+  );
+  const errorTexture = textureLoader.load("./textures/data_error.jpg");
+  errorTexture.wrapS = THREE.RepeatWrapping;
+  errorTexture.wrapT = THREE.RepeatWrapping;
+  errorDeviceOutlinePass.patternTexture = errorTexture;
+  errorDeviceOutlinePass.usePatternTexture = false;
+  watch(errorDeviceGroup, (selected) => {
+    console.log("error", selected);
+    errorDeviceOutlinePass.selectedObjects = selected;
+  });
+
+  errorDeviceOutlinePass.visibleEdgeColor.set("#ff0000");
+  errorDeviceOutlinePass.hiddenEdgeColor.set("#ff0000");
+  errorDeviceOutlinePass.edgeStrength = 10;
+  errorDeviceOutlinePass.edgeGlow = 0;
+  errorDeviceOutlinePass.edgeThickness = 1;
+  errorDeviceOutlinePass.renderToScreen = true;
+  errorDeviceOutlinePass.selectedObjects = [];
+  composer.addPass(errorDeviceOutlinePass);
+
+  //设备关闭
+  const closedDeviceOutlinePass = new OutlinePass(
+    new THREE.Vector2(width * pixelRatio, height * pixelRatio),
+    scene,
+    camera
+  );
+
+  const closeTexture = textureLoader.load("./textures/device_close.jpg");
+  closeTexture.wrapS = THREE.RepeatWrapping;
+  closeTexture.wrapT = THREE.RepeatWrapping;
+  closedDeviceOutlinePass.patternTexture = closeTexture;
+  closedDeviceOutlinePass.usePatternTexture = false;
+
+  watch(closedDeviceGroup, (selected) => {
+    closedDeviceOutlinePass.selectedObjects = selected;
+  });
+
+  closedDeviceOutlinePass.visibleEdgeColor.set("#0022ff");
+  closedDeviceOutlinePass.hiddenEdgeColor.set("#0022ff");
+  closedDeviceOutlinePass.edgeStrength = 10;
+  closedDeviceOutlinePass.edgeGlow = 0;
+  closedDeviceOutlinePass.edgeThickness = 1;
+  closedDeviceOutlinePass.renderToScreen = true;
+  closedDeviceOutlinePass.selectedObjects = [];
+  composer.addPass(closedDeviceOutlinePass);
 
   //抗锯齿
   const effectFXAA = new ShaderPass(FXAAShader);
@@ -193,6 +270,7 @@ function measure(func) {
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.listenToKeyEvents(window); // optional
 controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
+controls.autoRotate = true; // an animation loop is required when either damping or auto-rotation are enabled
 controls.dampingFactor = 0.05;
 controls.screenSpacePanning = false;
 controls.minDistance = 0.1;

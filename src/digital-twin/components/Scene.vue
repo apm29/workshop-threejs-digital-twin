@@ -59,8 +59,21 @@ const heightRef = inject(HeightInjectKey);
 //stats
 const stats = new Stats();
 // 设置监视器面板，传入面板id（0: fps, 1: ms, 2: mb）
-stats.setMode(1);
+stats.setMode(0);
 window.document.body.appendChild(stats.dom);
+stats.dom.style.top = "70px";
+//stats
+const stats1 = new Stats();
+// 设置监视器面板，传入面板id（0: fps, 1: ms, 2: mb）
+stats1.setMode(1);
+window.document.body.appendChild(stats1.dom);
+stats1.dom.style.top = "120px";
+//stats
+const stats2 = new Stats();
+// 设置监视器面板，传入面板id（0: fps, 1: ms, 2: mb）
+stats2.setMode(2);
+window.document.body.appendChild(stats2.dom);
+stats2.dom.style.top = "170px";
 
 const composer = new EffectComposer(renderer);
 
@@ -292,10 +305,14 @@ function animate() {
     func();
   });
   stats.begin();
+  stats1.begin();
+  stats2.begin();
   controls.update();
   // renderer.render(scene, camera);
   composer.render();
   stats.end();
+  stats1.end();
+  stats2.end();
 }
 animate();
 </script>

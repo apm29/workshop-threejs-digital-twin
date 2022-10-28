@@ -22,57 +22,49 @@
       ></SpriteLabel>
     </template>
 
-    <AttachDialog
-      v-if="selectedPosition"
-      :attach="selectedPosition"
-      :viewData="selectedViewData"
-      @close="resetCamera()"
-      v-loading="loading"
-      element-loading-text="拼命加载中"
-      element-loading-spinner="el-icon-loading"
-    >
-      <template #option>
-        <el-select v-model="selectedViewData.range" size="mini">
-          <el-option
-            v-for="option of rangeOptions"
-            :label="option.label"
-            :value="option.value"
-            :key="option.value"
-          ></el-option>
-        </el-select>
-      </template>
-      <BasicLineCharts h="full" :data="data" :dataAxisX="dataAxisX" />
+    <AttachDialog v-if="selectedPosition" :attach="selectedPosition">
+      <TimeSeriesChart
+        :range.sync="selectedViewData.range"
+        :title="selectedViewData.title"
+        :org="selectedViewData.org"
+        :bucket="selectedViewData.bucket"
+        :measurement="selectedViewData.measurement"
+        @close="resetCamera()"
+      ></TimeSeriesChart>
     </AttachDialog>
 
-    <el-form
+    <SimpleBorder12
       fixed="!~"
-      top="0"
-      p="x-3 y-4"
-      h="full"
+      top="70px"
       min="w-12rem"
       right="0"
       z="30"
-      label-position="left"
-      label-width="6rem"
-      bg="gradient-to-r"
+      bg="gradient-to-b"
+      via="bluegray-700/10"
       from="transparent"
-      to="dark-600"
-      style="pointer-events: none"
-      size="mini"
+      to="transparent"
     >
-      <el-form-item label="显示坐标轴" style="pointer-events: auto">
-        <el-switch v-model="showAxesHelper"></el-switch>
-      </el-form-item>
-      <el-form-item label="显示建筑" style="pointer-events: auto">
-        <el-switch v-model="showOther"></el-switch>
-      </el-form-item>
-      <el-form-item label="自动旋转" style="pointer-events: auto">
-        <el-switch v-model="autoRotate"></el-switch>
-      </el-form-item>
-      <el-form-item label="" style="pointer-events: auto">
-        <el-button @click="resetCamera">重置视角</el-button>
-      </el-form-item>
-    </el-form>
+      <el-form
+        label-position="left"
+        label-width="6rem"
+        style="pointer-events: none"
+        size="mini"
+        p="x-4 y-4"
+      >
+        <el-form-item label="显示坐标轴" style="pointer-events: auto">
+          <el-switch v-model="showAxesHelper"></el-switch>
+        </el-form-item>
+        <el-form-item label="显示建筑" style="pointer-events: auto">
+          <el-switch v-model="showOther"></el-switch>
+        </el-form-item>
+        <el-form-item label="自动旋转" style="pointer-events: auto">
+          <el-switch v-model="autoRotate"></el-switch>
+        </el-form-item>
+        <el-form-item label="" style="pointer-events: auto">
+          <el-button @click="resetCamera">重置视角</el-button>
+        </el-form-item>
+      </el-form>
+    </SimpleBorder12>
     <div
       fixed="!~"
       bottom="0"
@@ -127,8 +119,8 @@ import CustomGltfModel from "~/digital-twin/components/CustomGltfModel.vue";
 import SpriteLabel from "~/digital-twin/components/SpriteLabel.vue";
 import AttachDialog from "~/digital-twin/components/AttachDialog.vue";
 import AxesHelper from "~/digital-twin/components/AxesHelper.vue";
-import BasicLineCharts from "~/components/charts/BasicLineCharts.vue";
-import dayjs from "dayjs";
+import TimeSeriesChart from "~/digital-twin/combine/TimeSeriesChart.vue";
+import SimpleBorder12 from "~/svg/border/SimpleBorder12.vue";
 import TWEEN from "@tweenjs/tween.js";
 import { useThree } from "~/digital-twin/components/three";
 import { useModels } from "~/digital-twin/components/models.js";
@@ -142,89 +134,10 @@ import {
 //数据部分
 const ViewModelData = ref(ModelData);
 const ViewSpriteData = ref(SpriteData);
-const rangeOptions = [
-  {
-    label: "最近1分钟",
-    value: "-1m",
-  },
-  {
-    label: "最近5分钟",
-    value: "-5m",
-  },
-  {
-    label: "最近15分钟",
-    value: "-15m",
-  },
-  {
-    label: "最近1小时",
-    value: "-1h",
-  },
-  {
-    label: "最近3小时",
-    value: "-3h",
-  },
-  {
-    label: "最近6小时",
-    value: "-6h",
-  },
-  {
-    label: "最近12小时",
-    value: "-12h",
-  },
-  {
-    label: "最近24小时",
-    value: "-24h",
-  },
-  {
-    label: "最近2天",
-    value: "-2d",
-  },
-  {
-    label: "最近7天",
-    value: "-7d",
-  },
-];
 const animateDuration = 2000;
 const selectedPosition = ref(null);
 const selectedViewData = ref(null);
 const modelObject3dMap = shallowReactive({});
-const loading = ref(false);
-const rawData = ref([]);
-const data = computed(() => {
-  return [
-    {
-      data: rawData.value.map((it) => it._value),
-      name: "数据值",
-    },
-  ];
-});
-watch(() => selectedViewData.value?.range, queryModelData);
-watch(() => selectedViewData.value?.org, queryModelData);
-watch(() => selectedViewData.value?.bucket, queryModelData);
-watch(() => selectedViewData.value?.measurement, queryModelData);
-
-function queryModelData() {
-  const viewData = selectedViewData.value;
-  if (!viewData) {
-    return;
-  }
-  //查询数据
-  rawData.value = [];
-  loading.value = true;
-  queryInfluxDb({
-    org: viewData.org,
-    bucket: viewData.bucket,
-    measurement: viewData.measurement,
-    range: viewData.range,
-  })
-    .then((res) => {
-      rawData.value = res.data ?? [];
-    })
-    .finally(() => (loading.value = false));
-}
-const dataAxisX = computed(() => {
-  return rawData.value.map((it) => dayjs(it._time).format("YYYY/MM/DD HH:mm:ss"));
-});
 
 const registerSelectHandler = inject(RegisterSelectHandler);
 const highlighted = inject(HighlightedGroups);

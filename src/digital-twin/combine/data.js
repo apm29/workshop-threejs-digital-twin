@@ -699,5 +699,4 @@ export const DeviceStatus = [
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "GM_CCQCKFY_P_Get_kPa", title: "除尘器出口", key: "GM_CCQCKFY_P_Get_kPa", },
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "BZLX_A", title: "输送(干磨机后)", key: "C_BZLX", },
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "ZDS_A", title: "振动筛", key: "C_ZDS", },
-  { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "BZLX_A", title: "称量包装机", key: "C_BZLX", },
 ]

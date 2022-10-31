@@ -231,7 +231,7 @@ const svgStyle = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-$--dv-shadow: 0 2px 4px rgba(11, 116, 210, 0.45), 0 0 6px rgba(148, 245, 233, 0.35) !default;
+$--dv-shadow: 0 2px 4px rgba(34, 109, 174, 0.45), 0 0 6px rgba(199, 223, 220, 0.35) !default;
 .st0 {
   fill: url(#my-dv-header6-SVGID_1_);
 }

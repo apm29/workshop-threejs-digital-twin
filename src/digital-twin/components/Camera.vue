@@ -9,7 +9,23 @@ import * as THREE from "three";
 import { CameraInjectKey, WidthInjectKey, HeightInjectKey } from "./inject-keys";
 import { useThree } from "./three";
 import { INITIAL_CAMERA_X, INITIAL_CAMERA_Y, INITIAL_CAMERA_Z } from "./axes.js";
-const { setCamera } = useThree();
+
+const props = defineProps({
+  namespace: {
+    type: String,
+    default: "app",
+  },
+  position: {
+    type: Object,
+    default: () => ({
+      x: INITIAL_CAMERA_X,
+      y: INITIAL_CAMERA_Y,
+      z: INITIAL_CAMERA_Z,
+    }),
+  },
+});
+
+const { setCamera } = useThree(props.namespace);
 
 const width = inject(WidthInjectKey);
 const height = inject(HeightInjectKey);
@@ -21,9 +37,11 @@ const camera = new THREE.PerspectiveCamera(
   5000 //far
 );
 
-camera.position.x = INITIAL_CAMERA_X;
-camera.position.y = INITIAL_CAMERA_Y;
-camera.position.z = INITIAL_CAMERA_Z;
+camera.position.x = props.position?.x ?? INITIAL_CAMERA_X;
+camera.position.y = props.position?.y ?? INITIAL_CAMERA_Y;
+camera.position.z = props.position?.z ?? INITIAL_CAMERA_Z;
+
+console.log("camera position:", camera.position);
 
 //监听视窗大小变化
 watch([width, height], () => {

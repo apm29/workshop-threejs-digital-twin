@@ -1,8 +1,8 @@
 <template>
   <div h="screen" w="screen" class="atcc-workshop">
-    <Renderer h="screen" w="screen">
-      <Camera>
-        <Scene>
+    <Renderer h="screen" w="screen" namespace="app">
+      <Camera namespace="app">
+        <Scene namespace="app">
           <Sky></Sky>
           <Ground></Ground>
           <CementGround></CementGround>

@@ -36,12 +36,26 @@ import { SobelOperatorShader } from "three/addons/shaders/SobelOperatorShader.js
 import { useThree } from "./three";
 import TWEEN from "@tweenjs/tween.js";
 
-const { setScene, setControl } = useThree();
+const props = defineProps({
+  namespace: {
+    type: String,
+    default: "app",
+  },
+  background: {
+    type: String,
+  },
+});
+
+const { setScene, setControl } = useThree(props.namespace);
 const scene = new THREE.Scene();
+if (props.background) {
+  const textureLoader = new THREE.TextureLoader();
+  scene.background = textureLoader.load(props.background);
+}
 //背景色
-scene.background = new THREE.Color().setHex(0x000000);
+// scene.background = new THREE.Color().setHex(0x000000);
 //雾
-scene.fog = new THREE.Fog(scene.background, 1, 300);
+scene.fog = new THREE.Fog(new THREE.Color().setHex(0x000000), 1, 300);
 //可选择得组
 const group = new THREE.Group();
 scene.add(group);
@@ -62,18 +76,6 @@ const stats = new Stats();
 stats.setMode(0);
 window.document.body.appendChild(stats.dom);
 stats.dom.style.top = "70px";
-//stats
-const stats1 = new Stats();
-// 设置监视器面板，传入面板id（0: fps, 1: ms, 2: mb）
-stats1.setMode(1);
-window.document.body.appendChild(stats1.dom);
-stats1.dom.style.top = "120px";
-//stats
-const stats2 = new Stats();
-// 设置监视器面板，传入面板id（0: fps, 1: ms, 2: mb）
-stats2.setMode(2);
-window.document.body.appendChild(stats2.dom);
-stats2.dom.style.top = "170px";
 
 const composer = new EffectComposer(renderer);
 
@@ -305,14 +307,10 @@ function animate() {
     func();
   });
   stats.begin();
-  stats1.begin();
-  stats2.begin();
   controls.update();
   // renderer.render(scene, camera);
   composer.render();
   stats.end();
-  stats1.end();
-  stats2.end();
 }
 animate();
 </script>

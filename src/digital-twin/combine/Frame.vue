@@ -8,7 +8,7 @@
     w="100vw"
     h="auto"
     bg="gradient-to-b"
-    from="bluegray-700"
+    from="teal-900/70"
     to="transparent"
   >
     安特磁材三分厂数字化

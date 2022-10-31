@@ -33,7 +33,7 @@
       ></TimeSeriesChart>
     </AttachDialog>
 
-    <SimpleBorder12
+    <SimpleBorder6
       fixed="!~"
       top="70px"
       min="w-12rem"
@@ -64,7 +64,7 @@
           <el-button @click="resetCamera">重置视角</el-button>
         </el-form-item>
       </el-form>
-    </SimpleBorder12>
+    </SimpleBorder6>
     <div
       fixed="!~"
       bottom="0"
@@ -81,8 +81,8 @@
       items="center"
     >
       <h3 w="full" text="white sm">
-        <span text="red-500">红色</span>:数据异常,<span text="blue-500">蓝色</span>
-        :设备关闭,<span text="green-500">绿色</span>:运行正常
+        <span text="red-300">红色</span>:数据异常,<span text="blue-300">蓝色</span>
+        :设备关闭,<span text="green-300">绿色</span>:运行正常
       </h3>
       <el-button
         size="mini"
@@ -120,7 +120,7 @@ import SpriteLabel from "~/digital-twin/components/SpriteLabel.vue";
 import AttachDialog from "~/digital-twin/components/AttachDialog.vue";
 import AxesHelper from "~/digital-twin/components/AxesHelper.vue";
 import TimeSeriesChart from "~/digital-twin/combine/TimeSeriesChart.vue";
-import SimpleBorder12 from "~/svg/border/SimpleBorder12.vue";
+import SimpleBorder6 from "~/svg/border/SimpleBorder6.vue";
 import TWEEN from "@tweenjs/tween.js";
 import { useThree } from "~/digital-twin/components/three";
 import { useModels } from "~/digital-twin/components/models.js";
@@ -131,6 +131,14 @@ import {
   INITIAL_CAMERA_Y,
   INITIAL_CAMERA_Z,
 } from "~/digital-twin/components/axes.js";
+
+const props = defineProps({
+  namespace: {
+    type: String,
+    default: "app",
+  },
+});
+
 //数据部分
 const ViewModelData = ref(ModelData);
 const ViewSpriteData = ref(SpriteData);
@@ -214,7 +222,7 @@ const showAxesHelper = ref(false);
 
 //自动旋转开关
 watch(autoRotate, (autoRotate) => {
-  const { control } = useThree();
+  const { control } = useThree(props.namespace);
   control.value.autoRotate = autoRotate;
   // control.value.update();
 });
@@ -224,7 +232,7 @@ function resetCamera() {
   selectedPosition.value = null;
   selectedViewData.value = null;
   highlighted.value = [];
-  const { camera: cameraRef, control: controlRef } = useThree();
+  const { camera: cameraRef, control: controlRef } = useThree(props.namespace);
   const camera = cameraRef.value;
   const controls = controlRef.value;
   //视角动画
@@ -255,7 +263,7 @@ const { models } = useModels();
 
 function handleViewModel({ viewData, position }) {
   console.log(position);
-  const { camera: cameraRef, control: controlRef } = useThree();
+  const { camera: cameraRef, control: controlRef } = useThree(props.namespace);
   const camera = cameraRef.value;
   const controls = controlRef.value;
 
@@ -342,7 +350,7 @@ function getDeviceStateTextClass(deviceStatus, craftStatus) {
   }
 }
 //设备状态
-const { loading: loadingModel } = useThree();
+const { loading: loadingModel } = useThree(props.namespace);
 const deviceStatus = ref([]);
 const closedDeviceKeys = computed(() => {
   return deviceStatus.value.filter((d) => d.status === 2).map((it) => it.key);

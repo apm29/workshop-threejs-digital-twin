@@ -1,5 +1,5 @@
 <template>
-  <SimpleBorder
+  <SimpleBorder6
     v-loading="loading"
     element-loading-text="加载数据中"
     element-loading-spinner="el-icon-loading"
@@ -29,18 +29,20 @@
           <i i-mdi-close></i>
         </button>
       </h1>
-      <div flex="grow" overflow="y-auto">
-        <BasicLineCharts h="full" :data="data" :dataAxisX="dataAxisX" />
+      <div flex="~ grow" overflow="y-auto">
+        <ModelShow></ModelShow>
+        <BasicLineCharts flex="grow" h="full" :data="data" :dataAxisX="dataAxisX" />
       </div>
     </div>
-  </SimpleBorder>
+  </SimpleBorder6>
 </template>
 
 <script setup>
 import dayjs from "dayjs";
 import { queryInfluxDb } from "~/api/influx";
 import BasicLineCharts from "~/components/charts/BasicLineCharts.vue";
-import SimpleBorder from "~/svg/border/SimpleBorder.vue";
+import SimpleBorder6 from "~/svg/border/SimpleBorder6.vue";
+import ModelShow from "./ModelShow.vue";
 const rangeOptions = [
   {
     label: "最近1分钟",
@@ -122,7 +124,7 @@ function queryModelData() {
     .finally(() => (loading.value = false));
 }
 const dataAxisX = computed(() => {
-  return rawData.value.map((it) => dayjs(it._time).format("YYYY/MM/DD HH:mm:ss"));
+  return rawData.value.map((it) => dayjs(it._time).format("MM/DD HH:mm"));
 });
 </script>
 

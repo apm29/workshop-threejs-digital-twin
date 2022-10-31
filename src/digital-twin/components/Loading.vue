@@ -28,9 +28,21 @@
 <script setup>
 import * as THREE from "three";
 import { useThree } from "./three";
+
+
+const props = defineProps({
+  namespace: {
+    type: String,
+    default: "app",
+  },
+});
+
 const loaded = ref(0);
 const total = ref(0);
-const { loading } = useThree();
+
+
+const { loading } = useThree(props.namespace);
+
 THREE.DefaultLoadingManager.onStart = function (url, itemsLoaded, itemsTotal) {
   // console.log(
   //   "Started loading file: " +

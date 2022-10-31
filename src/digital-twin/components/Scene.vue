@@ -15,7 +15,6 @@ import {
   SelectableGroupInjectKey,
   WidthInjectKey,
   HeightInjectKey,
-  OrbitControlInjectKey,
   HighlightedGroups,
   RegisterSelectHandler,
   ErrorDeviceGroups,
@@ -26,7 +25,6 @@ import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { OutlinePass } from "three/addons/postprocessing/OutlinePass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
 import { FilmPass } from "three/addons/postprocessing/FilmPass.js";
 import { GammaCorrectionShader } from "three/addons/shaders/GammaCorrectionShader.js";
@@ -255,7 +253,6 @@ function createPostProcess() {
         renderer,
         scene,
         selectedObject,
-        controls,
       });
       selectEventHandlers.forEach((func) => {
         func({
@@ -264,7 +261,6 @@ function createPostProcess() {
           renderer,
           scene,
           selectedObject,
-          controls,
         });
       });
     } else {
@@ -281,19 +277,6 @@ function measure(func) {
   console.log("函数耗时:", after - before);
 }
 
-//control
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.listenToKeyEvents(window); // optional
-controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
-controls.autoRotate = true; // an animation loop is required when either damping or auto-rotation are enabled
-controls.dampingFactor = 0.05;
-controls.screenSpacePanning = false;
-controls.minDistance = 0.1;
-controls.maxDistance = 100;
-controls.maxPolarAngle = (Math.PI / 2) * 1.5;
-setControl(controls);
-provide(OrbitControlInjectKey, controls);
-
 const loopFunc = [];
 function registerLoopFunc(func) {
   loopFunc.push(func);
@@ -307,7 +290,7 @@ function animate() {
     func();
   });
   stats.begin();
-  controls.update();
+  // controls.update();
   // renderer.render(scene, camera);
   composer.render();
   stats.end();

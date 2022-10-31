@@ -151,21 +151,23 @@ const registerSelectHandler = inject(RegisterSelectHandler);
 const highlighted = inject(HighlightedGroups);
 const errorDevices = inject(ErrorDeviceGroups);
 const closedDevices = inject(ClosedDeviceGroups);
-registerSelectHandler(({ event, camera, renderer, scene, selectedObject, controls }) => {
+registerSelectHandler(({ event, camera, renderer, scene, selectedObject }) => {
   handleSelect({
     event,
     camera,
     renderer,
     scene,
     selectedObject,
-    controls,
   });
 });
 
-function handleSelect({ event, selectedObject, camera, controls }) {
+function handleSelect({ event, selectedObject }) {
   if (!(selectedObject instanceof THREE.Sprite)) {
     return;
   }
+  const { camera: cameraRef, control: controlRef } = useThree(props.namespace);
+  const camera = cameraRef.value;
+  const controls = controlRef.value;
   const viewData = selectedObject.userData.viewData;
   //高亮
   // console.log(modelObject3dMap[viewData.key]);

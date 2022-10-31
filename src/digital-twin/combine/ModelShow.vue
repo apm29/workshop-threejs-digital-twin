@@ -11,6 +11,7 @@
           }"
         >
           <Scene namespace="demo">
+            <Controls namespace="demo"></Controls>
             <Light></Light>
             <!-- <AxesHelper></AxesHelper> -->
             <GltfModel
@@ -33,6 +34,7 @@
 import Renderer from "~/digital-twin/components/Renderer.vue";
 import Scene from "~/digital-twin/components/Scene.vue";
 import Camera from "~/digital-twin/components/Camera.vue";
+import Controls from "~/digital-twin/components/Controls.vue";
 import SimpleBorder6 from "~/svg/border/SimpleBorder6.vue";
 import GltfModel from "~/digital-twin/components/GltfModel.vue";
 import Light from "~/digital-twin/components/Light.vue";

@@ -412,7 +412,7 @@ export const SpriteData = [
       bucket: "CFCL",
       measurement: "C_BZLX",
       range: "-1m",
-      key: "C_BZLX_2",
+      key: "C_BZLX",
     },
   },
   {

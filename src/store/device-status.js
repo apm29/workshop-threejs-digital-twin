@@ -1,12 +1,8 @@
 import { defineStore } from "pinia";
 import { DeviceStatus } from "~/digital-twin/combine/data";
 import { queryInfluxDb } from "~/api/influx";
+import { DeviceStatusEnum } from "~/definition";
 
-const DeviceStatusEnum = {
-  NORMAL: 1,  //设备正常
-  CLOSED: 2, //设备关闭
-  ERROR: 3, //数据异常
-}
 /**
  * 设备状态Store, 定期更新设备状态
  * 数据格式为 { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "N_P1", title: "P1", key: "P1", status: 1 }
@@ -16,13 +12,24 @@ export const useDeviceStatusStore = defineStore("device-status", () => {
   const deviceStatus = ref([]);
   const lastUpdateTime = ref(0);
   const normalDeviceKeys = computed(() => {
-    return deviceStatus.value.filter((d) => d.status === DeviceStatusEnum.NORMAL).map((it) => it.key);
+    return deviceStatus.value
+      .filter((d) => d.status === DeviceStatusEnum.NORMAL)
+      .map((it) => it.key);
   });
   const closedDeviceKeys = computed(() => {
-    return deviceStatus.value.filter((d) => d.status === DeviceStatusEnum.CLOSED).map((it) => it.key);
+    return deviceStatus.value
+      .filter((d) => d.status === DeviceStatusEnum.CLOSED)
+      .map((it) => it.key);
   });
   const errorDeviceKeys = computed(() => {
-    return deviceStatus.value.filter((d) => d.status === DeviceStatusEnum.ERROR).map((it) => it.key);
+    return deviceStatus.value
+      .filter((d) => d.status === DeviceStatusEnum.ERROR)
+      .map((it) => it.key);
+  });
+  const unknownDeviceKeys = computed(() => {
+    return deviceStatus.value
+      .filter((d) => d.status === DeviceStatusEnum.UNKNOWN)
+      .map((it) => it.key);
   });
   onMounted(getDevicesStatus);
   //定时更新
@@ -40,7 +47,7 @@ export const useDeviceStatusStore = defineStore("device-status", () => {
           });
           return {
             ...device,
-            status: res?.data?.[0]?._value ?? 4,
+            status: res?.data?.[0]?._value ?? DeviceStatusEnum.UNKNOWN,
           };
         } catch (err) {
           console.log(err);
@@ -68,6 +75,7 @@ export const useDeviceStatusStore = defineStore("device-status", () => {
     normalDeviceKeys,
     closedDeviceKeys,
     errorDeviceKeys,
+    unknownDeviceKeys,
 
     //function
     getSingleDeviceStatus,

@@ -14,8 +14,10 @@
     </template>
     <template v-for="spriteData of ViewSpriteData">
       <SpriteLabel
-        :key="spriteData.viewData.key + '_sprite'"
-        :path="spriteData.path"
+        :path="`./status/${
+          deviceStatus.find((it) => it.key === spriteData.viewData.key)?.status ??
+          DeviceStatusEnum.UNKNOWN
+        }.png`"
         :position="spriteData.position"
         :viewData="spriteData.viewData"
       ></SpriteLabel>
@@ -81,7 +83,10 @@
     >
       <h3 w="full" text="white sm">
         <span text="red-300">红色</span>:数据异常,<span text="blue-300">蓝色</span>
-        :设备关闭,<span text="green-300">绿色</span>:运行正常
+        :设备关闭,<span text="green-300">绿色</span>:运行正常,<span text="orange-300">
+          黄色
+        </span>
+        :未获取到数据
       </h3>
       <el-button
         size="mini"
@@ -92,7 +97,9 @@
             ? 'danger'
             : closedDeviceKeys.includes(model.viewData.key)
             ? 'primary'
-            : 'success'
+            : normalDeviceKeys.includes(model.viewData.key)
+            ? 'success'
+            : 'warning'
         "
         m="!0"
         v-for="model of models"
@@ -124,8 +131,8 @@ import SimpleBorder6 from "~/svg/border/SimpleBorder6.vue";
 import TWEEN from "@tweenjs/tween.js";
 import { useThree } from "~/digital-twin/components/three";
 import { useModels } from "~/digital-twin/components/models.js";
-import { ModelData, SpriteData, DeviceStatus } from "./data.js";
-import { queryInfluxDb } from "~/api/influx";
+import { ModelData, SpriteData } from "./data.js";
+import { DeviceStatusEnum } from "~/definition";
 import {
   INITIAL_CAMERA_X,
   INITIAL_CAMERA_Y,
@@ -309,30 +316,32 @@ function handleViewModel({ viewData, position }) {
 //设备状态
 const { loading: loadingModel } = useThree(namespace);
 const deviceStore = useDeviceStatusStore();
-const { deviceStatus, closedDeviceKeys, errorDeviceKeys } = toRefs(deviceStore);
+const { deviceStatus, closedDeviceKeys, errorDeviceKeys, normalDeviceKeys } = toRefs(
+  deviceStore
+);
 
-watch([errorDeviceKeys, loadingModel], ([keys, loading]) => {
-  if (!loading) {
-    errorDevices.value = keys
-      .map((key) => {
-        const model = modelObject3dMap[key];
-        console.log("get", key, model);
-        return model;
-      })
-      .filter((it) => it);
-  }
-});
-watch([closedDeviceKeys, loadingModel], ([keys, loading]) => {
-  if (!loading) {
-    closedDevices.value = keys
-      .map((key) => {
-        const model = modelObject3dMap[key];
-        console.log("get", key, model);
-        return model;
-      })
-      .filter((it) => it);
-  }
-});
+// watch([errorDeviceKeys, loadingModel], ([keys, loading]) => {
+//   if (!loading) {
+//     errorDevices.value = keys
+//       .map((key) => {
+//         const model = modelObject3dMap[key];
+//         console.log("get", key, model);
+//         return model;
+//       })
+//       .filter((it) => it);
+//   }
+// });
+// watch([closedDeviceKeys, loadingModel], ([keys, loading]) => {
+//   if (!loading) {
+//     closedDevices.value = keys
+//       .map((key) => {
+//         const model = modelObject3dMap[key];
+//         console.log("get", key, model);
+//         return model;
+//       })
+//       .filter((it) => it);
+//   }
+// });
 </script>
 
 <style lang="scss">

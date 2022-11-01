@@ -51,6 +51,7 @@ if (props.position) {
 }
 label.userData.viewData = props.viewData;
 selectableGroup.add(label);
+
 // const oldY = label.position.y;
 // let down = true;
 // const clock = new THREE.Clock();
@@ -117,6 +118,14 @@ watch(
     label.position.z = (props.position?.z ?? 0) + BASE_Z;
   },
   { deep: true }
+);
+//更新贴图
+watch(
+  () => props.path,
+  (path) => {
+    const texture = textureLoader.load(path);
+    label.material.map = texture;
+  }
 );
 
 onBeforeUnmount(() => {

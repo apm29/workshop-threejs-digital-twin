@@ -30,7 +30,7 @@
         </button>
       </h1>
       <div flex="~ grow" overflow="y-auto">
-        <ModelShow></ModelShow>
+        <ModelGallery></ModelGallery>
         <BasicLineCharts flex="grow" h="full" :data="data" :dataAxisX="dataAxisX" />
       </div>
     </div>
@@ -42,7 +42,7 @@ import dayjs from "dayjs";
 import { queryInfluxDb } from "~/api/influx";
 import BasicLineCharts from "~/components/charts/BasicLineCharts.vue";
 import SimpleBorder6 from "~/svg/border/SimpleBorder6.vue";
-import ModelShow from "./ModelShow.vue";
+import ModelGallery from "./ModelGallery.vue";
 const rangeOptions = [
   {
     label: "最近1分钟",

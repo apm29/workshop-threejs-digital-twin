@@ -10,7 +10,7 @@
           }"
         >
           <Scene>
-            <Controls></Controls>
+            <Controls auto-rotate></Controls>
             <Light></Light>
             <!-- <AxesHelper></AxesHelper> -->
             <GltfModel

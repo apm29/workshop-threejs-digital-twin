@@ -1,21 +1,16 @@
-const three = {
-  app: {
-    renderer: ref(),
-    scene: ref(),
-    camera: ref(),
-    control: ref(),
-    loading: ref(false),
-  },
-  demo: {
-    renderer: ref(),
-    scene: ref(),
-    camera: ref(),
-    control: ref(),
-    loading: ref(false),
-  },
-};
+const three = {};
 export function useThree(namespace = "app") {
+  if (!three[namespace]) {
+    three[namespace] = {
+      renderer: ref(),
+      scene: ref(),
+      camera: ref(),
+      control: ref(),
+      loading: ref(false),
+    }
+  }
   const selected = three[namespace];
+
   function setScene(value) {
     selected.scene.value = value;
   }

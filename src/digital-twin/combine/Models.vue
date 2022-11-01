@@ -112,6 +112,7 @@ import {
   RegisterSelectHandler,
   ErrorDeviceGroups,
   ClosedDeviceGroups,
+  NameSpaceInjectKey,
 } from "~/digital-twin/components/inject-keys.js";
 import * as THREE from "three";
 import GltfModel from "~/digital-twin/components/GltfModel.vue";
@@ -132,17 +133,12 @@ import {
   INITIAL_CAMERA_Z,
 } from "~/digital-twin/components/axes.js";
 
-const props = defineProps({
-  namespace: {
-    type: String,
-    default: "app",
-  },
-});
+const namespace = inject(NameSpaceInjectKey);
 
 //数据部分
 const ViewModelData = ref(ModelData);
 const ViewSpriteData = ref(SpriteData);
-const animateDuration = 2000;
+const animateDuration = 1200;
 const selectedPosition = ref(null);
 const selectedViewData = ref(null);
 const modelObject3dMap = shallowReactive({});
@@ -165,7 +161,7 @@ function handleSelect({ event, selectedObject }) {
   if (!(selectedObject instanceof THREE.Sprite)) {
     return;
   }
-  const { camera: cameraRef, control: controlRef } = useThree(props.namespace);
+  const { camera: cameraRef, control: controlRef } = useThree(namespace);
   const camera = cameraRef.value;
   const controls = controlRef.value;
   const viewData = selectedObject.userData.viewData;
@@ -219,12 +215,13 @@ function handleSelect({ event, selectedObject }) {
   tweenControl.start();
 }
 const showOther = ref(true);
-const autoRotate = ref(true);
+
 const showAxesHelper = ref(false);
 
 //自动旋转开关
+const { control } = useThree(namespace);
+const autoRotate = ref(control.autoRotate);
 watch(autoRotate, (autoRotate) => {
-  const { control } = useThree(props.namespace);
   control.value.autoRotate = autoRotate;
   // control.value.update();
 });
@@ -234,7 +231,7 @@ function resetCamera() {
   selectedPosition.value = null;
   selectedViewData.value = null;
   highlighted.value = [];
-  const { camera: cameraRef, control: controlRef } = useThree(props.namespace);
+  const { camera: cameraRef, control: controlRef } = useThree(namespace);
   const camera = cameraRef.value;
   const controls = controlRef.value;
   //视角动画
@@ -265,7 +262,7 @@ const { models } = useModels();
 
 function handleViewModel({ viewData, position }) {
   console.log(position);
-  const { camera: cameraRef, control: controlRef } = useThree(props.namespace);
+  const { camera: cameraRef, control: controlRef } = useThree(namespace);
   const camera = cameraRef.value;
   const controls = controlRef.value;
 
@@ -352,7 +349,7 @@ function getDeviceStateTextClass(deviceStatus, craftStatus) {
   }
 }
 //设备状态
-const { loading: loadingModel } = useThree(props.namespace);
+const { loading: loadingModel } = useThree(namespace);
 const deviceStatus = ref([]);
 const closedDeviceKeys = computed(() => {
   return deviceStatus.value.filter((d) => d.status === 2).map((it) => it.key);

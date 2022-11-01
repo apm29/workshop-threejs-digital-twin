@@ -6,7 +6,7 @@ export function useThree(namespace = "app") {
       scene: ref(),
       camera: ref(),
       control: ref(),
-      loading: ref(false),
+      loading: ref(true),
     }
   }
   const selected = three[namespace];

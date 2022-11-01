@@ -6,16 +6,10 @@
 
 <script setup>
 import * as THREE from "three";
-import {
-  SceneInjectKey,
-  SelectableGroupInjectKey,
-  RenderLoopInjectKey,
-} from "./inject-keys";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { SelectableGroupInjectKey, RenderLoopInjectKey } from "./inject-keys";
 import { useModels } from "~/digital-twin/components/models.js";
 import { BASE_X, BASE_Y, BASE_Z } from "./axes.js";
 
-const scene = inject(SceneInjectKey);
 const selectableGroup = inject(SelectableGroupInjectKey);
 const registerLoopFunc = inject(RenderLoopInjectKey);
 const props = defineProps({
@@ -92,14 +86,14 @@ registerLoopFunc(() => {
       oldCenterY - downY,
       oldCenterY
     );
-    label.position.y -= 0.01;
+    label.position.y -= 0.001;
   } else {
     label.center.y = clamp(
       label.center.y + downY * delta,
       oldCenterY - downY,
       oldCenterY
     );
-    label.position.y += 0.01;
+    label.position.y += 0.001;
   }
 });
 

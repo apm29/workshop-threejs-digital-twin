@@ -7,10 +7,17 @@ import 'element-ui/lib/theme-chalk/index.css';
 import ElementUI from "element-ui";
 import VueRouter from "vue-router";
 import router from '~/router'
+import { createPinia, PiniaVuePlugin } from 'pinia'
+
+Vue.use(PiniaVuePlugin)
 Vue.use(ElementUI)
 Vue.use(VueRouter)
+
+const pinia = createPinia()
+
 const app = new Vue({
   router,
+  pinia,
   render: (h) => h(App),
 })
 

@@ -9,7 +9,6 @@
         :name="modelData.key"
         :path="modelData.path"
         :position="modelData.position"
-        selectable
         :model.sync="modelObject3dMap[modelData.key]"
       ></GltfModel>
     </template>
@@ -41,8 +40,8 @@
       z="30"
       bg="gradient-to-b"
       via="bluegray-700/10"
-      from="transparent"
-      to="transparent"
+      from="blue-500/10"
+      to="blue-500/10"
     >
       <el-form
         label-position="left"
@@ -132,15 +131,16 @@ import {
   INITIAL_CAMERA_Y,
   INITIAL_CAMERA_Z,
 } from "~/digital-twin/components/axes.js";
+import { useDeviceStatusStore } from "~/store";
 
 const namespace = inject(NameSpaceInjectKey);
 
 //数据部分
 const ViewModelData = ref(ModelData);
 const ViewSpriteData = ref(SpriteData);
-const animateDuration = 1200;
-const selectedPosition = ref(null);
-const selectedViewData = ref(null);
+const animateDuration = 2000;
+const selectedPosition = ref();
+const selectedViewData = ref({});
 const modelObject3dMap = shallowReactive({});
 
 const registerSelectHandler = inject(RegisterSelectHandler);
@@ -306,107 +306,33 @@ function handleViewModel({ viewData, position }) {
   tweenControl.start();
 }
 
-const NodeStatusClassMap = {
-  1: "green-node", //绿色
-  2: "blue-node", //蓝色
-  3: "gray-node", //灰色
-  "-1": "red-node", //红色
-};
-const DataTextStatusClassMap = {
-  1: "green-text", //绿色
-  2: "blue-text", //蓝色
-  3: "gray-text", //灰色
-  "-1": "red-text", //红色
-};
-//
-//1:设备开: 绿色
-//2:设备关: 蓝色
-//3:设备数据异常: 灰色
-//
-//1:工艺状态正常: 绿色
-//2:工艺状态过高: 红色
-//3:工艺状态过低: 红色
-//4:工艺数据异常: 灰色
-//
-function getDeviceStateNodeClass(deviceStatus, craftStatus) {
-  //工艺状态异常时显示红色
-  if (craftStatus == 3 || craftStatus == 2) {
-    return NodeStatusClassMap[-1];
-  } else if (craftStatus == 4) {
-    return NodeStatusClassMap[3];
-  } else {
-    return NodeStatusClassMap[deviceStatus];
-  }
-}
-function getDeviceStateTextClass(deviceStatus, craftStatus) {
-  //工艺状态异常时显示红色
-  if (craftStatus == 3 || craftStatus == 2) {
-    return DataTextStatusClassMap[-1];
-  } else if (craftStatus == 4) {
-    return DataTextStatusClassMap[3];
-  } else {
-    return DataTextStatusClassMap[deviceStatus];
-  }
-}
 //设备状态
 const { loading: loadingModel } = useThree(namespace);
-const deviceStatus = ref([]);
-const closedDeviceKeys = computed(() => {
-  return deviceStatus.value.filter((d) => d.status === 2).map((it) => it.key);
-});
-const errorDeviceKeys = computed(() => {
-  return deviceStatus.value.filter((d) => d.status === 3).map((it) => it.key);
-});
-watch([errorDeviceKeys, loadingModel], ([keys]) => {
-  console.log("error keys", keys);
-  errorDevices.value = keys
-    .map((key) => {
-      const model = modelObject3dMap[key];
-      console.log("get", key, model);
-      return model;
-    })
-    .filter((it) => it);
-});
-watch([closedDeviceKeys, loadingModel], ([keys]) => {
-  console.log("closed keys", keys);
-  closedDevices.value = keys
-    .map((key) => {
-      const model = modelObject3dMap[key];
-      console.log("get", key, model);
-      return model;
-    })
-    .filter((it) => it);
-});
-function getDevicesStatus() {
-  return Promise.all(
-    DeviceStatus.map((device) => {
-      return queryInfluxDb({
-        org: device.org,
-        bucket: device.bucket,
-        measurement: device.measurement,
-        range: -1, //只查一条
+const deviceStore = useDeviceStatusStore();
+const { deviceStatus, closedDeviceKeys, errorDeviceKeys } = toRefs(deviceStore);
+
+watch([errorDeviceKeys, loadingModel], ([keys, loading]) => {
+  if (!loading) {
+    errorDevices.value = keys
+      .map((key) => {
+        const model = modelObject3dMap[key];
+        console.log("get", key, model);
+        return model;
       })
-        .then((res) => {
-          return {
-            ...device,
-            status: res?.data?.[0]?._value ?? 4,
-          };
-        })
-        .catch((err) => {
-          console.log(err);
-          return {
-            ...device,
-            status: 4,
-          };
-        });
-    })
-  ).then((res) => {
-    console.log(res);
-    deviceStatus.value = res;
-  });
-}
-onMounted(getDevicesStatus);
-useIntervalFn(getDevicesStatus, 60_000);
+      .filter((it) => it);
+  }
+});
+watch([closedDeviceKeys, loadingModel], ([keys, loading]) => {
+  if (!loading) {
+    closedDevices.value = keys
+      .map((key) => {
+        const model = modelObject3dMap[key];
+        console.log("get", key, model);
+        return model;
+      })
+      .filter((it) => it);
+  }
+});
 </script>
 
 <style lang="scss">

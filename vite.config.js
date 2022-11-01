@@ -40,7 +40,7 @@ export default defineConfig({
     vitePluginVue(),
     // https://github.com/antfu/unplugin-auto-import
     AutoImport({
-      imports: ["vue", "vue/macros", "@vueuse/core"],
+      imports: ["vue", "vue/macros", "@vueuse/core", "pinia"],
       dts: true,
       dirs: ["./src/composables"],
       vueTemplate: true,

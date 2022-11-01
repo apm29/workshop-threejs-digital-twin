@@ -27,10 +27,12 @@ const props = defineProps({
   background: {
     type: String,
   },
+  stats: {
+    type: Boolean,
+  },
 });
 
-const namespace = inject(NameSpaceInjectKey)
-
+const namespace = inject(NameSpaceInjectKey);
 
 const { setScene, setControl } = useThree(namespace);
 const scene = new THREE.Scene();
@@ -56,10 +58,12 @@ const widthRef = inject(WidthInjectKey);
 const heightRef = inject(HeightInjectKey);
 //stats
 const stats = new Stats();
-// 设置监视器面板，传入面板id（0: fps, 1: ms, 2: mb）
-stats.setMode(0);
-window.document.body.appendChild(stats.dom);
-stats.dom.style.top = "70px";
+if (props.stats) {
+  // 设置监视器面板，传入面板id（0: fps, 1: ms, 2: mb）
+  stats.setMode(0);
+  window.document.body.appendChild(stats.dom);
+  stats.dom.style.top = "70px";
+}
 
 const composer = new EffectComposer(renderer);
 provide(ComposerInjectKey, composer);

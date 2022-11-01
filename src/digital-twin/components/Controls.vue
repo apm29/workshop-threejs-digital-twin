@@ -6,6 +6,7 @@
 
 <script setup>
 import {
+  NameSpaceInjectKey,
   CameraInjectKey,
   RendererInjectKey,
   RenderLoopInjectKey,
@@ -14,21 +15,16 @@ import {
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { useThree } from "./three";
 
-const props = defineProps({
-  namespace: {
-    type: String,
-    default: "app",
-  },
-});
+const namespace = inject(NameSpaceInjectKey)
 
-const { setControl } = useThree(props.namespace);
+const { setControl } = useThree(namespace);
 
 const renderer = inject(RendererInjectKey);
 const camera = inject(CameraInjectKey);
 const registerLoopFunc = inject(RenderLoopInjectKey);
 //control
 const controls = new OrbitControls(camera, renderer.domElement);
-controls.listenToKeyEvents(window); // optional
+controls.listenToKeyEvents(renderer.domElement); // optional
 controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
 controls.autoRotate = true; // an animation loop is required when either damping or auto-rotation are enabled
 controls.dampingFactor = 0.05;

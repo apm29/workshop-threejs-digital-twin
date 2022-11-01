@@ -1,3 +1,4 @@
+export const NameSpaceInjectKey = Symbol("name-space")
 export const RendererInjectKey = Symbol("renderer")
 export const RenderLoopInjectKey = Symbol("render-loop")
 export const ComposerInjectKey = Symbol("composer")

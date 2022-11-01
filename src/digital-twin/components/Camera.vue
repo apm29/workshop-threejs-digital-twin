@@ -6,15 +6,11 @@
 
 <script setup>
 import * as THREE from "three";
-import { CameraInjectKey, WidthInjectKey, HeightInjectKey } from "./inject-keys";
+import { NameSpaceInjectKey, CameraInjectKey, WidthInjectKey, HeightInjectKey } from "./inject-keys";
 import { useThree } from "./three";
 import { INITIAL_CAMERA_X, INITIAL_CAMERA_Y, INITIAL_CAMERA_Z } from "./axes.js";
 
 const props = defineProps({
-  namespace: {
-    type: String,
-    default: "app",
-  },
   position: {
     type: Object,
     default: () => ({
@@ -25,7 +21,9 @@ const props = defineProps({
   },
 });
 
-const { setCamera } = useThree(props.namespace);
+const namespace = inject(NameSpaceInjectKey)
+
+const { setCamera } = useThree(namespace);
 
 const width = inject(WidthInjectKey);
 const height = inject(HeightInjectKey);

@@ -1,17 +1,16 @@
 <template>
   <SimpleBorder6 w="48" h="full" p="2">
-    <div h="full" w="full" class="bg-network">
-      <Renderer h="full" w="full" namespace="demo">
+    <NameSpace h="full" w="full" class="bg-network" namespace="demo">
+      <Renderer h="full" w="full">
         <Camera
-          namespace="demo"
           :position="{
             x: 1,
             y: 0.5,
             z: 1,
           }"
         >
-          <Scene namespace="demo">
-            <Controls namespace="demo"></Controls>
+          <Scene>
+            <Controls></Controls>
             <Light></Light>
             <!-- <AxesHelper></AxesHelper> -->
             <GltfModel
@@ -26,11 +25,12 @@
           </Scene>
         </Camera>
       </Renderer>
-    </div>
+    </NameSpace>
   </SimpleBorder6>
 </template>
 
 <script setup>
+import NameSpace from "~/digital-twin/components/NameSpace.vue";
 import Renderer from "~/digital-twin/components/Renderer.vue";
 import Scene from "~/digital-twin/components/Scene.vue";
 import Camera from "~/digital-twin/components/Camera.vue";

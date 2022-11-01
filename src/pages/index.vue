@@ -1,10 +1,10 @@
 <template>
-  <div h="screen" w="screen" class="atcc-workshop">
-    <Renderer h="screen" w="screen" namespace="app">
-      <Camera namespace="app">
-        <Scene namespace="app">
+  <NameSpace h="screen" w="screen" namespace="app" class="atcc-workshop">
+    <Renderer h="screen" w="screen">
+      <Camera>
+        <Scene>
           <PostProcess>
-            <Controls namespace="app"></Controls>
+            <Controls></Controls>
             <Sky></Sky>
             <Ground></Ground>
             <CementGround></CementGround>
@@ -16,7 +16,7 @@
       </Camera>
     </Renderer>
     <Frame></Frame>
-  </div>
+  </NameSpace>
 </template>
 
 <script setup>
@@ -32,4 +32,5 @@ import Models from "~/digital-twin/combine/Models.vue";
 import Frame from "~/digital-twin/combine/Frame.vue";
 import Controls from "~/digital-twin/components/Controls.vue";
 import PostProcess from "~/digital-twin/components/PostProcess.vue";
+import NameSpace from "~/digital-twin/components/NameSpace.vue";
 </script>

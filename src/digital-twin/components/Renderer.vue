@@ -6,17 +6,17 @@
 
 <script setup>
 import * as THREE from "three";
-import { RendererInjectKey, WidthInjectKey, HeightInjectKey } from "./inject-keys";
+import {
+  NameSpaceInjectKey,
+  RendererInjectKey,
+  WidthInjectKey,
+  HeightInjectKey,
+} from "./inject-keys";
 import { useThree } from "./three";
 
-const props = defineProps({
-  namespace: {
-    type: String,
-    default: "app",
-  },
-});
+const namespace = inject(NameSpaceInjectKey);
 
-const { setRenderer } = useThree(props.namespace);
+const { setRenderer } = useThree(namespace);
 
 const wrapper = ref();
 const { width, height } = useElementSize(wrapper);

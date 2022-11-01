@@ -8,6 +8,7 @@
 import Stats from "three/addons/libs/stats.module.js";
 import * as THREE from "three";
 import {
+  NameSpaceInjectKey,
   CameraInjectKey,
   RendererInjectKey,
   RenderLoopInjectKey,
@@ -23,16 +24,15 @@ import { useThree } from "./three";
 import TWEEN from "@tweenjs/tween.js";
 
 const props = defineProps({
-  namespace: {
-    type: String,
-    default: "app",
-  },
   background: {
     type: String,
   },
 });
 
-const { setScene, setControl } = useThree(props.namespace);
+const namespace = inject(NameSpaceInjectKey)
+
+
+const { setScene, setControl } = useThree(namespace);
 const scene = new THREE.Scene();
 if (props.background) {
   const textureLoader = new THREE.TextureLoader();

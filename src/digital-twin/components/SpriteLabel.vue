@@ -57,21 +57,49 @@ if (props.position) {
 }
 label.userData.viewData = props.viewData;
 selectableGroup.add(label);
-const oldY = label.position.y;
+// const oldY = label.position.y;
+// let down = true;
+// const clock = new THREE.Clock();
+// const downY = 0.2;
+// registerLoopFunc(() => {
+//   const delta = clock.getDelta();
+//   if (label.position.y <= oldY - downY) {
+//     down = false;
+//   } else if (label.position.y >= oldY) {
+//     down = true;
+//   }
+//   if (down) {
+//     label.position.y = clamp(label.position.y - downY * delta, oldY - downY, oldY);
+//   } else {
+//     label.position.y = clamp(label.position.y + downY * delta, oldY - downY, oldY);
+//   }
+// });
+
+const oldCenterY = label.center.y;
 let down = true;
 const clock = new THREE.Clock();
 const downY = 0.2;
 registerLoopFunc(() => {
   const delta = clock.getDelta();
-  if (label.position.y <= oldY - downY) {
+  if (label.center.y <= oldCenterY - downY) {
     down = false;
-  } else if (label.position.y >= oldY) {
+  } else if (label.center.y >= oldCenterY) {
     down = true;
   }
   if (down) {
-    label.position.y = clamp(label.position.y - downY * delta, oldY - downY, oldY);
+    label.center.y = clamp(
+      label.center.y - downY * delta,
+      oldCenterY - downY,
+      oldCenterY
+    );
+    label.position.y -= 0.01;
   } else {
-    label.position.y = clamp(label.position.y + downY * delta, oldY - downY, oldY);
+    label.center.y = clamp(
+      label.center.y + downY * delta,
+      oldCenterY - downY,
+      oldCenterY
+    );
+    label.position.y += 0.01;
   }
 });
 
@@ -90,15 +118,9 @@ watch(
 watch(
   () => props.position,
   () => {
-    if (props.position) {
-      label.position.x = (props.position.x || 0) + BASE_X;
-      label.position.y = (props.position.y || 0) + BASE_Y;
-      label.position.z = (props.position.z || 0) + BASE_Z;
-    } else {
-      label.position.x = BASE_X;
-      label.position.y = BASE_Y;
-      label.position.z = BASE_Z;
-    }
+    label.position.x = (props.position?.x ?? 0) + BASE_X;
+    label.position.y = (props.position?.y ?? 0) + BASE_Y;
+    label.position.z = (props.position?.z ?? 0) + BASE_Z;
   },
   { deep: true }
 );

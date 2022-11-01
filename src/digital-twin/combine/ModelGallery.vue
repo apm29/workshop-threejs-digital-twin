@@ -2,19 +2,13 @@
   <SimpleBorder6 w="48" h="full" p="2">
     <NameSpace h="full" w="full" class="bg-network" namespace="demo">
       <Renderer h="full" w="full">
-        <Camera
-          :position="{
-            x: 1,
-            y: 0.5,
-            z: 1,
-          }"
-        >
+        <Camera :position="cameraPosition">
           <Scene>
             <Controls auto-rotate></Controls>
             <Light></Light>
             <!-- <AxesHelper></AxesHelper> -->
             <GltfModel
-              path="./glb/电机.glb"
+              :path="modelPath"
               :position="{
                 x: -BASE_X,
                 y: -BASE_Y,
@@ -40,6 +34,21 @@ import GltfModel from "~/digital-twin/components/GltfModel.vue";
 import Light from "~/digital-twin/components/Light.vue";
 import { BASE_X, BASE_Y, BASE_Z } from "~/digital-twin/components/axes.js";
 import AxesHelper from "~/digital-twin/components/AxesHelper.vue";
+
+defineProps({
+  cameraPosition: {
+    type: Object,
+    default: () => ({
+      x: 1,
+      y: 0.5,
+      z: 1,
+    }),
+  },
+  modelPath: {
+    type: String,
+    default: "./glb/电机.glb",
+  },
+});
 </script>
 
 <style lang="scss" scoped>

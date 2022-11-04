@@ -61,7 +61,8 @@ export default defineConfig({
     port: 7456,
     proxy: {
       "/java": {
-        target: "http://atcc-workshoptest.ciih.net",
+        target: "http://atcc-workshop.ciih.net",
+        // target: "http://atcc-workshoptest.ciih.net",
         // target: "http://192.168.1.7:8088",
         changeOrigin: true,
       },

@@ -50,10 +50,11 @@ export const useDeviceStatusStore = defineStore("device-status", () => {
             status: res?.data?.[0]?._value ?? DeviceStatusEnum.UNKNOWN,
           };
         } catch (err) {
-          console.log(err);
+          console.error(err);
+          console.log(`查询设备状态${device.org}-${device.bucket}-${device.measurement}失败`);
           return {
             ...device,
-            status: 4,
+            status: DeviceStatusEnum.ERROR,
           };
         }
       })
@@ -63,7 +64,16 @@ export const useDeviceStatusStore = defineStore("device-status", () => {
   }
 
   function getSingleDeviceStatus(key) {
-    return deviceStatus.find((it) => it.key === key);
+    return deviceStatus.value.find((it) => it.key === key);
+  }
+
+  function getSingleDeviceStatusBy({ org, bucket, measurement }) {
+    return deviceStatus.value.find(
+      (it) => it.org === org && it.bucket === bucket && it.measurement === measurement
+    ) ?? {
+      org, bucket, measurement,
+      status: DeviceStatusEnum.UNKNOWN,
+    };
   }
 
   return {
@@ -79,5 +89,6 @@ export const useDeviceStatusStore = defineStore("device-status", () => {
 
     //function
     getSingleDeviceStatus,
+    getSingleDeviceStatusBy,
   };
 });

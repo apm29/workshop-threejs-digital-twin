@@ -6,12 +6,17 @@
 
 <script setup>
 import * as THREE from "three";
-import { SelectableGroupInjectKey, RenderLoopInjectKey } from "./inject-keys";
+import {
+  SelectableGroupInjectKey,
+  RenderLoopInjectKey,
+  RegisterSelectHandler,
+} from "./inject-keys";
 import { useModels } from "~/digital-twin/components/models.js";
 import { BASE_X, BASE_Y, BASE_Z } from "./axes.js";
 
 const selectableGroup = inject(SelectableGroupInjectKey);
 const registerLoopFunc = inject(RenderLoopInjectKey);
+const selectHandler = inject(RegisterSelectHandler);
 const props = defineProps({
   path: {
     type: String,
@@ -29,6 +34,7 @@ const props = defineProps({
     default: () => ({}),
   },
 });
+const emit = defineEmits(["click"]);
 
 const textureLoader = new THREE.TextureLoader();
 
@@ -95,6 +101,19 @@ registerLoopFunc(() => {
       oldCenterY
     );
     label.position.y += 0.001;
+  }
+});
+//注册点击事件
+selectHandler(({ event, camera, renderer, scene, selectedObject }) => {
+  if (selectedObject === label) {
+    console.log("SELECTED!");
+    emit("click", {
+      event,
+      camera,
+      renderer,
+      scene,
+      selectedObject,
+    });
   }
 });
 

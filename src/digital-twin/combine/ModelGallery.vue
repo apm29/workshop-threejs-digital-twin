@@ -1,5 +1,5 @@
 <template>
-  <SimpleBorder6 w="48" h="full" p="2">
+  <SimpleBorder6 w="48" h="100" p="2">
     <NameSpace h="full" w="full" class="bg-network" namespace="demo">
       <Renderer h="full" w="full">
         <Camera :position="cameraPosition">

@@ -13,6 +13,19 @@ export const SpriteData = [
       measurement: "N_P1",
       range: "-1m",
       key: "P1",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "N_P1",
+      },
+      model: {
+        path: "./glb/提升机.glb",
+        cameraPosition: {
+          x: 8,
+          y: 1,
+          z: 8
+        }
+      }
     },
   },
   {
@@ -29,6 +42,19 @@ export const SpriteData = [
       measurement: "N_P2",
       range: "-1m",
       key: "P2",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "N_P2",
+      },
+      model: {
+        path: "./glb/提升机.glb",
+        cameraPosition: {
+          x: 8,
+          y: 1,
+          z: 8
+        }
+      }
     },
   },
   {
@@ -45,6 +71,19 @@ export const SpriteData = [
       measurement: "N_P3",
       range: "-1m",
       key: "P3",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "N_P3",
+      },
+      model: {
+        path: "./glb/提升机.glb",
+        cameraPosition: {
+          x: 8,
+          y: 1,
+          z: 8
+        }
+      }
     },
   },
   {
@@ -61,6 +100,19 @@ export const SpriteData = [
       measurement: "N_P4",
       range: "-1m",
       key: "P4",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "N_P4",
+      },
+      model: {
+        path: "./glb/提升机.glb",
+        cameraPosition: {
+          x: 8,
+          y: 1,
+          z: 8
+        }
+      }
     },
   },
   {
@@ -77,6 +129,19 @@ export const SpriteData = [
       measurement: "N_P5",
       range: "-1m",
       key: "P5",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "N_P5",
+      },
+      model: {
+        path: "./glb/提升机.glb",
+        cameraPosition: {
+          x: 8,
+          y: 1,
+          z: 8
+        }
+      }
     },
   },
   {
@@ -93,6 +158,14 @@ export const SpriteData = [
       measurement: "C_LDJ",
       range: "-1m",
       key: "C_LDJ",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "LDJ_A",
+      },
+      model: {
+        path: "./glb/电机.glb"
+      }
     },
   },
   {
@@ -109,6 +182,14 @@ export const SpriteData = [
       measurement: "C_ZMJ",
       range: "-1m",
       key: "C_ZMJ",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "ZMJ_A",
+      },
+      model: {
+        path: "./glb/电机.glb"
+      }
     },
   },
   {
@@ -124,7 +205,15 @@ export const SpriteData = [
       bucket: "JLKZQ",
       measurement: "C_ZMJCCQ",
       range: "-1m",
-      key: "C_ZMJCCQ",
+      key: "C_ZMJ",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "ZMJCCQ_A",
+      },
+      model: {
+        path: "./glb/电机.glb"
+      }
     },
   },
   {
@@ -141,6 +230,14 @@ export const SpriteData = [
       measurement: "C_GLDZJ",
       range: "-1m",
       key: "C_GLDZJ",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "GLDZJ_A",
+      },
+      model: {
+        path: "./glb/电机.glb"
+      }
     },
   },
   {
@@ -157,6 +254,14 @@ export const SpriteData = [
       measurement: "C_SZJB",
       range: "-1m",
       key: "C_SZJB",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "SZJB_A",
+      },
+      model: {
+        path: "./glb/电机.glb"
+      }
     },
   },
   {
@@ -173,6 +278,14 @@ export const SpriteData = [
       measurement: "C_ZQJ",
       range: "-1m",
       key: "C_ZQJ",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "ZQJ_A",
+      },
+      model: {
+        path: "./glb/电机.glb"
+      }
     },
   },
   {
@@ -189,6 +302,14 @@ export const SpriteData = [
       measurement: "C_PDJ",
       range: "-1m",
       key: "C_PDJ",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "PDJ_A",
+      },
+      model: {
+        path: "./glb/电机.glb"
+      }
     },
   },
   {
@@ -205,6 +326,14 @@ export const SpriteData = [
       measurement: "C_YFJ",
       range: "-1m",
       key: "C_YFJ",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "YFJ_A",
+      },
+      model: {
+        path: "./glb/电机.glb"
+      }
     },
   },
   {
@@ -221,6 +350,14 @@ export const SpriteData = [
       measurement: "T_ZFG",
       range: "-1m",
       key: "T_ZFG",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "ZFG_T",
+      },
+      model: {
+        path: "./glb/电机.glb"
+      }
     },
   },
   {
@@ -237,6 +374,14 @@ export const SpriteData = [
       measurement: "C_GFJ",
       range: "-1m",
       key: "C_GFJ",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "GFJ_A",
+      },
+      model: {
+        path: "./glb/电机.glb"
+      }
     },
   },
   {
@@ -253,6 +398,14 @@ export const SpriteData = [
       measurement: "T_DYCL",
       range: "-1m",
       key: "T_DYCL",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "DYCL_T",
+      },
+      model: {
+        path: "./glb/电机.glb"
+      }
     },
   },
   {
@@ -269,6 +422,14 @@ export const SpriteData = [
       measurement: "T2",
       range: "-1m",
       key: "T2",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "T2",
+      },
+      model: {
+        path: "./glb/电机.glb"
+      }
     },
   },
   {
@@ -285,6 +446,14 @@ export const SpriteData = [
       measurement: "HZ_TRQ1_BKLL_GET_M3H",
       range: "-1m",
       key: "HZ_TRQ1_BKLL_GET_M3H",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "HZ_TRQ1_BKLL_GET_M3H",
+      },
+      model: {
+        path: "./glb/电机.glb"
+      }
     },
   },
   {
@@ -301,6 +470,14 @@ export const SpriteData = [
       measurement: "T12",
       range: "-1m",
       key: "T12",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "T12",
+      },
+      model: {
+        path: "./glb/电机.glb"
+      }
     },
   },
   {
@@ -317,6 +494,14 @@ export const SpriteData = [
       measurement: "C_GuFJ",
       range: "-1m",
       key: "C_GuFJ",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "GuFJ_A",
+      },
+      model: {
+        path: "./glb/电机.glb"
+      }
     },
   },
   {
@@ -333,6 +518,14 @@ export const SpriteData = [
       measurement: "C_LQT",
       range: "-1m",
       key: "C_LQT",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "LQT_A",
+      },
+      model: {
+        path: "./glb/电机.glb"
+      }
     },
   },
   {
@@ -349,6 +542,14 @@ export const SpriteData = [
       measurement: "C_WJZL",
       range: "-1m",
       key: "C_WJZL",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "WJZL_A",
+      },
+      model: {
+        path: "./glb/电机.glb"
+      }
     },
   },
   {
@@ -365,6 +566,14 @@ export const SpriteData = [
       measurement: "C_CMJ",
       range: "-1m",
       key: "C_CMJ",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "CMJ_A",
+      },
+      model: {
+        path: "./glb/电机.glb"
+      }
     },
   },
   {
@@ -381,6 +590,14 @@ export const SpriteData = [
       measurement: "C_ZDS",
       range: "-1m",
       key: "C_ZDS",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "ZDS_A",
+      },
+      model: {
+        path: "./glb/电机.glb"
+      }
     },
   },
   {
@@ -397,6 +614,14 @@ export const SpriteData = [
       measurement: "C_BZLX",
       range: "-1m",
       key: "C_BZLX",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "BZLX_A",
+      },
+      model: {
+        path: "./glb/电机.glb"
+      }
     },
   },
   {
@@ -413,6 +638,14 @@ export const SpriteData = [
       measurement: "C_BZLX",
       range: "-1m",
       key: "C_BZLX",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "BZLX_A",
+      },
+      model: {
+        path: "./glb/电机.glb"
+      }
     },
   },
   {
@@ -429,6 +662,14 @@ export const SpriteData = [
       measurement: "C_CCYFJ_BPQ",
       range: "-1m",
       key: "C_CCYFJ_BPQ",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "CCYFJ_BPQ_A",
+      },
+      model: {
+        path: "./glb/电机.glb"
+      }
     },
   },
 ];
@@ -674,9 +915,10 @@ export const DeviceStatus = [
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "N_P5", title: "P5", key: "P5", },
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "LDJ_A", title: "梨刀机", key: "C_LDJ", },
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "ZMJ_A", title: "致密机", key: "C_ZMJ", },
+  { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "CCYFJ_A", title: "致密机除尘器", key: "C_ZMJCCQ", },
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "GLDZJ_A", title: "输送(致密机后)", key: "C_GLDZJ", },
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "SZJB_A", title: "混料", key: "C_SZJB", },
-  { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "ZQQ_A", title: "造球机", key: "C_ZQQ", },
+  { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "ZQQ_A", title: "造球机", key: "C_ZQJ", },
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "PDJ_A", title: "传送带", key: "C_PDJ", },
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "CCYFJ_A", title: "除尘器(造球)", key: "C_CCYFJ", },
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "ZQQ_A", title: "输送(造球区后)", key: "C_ZQQ", },
@@ -690,7 +932,9 @@ export const DeviceStatus = [
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "SJ_GeiFJ_P_Get_kPa", title: "给风机", key: "SJ_GeiFJ_P_Get_kPa", },
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "GFJ_A", title: "关风", key: "C_GFJ", },
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "SJ_YWFY_YL_Get_Pa", title: "窑尾负压", key: "SJ_YWFY_YL_Get_Pa", },
+  { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "HZ_TRQ1_BKLL_GET_M3H", title: "天然气", key: "HZ_TRQ1_BKLL_GET_M3H", },
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "LQT_A", title: "冷却筒", key: "C_LQT", },
+  { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "GuFJ_A", title: "鼓风机", key: "C_GuFJ", },
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "ZFG_T", title: "喷淋塔(T15)", key: "T_ZFG", },
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "WJZL_A", title: "外加籽料", key: "C_WJZL", },
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "CMJL_A", title: "输送(冷却后)	", key: "C_CMJL", },

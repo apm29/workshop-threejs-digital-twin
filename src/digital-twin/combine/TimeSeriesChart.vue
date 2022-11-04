@@ -13,7 +13,7 @@
       flex="~ col"
       p="x-6 y-4"
       w="160"
-      h="100"
+      min="h-100"
     >
       <h1 text="lg" font="bold" relative="~">
         {{ title }}
@@ -30,8 +30,19 @@
         </button>
       </h1>
       <div flex="~ grow" overflow="y-auto">
-        <ModelGallery></ModelGallery>
-        <BasicLineCharts flex="grow" h="full" :data="data" :dataAxisX="dataAxisX" />
+        <ModelGallery
+          :model-path="model.path"
+          :camera-position="model.cameraPosition"
+        ></ModelGallery>
+        <div flex="~ grow col">
+          <BasicLineCharts flex="grow" h="full" :data="data" :dataAxisX="dataAxisX" />
+          <DeviceStatus
+            title="设备状态"
+            :org="status.org"
+            :bucket="status.bucket"
+            :measurement="status.measurement"
+          ></DeviceStatus>
+        </div>
       </div>
     </div>
   </SimpleBorder6>
@@ -42,6 +53,7 @@ import dayjs from "dayjs";
 import { queryInfluxDb } from "~/api/influx";
 import BasicLineCharts from "~/components/charts/BasicLineCharts.vue";
 import SimpleBorder6 from "~/svg/border/SimpleBorder6.vue";
+import DeviceStatus from "./DeviceStatus.vue";
 import ModelGallery from "./ModelGallery.vue";
 const rangeOptions = [
   {
@@ -91,6 +103,8 @@ const props = defineProps({
   org: String,
   bucket: String,
   measurement: String,
+  status: Object,
+  model: Object,
 });
 
 const loading = ref(false);

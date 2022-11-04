@@ -6,7 +6,12 @@
 
 <script setup>
 import * as THREE from "three";
-import { NameSpaceInjectKey, CameraInjectKey, WidthInjectKey, HeightInjectKey } from "./inject-keys";
+import {
+  NameSpaceInjectKey,
+  CameraInjectKey,
+  WidthInjectKey,
+  HeightInjectKey,
+} from "./inject-keys";
 import { useThree } from "./three";
 import { INITIAL_CAMERA_X, INITIAL_CAMERA_Y, INITIAL_CAMERA_Z } from "./axes.js";
 
@@ -21,7 +26,7 @@ const props = defineProps({
   },
 });
 
-const namespace = inject(NameSpaceInjectKey)
+const namespace = inject(NameSpaceInjectKey);
 
 const { setCamera } = useThree(namespace);
 
@@ -39,8 +44,6 @@ camera.position.x = props.position?.x ?? INITIAL_CAMERA_X;
 camera.position.y = props.position?.y ?? INITIAL_CAMERA_Y;
 camera.position.z = props.position?.z ?? INITIAL_CAMERA_Z;
 
-console.log("camera position:", camera.position);
-
 //监听视窗大小变化
 watch([width, height], () => {
   camera.aspect = unref(width) / unref(height);
@@ -49,8 +52,6 @@ watch([width, height], () => {
 
 provide(CameraInjectKey, camera);
 setCamera(camera);
-
-window.camera = camera;
 </script>
 
 <style lang="scss" scoped></style>

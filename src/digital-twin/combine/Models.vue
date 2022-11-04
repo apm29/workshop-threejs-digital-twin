@@ -20,16 +20,32 @@
         }.png`"
         :position="spriteData.position"
         :viewData="spriteData.viewData"
+        @click="handleSelect"
       ></SpriteLabel>
     </template>
 
     <AttachDialog v-if="selectedPosition" :attach="selectedPosition">
+      <MaterialDelivery
+        v-if="['P1', 'P2', 'P3', 'P4', 'P5'].includes(selectedViewData.key)"
+        :range.sync="selectedViewData.range"
+        :title="selectedViewData.title"
+        :craft-key="selectedViewData.key"
+        :org="selectedViewData.org"
+        :bucket="selectedViewData.bucket"
+        :measurement="selectedViewData.measurement"
+        :status="selectedViewData.status"
+        :model="selectedViewData.model"
+        @close="resetCamera()"
+      ></MaterialDelivery>
       <TimeSeriesChart
+        v-else
         :range.sync="selectedViewData.range"
         :title="selectedViewData.title"
         :org="selectedViewData.org"
         :bucket="selectedViewData.bucket"
         :measurement="selectedViewData.measurement"
+        :status="selectedViewData.status"
+        :model="selectedViewData.model"
         @close="resetCamera()"
       ></TimeSeriesChart>
     </AttachDialog>
@@ -127,6 +143,7 @@ import SpriteLabel from "~/digital-twin/components/SpriteLabel.vue";
 import AttachDialog from "~/digital-twin/components/AttachDialog.vue";
 import AxesHelper from "~/digital-twin/components/AxesHelper.vue";
 import TimeSeriesChart from "~/digital-twin/combine/TimeSeriesChart.vue";
+import MaterialDelivery from "~/digital-twin/combine/MaterialDelivery.vue";
 import SimpleBorder6 from "~/svg/border/SimpleBorder6.vue";
 import TWEEN from "@tweenjs/tween.js";
 import { useThree } from "~/digital-twin/components/three";
@@ -154,72 +171,12 @@ const registerSelectHandler = inject(RegisterSelectHandler);
 const highlighted = inject(HighlightedGroups);
 const errorDevices = inject(ErrorDeviceGroups);
 const closedDevices = inject(ClosedDeviceGroups);
-registerSelectHandler(({ event, camera, renderer, scene, selectedObject }) => {
-  handleSelect({
-    event,
-    camera,
-    renderer,
-    scene,
-    selectedObject,
-  });
-});
 
 function handleSelect({ event, selectedObject }) {
-  if (!(selectedObject instanceof THREE.Sprite)) {
-    return;
-  }
-  const { camera: cameraRef, control: controlRef } = useThree(namespace);
-  const camera = cameraRef.value;
-  const controls = controlRef.value;
-  const viewData = selectedObject.userData.viewData;
-  //高亮
-  // console.log(modelObject3dMap[viewData.key]);
-  if (modelObject3dMap[viewData.key]) {
-    highlighted.value = [modelObject3dMap[viewData.key]];
-  }
-  //向量计算
-  //物体位置--> 相机位置向量
-  const vector = new THREE.Vector3(
-    camera.position.x - selectedObject.position.x,
-    camera.position.y - selectedObject.position.y,
-    camera.position.z - selectedObject.position.z
-  );
-  console.log(vector.x, vector.y, vector.z);
-  //向量缩放到3-6m
-  vector.clampLength(3, 6);
-  //修改camera和control的目标位置
-  // camera.lookAt(
-  //   selectedObject.position.x,
-  //   selectedObject.position.y,
-  //   selectedObject.position.z
-  // );
-  selectedPosition.value = selectedObject.position;
-  selectedViewData.value = viewData;
-  // controls.target.x = selectedObject.position.x;
-  // controls.target.y = selectedObject.position.y;
-  // controls.target.z = selectedObject.position.z;
-  // controls.update();
-  //动画
-  const tween = new TWEEN.Tween(camera.position);
-  const tweenControl = new TWEEN.Tween(controls.target);
-  tween.to(
-    {
-      x: selectedObject.position.x + vector.x,
-      y: selectedObject.position.y + vector.y,
-      z: selectedObject.position.z + vector.z,
-    },
-    animateDuration
-  );
-  tweenControl.to(
-    {
-      x: selectedObject.position.x,
-      y: selectedObject.position.y,
-      z: selectedObject.position.z,
-    },
-    animateDuration
-  );
-  tween.start();
-  tweenControl.start();
+  handleViewModel({
+    viewData: selectedObject.userData.viewData,
+    position: selectedObject.position,
+  });
 }
 const showOther = ref(true);
 
@@ -242,9 +199,9 @@ function resetCamera() {
   const camera = cameraRef.value;
   const controls = controlRef.value;
   //视角动画
-  const tween = new TWEEN.Tween(camera.position);
+  const tweenCamera = new TWEEN.Tween(camera.position);
   const tweenControl = new TWEEN.Tween(controls.target);
-  tween.to(
+  tweenCamera.to(
     {
       x: INITIAL_CAMERA_X,
       y: INITIAL_CAMERA_Y,
@@ -260,7 +217,7 @@ function resetCamera() {
     },
     animateDuration
   );
-  tween.start();
+  tweenCamera.start();
   tweenControl.start();
 }
 
@@ -268,13 +225,11 @@ function resetCamera() {
 const { models } = useModels();
 
 function handleViewModel({ viewData, position }) {
-  console.log(position);
   const { camera: cameraRef, control: controlRef } = useThree(namespace);
   const camera = cameraRef.value;
   const controls = controlRef.value;
 
   //高亮
-  // console.log(modelObject3dMap[viewData.key]);
   if (modelObject3dMap[viewData.key]) {
     highlighted.value = [modelObject3dMap[viewData.key]];
   }
@@ -291,9 +246,9 @@ function handleViewModel({ viewData, position }) {
   selectedPosition.value = position;
   selectedViewData.value = viewData;
   //视角动画
-  const tween = new TWEEN.Tween(camera.position);
+  const tweenCamera = new TWEEN.Tween(camera.position);
   const tweenControl = new TWEEN.Tween(controls.target);
-  tween.to(
+  tweenCamera.to(
     {
       x: position.x + vector.x,
       y: position.y + vector.y,
@@ -309,7 +264,7 @@ function handleViewModel({ viewData, position }) {
     },
     animateDuration
   );
-  tween.start();
+  tweenCamera.start();
   tweenControl.start();
 }
 

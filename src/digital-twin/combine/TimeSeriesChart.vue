@@ -138,7 +138,7 @@ function queryModelData() {
     .finally(() => (loading.value = false));
 }
 const dataAxisX = computed(() => {
-  return rawData.value.map((it) => dayjs(it._time).format("MM/DD HH:mm"));
+  return rawData.value.map((it) => dayjs(it._time).format("YY/MM/DD HH:mm:ss"));
 });
 </script>
 

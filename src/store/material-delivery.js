@@ -4,6 +4,8 @@ import { queryInfluxDb } from "~/api/influx";
 
 /**
  * 设备状态Store, 定期更新进料数据
+ * 进料NP,P1_ADD ~ P5_ADD
+ * 配方数据-P1 ~ P5
  */
 export const useMaterialDeliveryStore = defineStore("material-delivery", () => {
   const materialDeliveryData = ref({});
@@ -12,6 +14,7 @@ export const useMaterialDeliveryStore = defineStore("material-delivery", () => {
   onMounted(getData);
   //定时更新
   useIntervalFn(getData, 60_000);
+  //测试数据
   const test = [
     {
       "id": 132,

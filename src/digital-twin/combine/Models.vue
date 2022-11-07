@@ -49,82 +49,108 @@
         @close="resetCamera()"
       ></TimeSeriesChart>
     </AttachDialog>
-
-    <SimpleBorder6
-      fixed="!~"
-      top="70px"
-      min="w-12rem"
-      right="0"
-      z="30"
-      bg="gradient-to-b"
-      via="bluegray-700/10"
-      from="blue-500/10"
-      to="blue-500/10"
-    >
-      <el-form
-        label-position="left"
-        label-width="6rem"
-        style="pointer-events: none"
-        size="mini"
-        p="x-4 y-4"
+    <ArrowedDrawer top="[calc(50vh-100px)]" :value="true" direction="left">
+      <SimpleBorder6
+        min="w-6rem"
+        z="30"
+        bg="gradient-to-b"
+        via="bluegray-700/10"
+        from="blue-500/10"
+        to="blue-500/10"
       >
-        <el-form-item label="显示坐标轴" style="pointer-events: auto">
-          <el-switch v-model="showAxesHelper"></el-switch>
-        </el-form-item>
-        <el-form-item label="显示建筑" style="pointer-events: auto">
-          <el-switch v-model="showOther"></el-switch>
-        </el-form-item>
-        <el-form-item label="自动旋转" style="pointer-events: auto">
-          <el-switch v-model="autoRotate"></el-switch>
-        </el-form-item>
-        <el-form-item label="" style="pointer-events: auto">
-          <el-button @click="resetCamera">重置视角</el-button>
-        </el-form-item>
-      </el-form>
-    </SimpleBorder6>
-    <div
-      fixed="!~"
-      bottom="0"
-      p="x-3 b-4 t-12"
-      w="full"
-      right="0"
-      z="30"
-      bg="gradient-to-b"
-      from="transparent"
-      to="dark-600"
-      style="pointer-events: none"
-      flex="~ wrap"
-      gap="x-2 y-2"
-      items="center"
-    >
-      <h3 w="full" text="white sm">
-        <span text="red-300">红色</span>:数据异常,<span text="blue-300">蓝色</span>
-        :设备关闭,<span text="green-300">绿色</span>:运行正常,<span text="orange-300">
-          黄色
-        </span>
-        :未获取到数据
-      </h3>
-      <el-button
-        size="mini"
-        @click="handleViewModel(model)"
-        style="pointer-events: auto"
-        :type="
-          errorDeviceKeys.includes(model.viewData.key)
-            ? 'danger'
-            : closedDeviceKeys.includes(model.viewData.key)
-            ? 'primary'
-            : normalDeviceKeys.includes(model.viewData.key)
-            ? 'success'
-            : 'warning'
-        "
-        m="!0"
-        v-for="model of models"
-        :key="model.viewData.title"
-        plain
+        <el-form
+          label-position="left"
+          label-width="0rem"
+          style="pointer-events: none"
+          size="mini"
+          p="x-4 y-4"
+        >
+          <el-form-item label="" style="pointer-events: auto">
+            <el-button>设备状态</el-button>
+          </el-form-item>
+          <el-form-item label="" style="pointer-events: auto">
+            <el-button>视频监控</el-button>
+          </el-form-item>
+        </el-form>
+      </SimpleBorder6>
+    </ArrowedDrawer>
+    <ArrowedDrawer top="[calc(50vh-150px)]" :value="true" direction="right">
+      <SimpleBorder6
+        min="w-12rem"
+        z="30"
+        bg="gradient-to-b"
+        via="bluegray-700/10"
+        from="blue-500/10"
+        to="blue-500/10"
+        class="test-drawer"
       >
-        {{ model.viewData.title }}
-      </el-button>
-    </div>
+        <el-form
+          label-position="left"
+          label-width="6rem"
+          style="pointer-events: none"
+          size="mini"
+          p="x-4 y-4"
+        >
+          <el-form-item label="显示坐标轴" style="pointer-events: auto">
+            <el-switch v-model="showAxesHelper"></el-switch>
+          </el-form-item>
+          <el-form-item label="显示建筑" style="pointer-events: auto">
+            <el-switch v-model="showOther"></el-switch>
+          </el-form-item>
+          <el-form-item label="自动旋转" style="pointer-events: auto">
+            <el-switch v-model="autoRotate"></el-switch>
+          </el-form-item>
+          <el-form-item label="" style="pointer-events: auto">
+            <el-button @click="resetCamera">重置视角</el-button>
+          </el-form-item>
+        </el-form>
+      </SimpleBorder6>
+    </ArrowedDrawer>
+    <ArrowedDrawer :value="true">
+      <SimpleBorder6
+        bg="gradient-to-b"
+        via="bluegray-700/10"
+        from="blue-500/10"
+        to="blue-500/10"
+      >
+        <div
+          w="full"
+          p="x-3 b-4 t-6"
+          style="pointer-events: none"
+          flex="~ wrap"
+          gap="x-2 y-2"
+          items="center"
+        >
+          <h3 w="full" text="white sm">
+            <span text="red-300">红色</span>:数据异常,<span text="blue-300">蓝色</span>
+            :设备关闭,<span text="green-300">绿色</span>:运行正常,<span text="orange-300">
+              黄色
+            </span>
+            :未获取到数据
+          </h3>
+          <el-button
+            size="mini"
+            @click="handleViewModel(model)"
+            style="pointer-events: auto"
+            :type="
+              errorDeviceKeys.includes(model.viewData.key)
+                ? 'danger'
+                : closedDeviceKeys.includes(model.viewData.key)
+                ? 'primary'
+                : normalDeviceKeys.includes(model.viewData.key)
+                ? 'success'
+                : 'warning'
+            "
+            m="!0"
+            v-for="model of models"
+            :key="model.viewData.title"
+            plain
+          >
+            {{ model.viewData.title }}
+          </el-button>
+        </div>
+      </SimpleBorder6>
+    </ArrowedDrawer>
   </div>
 </template>
 
@@ -137,6 +163,7 @@ import {
   NameSpaceInjectKey,
 } from "~/digital-twin/components/inject-keys.js";
 import * as THREE from "three";
+import ArrowedDrawer from "~/components/modal/ArrowedDrawer.vue";
 import GltfModel from "~/digital-twin/components/GltfModel.vue";
 import CustomGltfModel from "~/digital-twin/components/CustomGltfModel.vue";
 import SpriteLabel from "~/digital-twin/components/SpriteLabel.vue";

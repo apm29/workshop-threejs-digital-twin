@@ -205,7 +205,7 @@ export const SpriteData = [
       bucket: "JLKZQ",
       measurement: "C_ZMJCCQ",
       range: "-1m",
-      key: "C_ZMJ",
+      key: "C_ZMJCCQ",
       status: {
         org: "atcc",
         bucket: "3fc_cf_sbzt",
@@ -403,6 +403,11 @@ export const SpriteData = [
         bucket: "3fc_cf_sbzt",
         measurement: "DYCL_T",
       },
+      craft: {
+        org: "atcc",
+        bucket: "Mointor",
+        measurement: "T_DYCL",
+      },
       model: {
         path: "./glb/电机.glb"
       }
@@ -426,6 +431,11 @@ export const SpriteData = [
         org: "atcc",
         bucket: "3fc_cf_sbzt",
         measurement: "T2",
+      },
+      craft: {
+        org: "atcc",
+        bucket: "Mointor",
+        measurement: "t2",
       },
       model: {
         path: "./glb/电机.glb"
@@ -474,6 +484,11 @@ export const SpriteData = [
         org: "atcc",
         bucket: "3fc_cf_sbzt",
         measurement: "T12",
+      },
+      craft: {
+        org: "atcc",
+        bucket: "Mointor",
+        measurement: "t12",
       },
       model: {
         path: "./glb/电机.glb"
@@ -940,12 +955,27 @@ export const DeviceStatus = [
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "PDJ_A", title: "传送带", key: "C_PDJ", },
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "CCYFJ_A", title: "除尘器(造球)", key: "C_CCYFJ", },
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "ZQQ_A", title: "输送(造球区后)", key: "C_ZQQ", },
-  { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "T2", title: "T2", key: "T2", },
-  { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "DYCL_T", title: "红外", key: "T_DYCL", },
+  {
+    org: "atcc", bucket: "3fc_cf_sbzt", measurement: "T2", title: "T2", key: "T2",
+    craft: { org: "atcc", bucket: "Mointor", measurement: "t2", title: "大窑T2工艺状态", key: "T2", },
+  },
+  {
+    org: "atcc", bucket: "3fc_cf_sbzt", measurement: "DYCL_T", title: "红外", key: "T_DYCL",
+    craft: { org: "atcc", bucket: "Mointor", measurement: "T_DYCL", title: "大窑红外工艺状态", key: "T_DYCL", },
+  },
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "DYSD_T", title: "红外", key: "T_DYSD", },
-  { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "T4", title: "T4", key: "T4", },
-  { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "T7", title: "T7", key: "T7", },
-  { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "T12", title: "T12", key: "T12", },
+  {
+    org: "atcc", bucket: "3fc_cf_sbzt", measurement: "T4", title: "T4", key: "T4",
+    craft: { org: "atcc", bucket: "Mointor", measurement: "t4", title: "大窑T4工艺状态", key: "T4", },
+  },
+  {
+    org: "atcc", bucket: "3fc_cf_sbzt", measurement: "T7", title: "T7", key: "T7",
+    craft: { org: "atcc", bucket: "Mointor", measurement: "t7", title: "大窑T7工艺状态", key: "T7", },
+  },
+  {
+    org: "atcc", bucket: "3fc_cf_sbzt", measurement: "T12", title: "T12", key: "T12",
+    craft: { org: "atcc", bucket: "Mointor", measurement: "t12", title: "大窑T12工艺状态", key: "T12", },
+  },
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "YFJ_A", title: "引风", key: "C_YFJ", },
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "SJ_GeiFJ_P_Get_kPa", title: "给风机", key: "SJ_GeiFJ_P_Get_kPa", },
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "GFJ_A", title: "关风", key: "C_GFJ", },
@@ -961,4 +991,5 @@ export const DeviceStatus = [
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "GM_CCQCKFY_P_Get_kPa", title: "除尘器出口", key: "GM_CCQCKFY_P_Get_kPa", },
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "BZLX_A", title: "输送(干磨机后)", key: "C_BZLX", },
   { org: "atcc", bucket: "3fc_cf_sbzt", measurement: "ZDS_A", title: "振动筛", key: "C_ZDS", },
+
 ]

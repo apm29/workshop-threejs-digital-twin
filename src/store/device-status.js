@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { DeviceStatus } from "~/digital-twin/combine/data";
 import { queryInfluxDb } from "~/api/influx";
-import { DeviceStatusEnum } from "~/definition";
+import { DeviceStatusEnum, CraftStatusEnum } from "~/definition";
 
 /**
  * 设备状态Store, 定期更新设备状态
@@ -26,6 +26,11 @@ export const useDeviceStatusStore = defineStore("device-status", () => {
       .filter((d) => d.status === DeviceStatusEnum.ERROR)
       .map((it) => it.key);
   });
+  const craftErrorDeviceKeys = computed(() => {
+    return deviceStatus.value
+      .filter((d) => d.status === DeviceStatusEnum.CRAFT_ERROR)
+      .map((it) => it.key);
+  });
   const unknownDeviceKeys = computed(() => {
     return deviceStatus.value
       .filter((d) => d.status === DeviceStatusEnum.UNKNOWN)
@@ -34,6 +39,18 @@ export const useDeviceStatusStore = defineStore("device-status", () => {
   onMounted(getDevicesStatus);
   //定时更新
   useIntervalFn(getDevicesStatus, 60_000);
+
+  function getDeviceStateTextClass(deviceStatus, craftStatus) {
+    //工艺状态异常时显示红色
+    if (craftStatus == CraftStatusEnum.HIGH || craftStatus == CraftStatusEnum.LOW) {
+      return DeviceStatusEnum.CRAFT_ERROR
+    } else if (craftStatus == CraftStatusEnum.ERROR) {
+      return DeviceStatusEnum.ERROR
+    } else {
+      return deviceStatus
+    }
+  }
+
 
   async function getDevicesStatus() {
     const res = await Promise.all(
@@ -45,9 +62,21 @@ export const useDeviceStatusStore = defineStore("device-status", () => {
             measurement: device.measurement,
             range: -1, //只查一条
           });
+          let deviceStatus = res?.data?.[0]?._value ?? DeviceStatusEnum.UNKNOWN;
+          if (device.craft) {
+            const craftRes = await queryInfluxDb({
+              org: device.craft.org,
+              bucket: device.craft.bucket,
+              measurement: device.craft.measurement,
+              range: -1, //只查一条
+            });
+            const craftStatus = craftRes?.data?.[0]?._value ?? CraftStatusEnum.ERROR;
+            deviceStatus = getDeviceStateTextClass(deviceStatus, craftStatus)
+          }
+
           return {
             ...device,
-            status: res?.data?.[0]?._value ?? DeviceStatusEnum.UNKNOWN,
+            status: deviceStatus,
           };
         } catch (err) {
           console.error(err);
@@ -61,6 +90,7 @@ export const useDeviceStatusStore = defineStore("device-status", () => {
     );
     deviceStatus.value = res;
     lastUpdateTime.value = new Date().getTime();
+    console.log(res);
   }
 
   function getSingleDeviceStatus(key) {
@@ -85,6 +115,7 @@ export const useDeviceStatusStore = defineStore("device-status", () => {
     normalDeviceKeys,
     closedDeviceKeys,
     errorDeviceKeys,
+    craftErrorDeviceKeys,
     unknownDeviceKeys,
 
     //function

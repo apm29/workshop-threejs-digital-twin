@@ -132,10 +132,12 @@
           items="center"
         >
           <h3 w="full" text="white sm">
-            <span text="red-300">红色</span>:数据异常,<span text="blue-300">蓝色</span>
-            :设备关闭,<span text="green-300">绿色</span>:运行正常,<span text="orange-300">
-              黄色
-            </span>
+            <span text="gray-300">灰色</span> :数据异常,
+            <span text="red-300">红色</span> :工艺状态异常,
+            <span text="blue-300"> 蓝色 </span> :设备关闭,
+            <span text="green-300"> 绿色 </span>
+            :运行正常,
+            <span text="orange-300"> 黄色 </span>
             :未获取到数据
           </h3>
           <el-button
@@ -144,6 +146,8 @@
             style="pointer-events: auto"
             :type="
               errorDeviceKeys.includes(model.viewData.key)
+                ? 'info'
+                : craftErrorDeviceKeys.includes(model.viewData.key)
                 ? 'danger'
                 : closedDeviceKeys.includes(model.viewData.key)
                 ? 'primary'
@@ -308,9 +312,13 @@ function handleViewModel({ viewData, position }) {
 //设备状态
 const { loading: loadingModel } = useThree(namespace);
 const deviceStore = useDeviceStatusStore();
-const { deviceStatus, closedDeviceKeys, errorDeviceKeys, normalDeviceKeys } = toRefs(
-  deviceStore
-);
+const {
+  deviceStatus,
+  closedDeviceKeys,
+  errorDeviceKeys,
+  normalDeviceKeys,
+  craftErrorDeviceKeys,
+} = toRefs(deviceStore);
 
 // watch([errorDeviceKeys, loadingModel], ([keys, loading]) => {
 //   if (!loading) {

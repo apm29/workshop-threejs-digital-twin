@@ -13,7 +13,7 @@ export const useMaterialDeliveryStore = defineStore("material-delivery", () => {
 
   onMounted(getData);
   //定时更新
-  useIntervalFn(getData, 60_000);
+  useIntervalFn(getData, 30_000);
   //测试数据
   const test = [
     {
@@ -82,7 +82,7 @@ export const useMaterialDeliveryStore = defineStore("material-delivery", () => {
     NP: {
       org: "atcc",
       bucket: "JLKZQ",
-      measurement: "N_P",
+      measurement: "N_PLTS",
     },
     //百分比 最大100
     P1: {
@@ -109,7 +109,13 @@ export const useMaterialDeliveryStore = defineStore("material-delivery", () => {
       org: "atcc",
       bucket: "JLKZQ",
       measurement: "N_P5_ADD",
-    }
+    },
+    //当前进料桶
+    OP: {
+      org: "atcc",
+      bucket: "JLKZQ",
+      measurement: "N_P",
+    },
   }
 
   async function getData() {
@@ -119,29 +125,32 @@ export const useMaterialDeliveryStore = defineStore("material-delivery", () => {
     const progressData = await Promise.all(Object.keys(querys).map((key) => {
       const { org, bucket, measurement } = querys[key]
       return queryInfluxDb({
-        org, bucket, measurement, range: "-1"
+        org, bucket, measurement, range: "-15m"
       }).then(res => Math.floor(res.data.reverse()[0]?._value ?? 0))
     }))
 
     lastUpdateTime.value = new Date().getTime();
     const result = {}
 
-    //P1 - P5
+    //P1 - P5 产地/原料
     result.P1 = formulaData.find(it => it.bucketNum === '1')
     result.P2 = formulaData.find(it => it.bucketNum === '2')
     result.P3 = formulaData.find(it => it.bucketNum === '3')
     result.P4 = formulaData.find(it => it.bucketNum === '4')
     result.P5 = formulaData.find(it => it.bucketNum === '5')
 
-    //进度
+    //总桶数
     result.NP = progressData[0]
+    //进度
     result.P1.bucketProgress = progressData[1]
     result.P2.bucketProgress = progressData[2]
     result.P3.bucketProgress = progressData[3]
     result.P4.bucketProgress = progressData[4]
     result.P5.bucketProgress = progressData[5]
+    //当前投料桶号
+    result.OP = `P${parseInt(progressData[6])}`
 
-    console.log(result);
+    console.log(progressData);
 
     materialDeliveryData.value = result;
 

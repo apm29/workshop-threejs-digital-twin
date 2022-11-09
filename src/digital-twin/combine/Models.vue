@@ -24,6 +24,16 @@
       ></SpriteLabel>
     </template>
 
+    <!-- <GltfModel
+      name="测试"
+      path="./animated/窑身.glb"
+      :position="{
+        x: 15,
+        y: 0,
+        z: -33,
+      }"
+    ></GltfModel> -->
+
     <AttachDialog v-if="selectedPosition" :attach="selectedPosition">
       <MaterialDelivery
         v-if="['P1', 'P2', 'P3', 'P4', 'P5'].includes(selectedViewData.key)"

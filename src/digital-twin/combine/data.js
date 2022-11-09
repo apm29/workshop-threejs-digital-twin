@@ -807,22 +807,31 @@ export const ModelData = [
     key: "T_DYCL",
   },
   {
-    path: "./glb/窑身1.glb",
+    path: "./animated/窑身.glb",
     position: {
-      x: 22.5,
-      z: -7.5,
-      y: 6.45,
+      x: 23.375,
+      z: -13,
+      y: 7.325,
     },
     key: "T2",
   },
   {
-    path: "./glb/窑身2.glb",
+    path: "./animated/窑身.glb",
     position: {
-      x: 22.5,
-      z: -14.5,
-      y: 6.45,
+      x: 23.375,
+      z: -24,
+      y: 7.325,
     },
     key: "DY_BODY2",
+  },
+  {
+    path: "./animated/窑身.glb",
+    position: {
+      x: 23.375,
+      z: -35,
+      y: 7.325,
+    },
+    key: "DY_BODY3",
   },
   {
     path: "./glb/大窑天然气.glb",
@@ -870,13 +879,22 @@ export const ModelData = [
     key: "C_WJZL",
   },
   {
-    path: "./glb/干磨机.glb",
+    path: "./glb/干磨机支撑.glb",
     position: {
       x: 23.5,
       z: -24.5,
       y: 0,
     },
     key: "C_CMJ",
+  },
+  {
+    path: "./animated/干磨机滚筒.glb",
+    position: {
+      x: 24.5,
+      z: -28.65,
+      y: 1.95,
+    },
+    key: "C_CMJ_GT",
   },
   {
     path: "./glb/称量包装机.glb",

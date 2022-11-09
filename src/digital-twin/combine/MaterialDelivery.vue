@@ -26,8 +26,8 @@
           :model-path="model.path"
           :camera-position="model.cameraPosition"
         ></ModelGallery>
-        <div flex="~ grow col" justify="around" gap="y-2">
-          <div flex="grow" grid="~ cols-2 rows-2">
+        <div flex="~ grow col" justify="around" gap="y-2" text="center">
+          <div flex="grow" grid="~ cols-2 rows-2" gap="2">
             <div
               flex="~ col"
               justify="center"
@@ -36,7 +36,10 @@
               p="x-5 y-2"
               border="~ bluegray-500"
             >
-              <div text="blue-300">投料百分比</div>
+              <div text="blue-300"></div>
+              <span text="blue-300">
+                {{ materialDeliveryData?.OP === craftKey ? "投料中" : "投料百分比" }}
+              </span>
               <div
                 text="md green-500"
                 flex="~ grow col"
@@ -78,7 +81,7 @@
               border="~ bluegray-500"
             >
               <span text="blue-300">桶数</span>
-              <span text="6xl green-500" font="bold mono" p="x-3">
+              <span text="4xl green-500" font="bold mono" p="x-3">
                 {{ materialDeliveryData?.NP }}
               </span>
             </div>
@@ -109,6 +112,7 @@
             title="设备状态"
             :org="status.org"
             :bucket="status.bucket"
+            min="h-28"
             :measurement="status.measurement"
           ></DeviceStatus>
         </div>

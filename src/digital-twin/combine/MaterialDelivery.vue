@@ -1,12 +1,5 @@
 <template>
-  <SimpleBorder6
-    v-loading="loading"
-    element-loading-text="加载数据中"
-    element-loading-spinner="el-icon-loading"
-    element-loading-background="rgba(0, 0, 0, 0.8)"
-    class="time-series-dialog-wrapper"
-    bg="bluegray-900/80"
-  >
+  <SimpleBorder6 class="time-series-dialog-wrapper" bg="bluegray-900/80">
     <div
       class="time-series-dialog"
       text="sm gray-200"
@@ -126,7 +119,6 @@ import { useMaterialDeliveryStore } from "~/store/material-delivery";
 import SimpleBorder6 from "~/svg/border/SimpleBorder6.vue";
 import DeviceStatus from "./DeviceStatus.vue";
 import ModelGallery from "./ModelGallery.vue";
-const loading = ref(false);
 const props = defineProps({
   title: String,
   craftKey: String,

@@ -29,7 +29,7 @@ export const install = () => {
             }
             resolve(axiosResponse.data);
           } else {
-            Message.error(axiosResponse.data.msg || axiosResponse.data.text);
+            Message.error(axiosResponse.data.msg || axiosResponse.data.text || "网络错误");
             reject(axiosResponse.data.msg);
           }
         } else {

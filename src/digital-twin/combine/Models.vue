@@ -286,6 +286,7 @@ function handleViewModel({ viewData, position }) {
   vector.clampLength(3, 6);
   selectedPosition.value = position;
   selectedViewData.value = viewData;
+  console.log(selectedViewData.value);
   //视角动画
   const tweenCamera = new TWEEN.Tween(camera.position);
   const tweenControl = new TWEEN.Tween(controls.target);

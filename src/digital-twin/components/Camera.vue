@@ -40,15 +40,20 @@ const camera = new THREE.PerspectiveCamera(
   5000 //far
 );
 
-camera.position.x = props.position?.x ?? INITIAL_CAMERA_X;
-camera.position.y = props.position?.y ?? INITIAL_CAMERA_Y;
-camera.position.z = props.position?.z ?? INITIAL_CAMERA_Z;
+function resetPosition() {
+  camera.position.x = props.position?.x ?? INITIAL_CAMERA_X;
+  camera.position.y = props.position?.y ?? INITIAL_CAMERA_Y;
+  camera.position.z = props.position?.z ?? INITIAL_CAMERA_Z;
+}
+resetPosition();
 
 //监听视窗大小变化
 watch([width, height], () => {
   camera.aspect = unref(width) / unref(height);
   camera.updateProjectionMatrix();
 });
+
+watch(() => props.position, resetPosition);
 
 provide(CameraInjectKey, camera);
 setCamera(camera);

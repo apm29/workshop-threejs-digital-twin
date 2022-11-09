@@ -164,7 +164,12 @@ export const SpriteData = [
         measurement: "LDJ_A",
       },
       model: {
-        path: "./glb/电机.glb"
+        path: "./centered/犁刀机.glb",
+        cameraPosition: {
+          x: 4,
+          y: 1,
+          z: 4
+        }
       }
     },
   },
@@ -188,7 +193,12 @@ export const SpriteData = [
         measurement: "ZMJ_A",
       },
       model: {
-        path: "./glb/电机.glb"
+        path: "./centered/致密机.glb",
+        cameraPosition: {
+          x: 6,
+          y: 1,
+          z: 6
+        }
       }
     },
   },
@@ -212,7 +222,12 @@ export const SpriteData = [
         measurement: "ZMJCCQ_A",
       },
       model: {
-        path: "./glb/电机.glb"
+        path: "./centered/致密机.glb",
+        cameraPosition: {
+          x: 6,
+          y: 1,
+          z: 6
+        }
       }
     },
   },
@@ -236,7 +251,12 @@ export const SpriteData = [
         measurement: "GLDZJ_A",
       },
       model: {
-        path: "./glb/电机.glb"
+        path: "./centered/给料电振机_双轴搅拌机.glb",
+        cameraPosition: {
+          x: 6,
+          y: 1,
+          z: 6
+        }
       }
     },
   },
@@ -260,7 +280,12 @@ export const SpriteData = [
         measurement: "SZJB_A",
       },
       model: {
-        path: "./glb/电机.glb"
+        path: "./centered/给料电振机_双轴搅拌机.glb",
+        cameraPosition: {
+          x: 6,
+          y: 1,
+          z: 6
+        }
       }
     },
   },
@@ -284,7 +309,12 @@ export const SpriteData = [
         measurement: "ZQJ_A",
       },
       model: {
-        path: "./glb/电机.glb"
+        path: "./centered/造球盘.glb",
+        cameraPosition: {
+          x: 4,
+          y: 1,
+          z: 4
+        }
       }
     },
   },
@@ -308,7 +338,12 @@ export const SpriteData = [
         measurement: "PDJ_A",
       },
       model: {
-        path: "./glb/电机.glb"
+        path: "./centered/皮带机.glb",
+        cameraPosition: {
+          x: 8,
+          y: 1,
+          z: 8
+        }
       }
     },
   },
@@ -332,7 +367,12 @@ export const SpriteData = [
         measurement: "YFJ_A",
       },
       model: {
-        path: "./glb/电机.glb"
+        path: "./centered/引风机.glb",
+        cameraPosition: {
+          x: 6,
+          y: 1,
+          z: 6
+        }
       }
     },
   },
@@ -356,7 +396,12 @@ export const SpriteData = [
         measurement: "ZFG_T",
       },
       model: {
-        path: "./glb/电机.glb"
+        path: "./centered/喷淋塔.glb",
+        cameraPosition: {
+          x: 11,
+          y: 1,
+          z: 11
+        }
       }
     },
   },
@@ -380,7 +425,12 @@ export const SpriteData = [
         measurement: "GFJ_A",
       },
       model: {
-        path: "./glb/电机.glb"
+        path: "./centered/关风机.glb",
+        cameraPosition: {
+          x: 3,
+          y: 1,
+          z: 3
+        }
       }
     },
   },
@@ -409,7 +459,12 @@ export const SpriteData = [
         measurement: "T_DYCL",
       },
       model: {
-        path: "./glb/电机.glb"
+        path: "./centered/窑头.glb",
+        cameraPosition: {
+          x: 5,
+          y: 1,
+          z: 5
+        }
       }
     },
   },
@@ -438,7 +493,12 @@ export const SpriteData = [
         measurement: "t2",
       },
       model: {
-        path: "./glb/电机.glb"
+        path: "./centered/窑身.glb",
+        cameraPosition: {
+          x: 13,
+          y: 3,
+          z: 13
+        }
       }
     },
   },
@@ -462,7 +522,12 @@ export const SpriteData = [
         measurement: "HZ_TRQ1_BKLL_GET_M3H",
       },
       model: {
-        path: "./glb/电机.glb"
+        path: "./centered/大窑天然气.glb",
+        cameraPosition: {
+          x: 8,
+          y: 3,
+          z: 8
+        }
       }
     },
   },
@@ -491,7 +556,12 @@ export const SpriteData = [
         measurement: "t12",
       },
       model: {
-        path: "./glb/电机.glb"
+        path: "./centered/引风大窑连接管.glb",
+        cameraPosition: {
+          x: 8,
+          y: 2,
+          z: 8
+        }
       }
     },
   },
@@ -515,7 +585,12 @@ export const SpriteData = [
         measurement: "GuFJ_A",
       },
       model: {
-        path: "./glb/电机.glb"
+        path: "./centered/鼓风机.glb",
+        cameraPosition: {
+          x: 4,
+          y: 2,
+          z: 4
+        }
       }
     },
   },
@@ -539,7 +614,12 @@ export const SpriteData = [
         measurement: "LQT_A",
       },
       model: {
-        path: "./glb/电机.glb"
+        path: "./centered/冷却桶.glb",
+        cameraPosition: {
+          x: 16,
+          y: 5,
+          z: 16
+        }
       }
     },
   },
@@ -563,7 +643,12 @@ export const SpriteData = [
         measurement: "WJZL_A",
       },
       model: {
-        path: "./glb/电机.glb"
+        path: "./centered/外加籽料.glb",
+        cameraPosition: {
+          x: 6,
+          y: 1,
+          z: 6
+        }
       }
     },
   },
@@ -587,7 +672,12 @@ export const SpriteData = [
         measurement: "CMJ_A",
       },
       model: {
-        path: "./glb/电机.glb"
+        path: "./centered/干磨机.glb",
+        cameraPosition: {
+          x: 8,
+          y: 1,
+          z: 8
+        }
       }
     },
   },
@@ -659,7 +749,12 @@ export const SpriteData = [
         measurement: "BZLX_A",
       },
       model: {
-        path: "./glb/电机.glb"
+        path: "./centered/称量包装机.glb",
+        cameraPosition: {
+          x: 8,
+          y: 1,
+          z: 8
+        }
       }
     },
   },
@@ -683,7 +778,12 @@ export const SpriteData = [
         measurement: "CCYFJ_BPQ_A",
       },
       model: {
-        path: "./glb/电机.glb"
+        path: "./centered/干磨机除尘器.glb",
+        cameraPosition: {
+          x: 8,
+          y: 1,
+          z: 8
+        }
       }
     },
   },
@@ -734,8 +834,8 @@ export const ModelData = [
   {
     path: "./glb/犁刀机.glb",
     position: {
-      x: 10.5,
-      z: -45,
+      x: 10.3,
+      z: -45.1,
       y: 2.4,
     },
     key: "C_LDJ",

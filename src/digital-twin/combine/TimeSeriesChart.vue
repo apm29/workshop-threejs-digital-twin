@@ -1,12 +1,5 @@
 <template>
-  <SimpleBorder6
-    v-loading="loading"
-    element-loading-text="加载数据中"
-    element-loading-spinner="el-icon-loading"
-    element-loading-background="rgba(0, 0, 0, 0.8)"
-    class="time-series-dialog-wrapper"
-    bg="bluegray-900/80"
-  >
+  <SimpleBorder6 class="time-series-dialog-wrapper" bg="bluegray-900/80">
     <div
       class="time-series-dialog"
       text="sm gray-200"
@@ -35,7 +28,16 @@
           :camera-position="model.cameraPosition"
         ></ModelGallery>
         <div flex="~ grow col">
-          <BasicLineCharts flex="grow" h="full" :data="data" :dataAxisX="dataAxisX" />
+          <BasicLineCharts
+            v-loading="loading"
+            element-loading-text="加载数据中"
+            element-loading-spinner="el-icon-loading"
+            element-loading-background="rgba(0, 0, 0, 0.8)"
+            flex="grow"
+            h="full"
+            :data="data"
+            :dataAxisX="dataAxisX"
+          />
           <DeviceStatus
             title="设备状态"
             :org="status.org"

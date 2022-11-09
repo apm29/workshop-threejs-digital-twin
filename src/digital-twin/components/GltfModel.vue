@@ -40,62 +40,69 @@ const gltfLoader = new GLTFLoader();
 const textureLoader = new THREE.TextureLoader();
 
 const model = ref();
-gltfLoader.load(props.path, (gltf) => {
-  const root = gltf.scene;
-  model.value = root;
-  // const wireframeMaterial = new THREE.MeshBasicMaterial({
-  //   color: 0x5356ff,
-  //   wireframe: true,
-  //   transparent: true,
-  // });
-  emit("update:model", root);
 
-  root.name = props.name;
+watch(() => props.path, loadModel, { immediate: true });
 
-  gltf.scene.traverse(function (obj) {
-    if (obj instanceof THREE.Mesh) {
-      // console.log(obj);
-      const oldTexture = obj.material.map;
-      const defaultMaterial = new THREE.MeshLambertMaterial({
-        color: obj.material.color,
-        // transparent: false,
-      });
-      obj.material = defaultMaterial;
-      obj.material.map = oldTexture;
-      obj.material.side = THREE.DoubleSide;
-      obj.castShadow = true;
-      // obj.receiveShadow = true;
-      //线框
-      // const frameObj = new THREE.Mesh(obj.geometry, wireframeMaterial);
-      // selectableGroup.add(frameObj)
+function loadModel() {
+  unload();
+  console.log("load", props.path);
+  gltfLoader.load(props.path, (gltf) => {
+    const root = gltf.scene;
+    model.value = root;
+    // const wireframeMaterial = new THREE.MeshBasicMaterial({
+    //   color: 0x5356ff,
+    //   wireframe: true,
+    //   transparent: true,
+    // });
+    emit("update:model", root);
+
+    root.name = props.name;
+
+    gltf.scene.traverse(function (obj) {
+      if (obj instanceof THREE.Mesh) {
+        // console.log(obj);
+        const oldTexture = obj.material.map;
+        const defaultMaterial = new THREE.MeshLambertMaterial({
+          color: obj.material.color,
+          // transparent: false,
+        });
+        // obj.material = defaultMaterial;
+        // obj.material.map = oldTexture;
+        obj.material.side = THREE.DoubleSide;
+        obj.castShadow = true;
+        // obj.receiveShadow = true;
+        //线框
+        // const frameObj = new THREE.Mesh(obj.geometry, wireframeMaterial);
+        // selectableGroup.add(frameObj)
+      }
+    });
+    if (gltf.animations && gltf.animations.length) {
+      const mixer = new THREE.AnimationMixer(gltf.scene);
+      // console.log(gltf.animations);
+      const clock = new THREE.Clock();
+      function animate() {
+        requestAnimationFrame(animate);
+        const mixerUpdateDelta = clock.getDelta();
+        mixer.update(mixerUpdateDelta);
+      }
+      const actions = gltf.animations.map((animation) => mixer.clipAction(animation));
+      actions.forEach((action) => action.play());
+      animate();
+    }
+
+    root.position.x = (props.position?.x ?? 0) + BASE_X;
+    root.position.y = (props.position?.y ?? 0) + BASE_Y;
+    root.position.z = (props.position?.z ?? 0) + BASE_Z;
+
+    if (props.selectable) {
+      selectableGroup.add(root);
+    } else {
+      scene.add(root);
     }
   });
-  if (gltf.animations && gltf.animations.length) {
-    const mixer = new THREE.AnimationMixer(gltf.scene);
-    console.log(gltf.animations);
-    const clock = new THREE.Clock();
-    function animate() {
-      requestAnimationFrame(animate);
-      const mixerUpdateDelta = clock.getDelta();
-      mixer.update(mixerUpdateDelta);
-    }
-    const actions = gltf.animations.map((animation) => mixer.clipAction(animation));
-    actions.forEach((action) => action.play());
-    animate();
-  }
+}
 
-  root.position.x = (props.position?.x ?? 0) + BASE_X;
-  root.position.y = (props.position?.y ?? 0) + BASE_Y;
-  root.position.z = (props.position?.z ?? 0) + BASE_Z;
-
-  if (props.selectable) {
-    selectableGroup.add(root);
-  } else {
-    scene.add(root);
-  }
-});
-
-onBeforeUnmount(() => {
+function unload() {
   if (model.value) {
     const root = model.value;
     if (props.selectable) {
@@ -104,7 +111,9 @@ onBeforeUnmount(() => {
       scene.remove(root);
     }
   }
-});
+}
+
+onBeforeUnmount(unload);
 
 watch(
   () => props.position,

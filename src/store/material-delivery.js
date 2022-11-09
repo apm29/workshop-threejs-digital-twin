@@ -119,17 +119,17 @@ export const useMaterialDeliveryStore = defineStore("material-delivery", () => {
   }
 
   async function getData() {
-    // const res = await queryCurrentUsedFormula()
+    let res
+    try {
+      res = await queryCurrentUsedFormula()
+    } catch (error) {
+      console.log(error);
+    }
     //测试
-    const formulaData = test
-    const progressData = await Promise.all(Object.keys(querys).map((key) => {
-      const { org, bucket, measurement } = querys[key]
-      return queryInfluxDb({
-        org, bucket, measurement, range: "-15m"
-      }).then(res => Math.floor(res.data.reverse()[0]?._value ?? 0))
-    }))
+    const formulaData = res?.data ?? []
 
-    lastUpdateTime.value = new Date().getTime();
+
+
     const result = {}
 
     //P1 - P5 产地/原料
@@ -138,7 +138,17 @@ export const useMaterialDeliveryStore = defineStore("material-delivery", () => {
     result.P3 = formulaData.find(it => it.bucketNum === '3')
     result.P4 = formulaData.find(it => it.bucketNum === '4')
     result.P5 = formulaData.find(it => it.bucketNum === '5')
-
+    let progressData = []
+    try {
+      progressData = await Promise.all(Object.keys(querys).map((key) => {
+        const { org, bucket, measurement } = querys[key]
+        return queryInfluxDb({
+          org, bucket, measurement, range: "-15m"
+        }).then(res => Math.floor(res.data.reverse()[0]?._value ?? 0))
+      }))
+    } catch (error) {
+      console.log(error);
+    }
     //总桶数
     result.NP = progressData[0]
     //进度
@@ -152,7 +162,9 @@ export const useMaterialDeliveryStore = defineStore("material-delivery", () => {
 
     console.log(progressData);
 
+    lastUpdateTime.value = new Date().getTime();
     materialDeliveryData.value = result;
+
 
 
 

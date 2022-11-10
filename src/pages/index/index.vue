@@ -2,7 +2,7 @@
   <NameSpace h="screen" w="screen" namespace="app" class="atcc-workshop">
     <Renderer h="screen" w="screen">
       <Camera>
-        <Scene>
+        <Scene stats>
           <PostProcess>
             <Controls></Controls>
             <Sky></Sky>

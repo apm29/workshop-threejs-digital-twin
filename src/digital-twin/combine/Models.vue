@@ -10,10 +10,12 @@
         :path="modelData.path"
         :position="modelData.position"
         :model.sync="modelObject3dMap[modelData.key]"
+        :animate-scale="scaleMap[modelData.key]"
       ></GltfModel>
     </template>
-    <template v-for="spriteData of ViewSpriteData">
+    <template v-if="currentMode === ModeEnum.DEVICE">
       <SpriteLabel
+        v-for="spriteData of ViewSpriteData"
         :path="`./status/${
           deviceStatus.find((it) => it.key === spriteData.viewData.key)?.status ??
           DeviceStatusEnum.UNKNOWN
@@ -23,16 +25,21 @@
         @click="handleSelect"
       ></SpriteLabel>
     </template>
-
-    <!-- <GltfModel
-      name="测试"
-      path="./animated/窑身.glb"
-      :position="{
-        x: 15,
-        y: 0,
-        z: -33,
-      }"
-    ></GltfModel> -->
+    <template v-if="currentMode === ModeEnum.MONITOR">
+      <SpriteLabel
+        path="./sprite/6.png"
+        :position="{
+          x: 23.5,
+          z: -47,
+          y: 9.2,
+        }"
+        :viewData="{
+          stream: 'http://192.168.88.6:8080/stream',
+        }"
+        @click="handleSelectMonitor"
+      >
+      </SpriteLabel>
+    </template>
 
     <AttachDialog v-if="selectedPosition" :attach="selectedPosition">
       <MaterialDelivery
@@ -59,6 +66,37 @@
         @close="resetCamera()"
       ></TimeSeriesChart>
     </AttachDialog>
+    <AttachDialog v-if="showMonitor" :attach="monitorPosition">
+      <SimpleBorder6
+        min="w-6rem"
+        z="30"
+        bg="gradient-to-b"
+        via="bluegray-700/70"
+        from="blue-500/70"
+        to="blue-500/70"
+      >
+        <div
+          class="time-series-dialog"
+          text="sm gray-200"
+          flex="~ col"
+          p="x-6 y-4"
+          w="160"
+          min="h-100"
+        >
+          <h1 text="lg" font="bold" relative="~">
+            视频监控
+            <button @click="unselectMonitor" text="2xl" absolute="~" right="2" top="1">
+              <i i-mdi-close></i>
+            </button>
+          </h1>
+          <div flex="~ grow" overflow="y-auto">
+            <video w="full" h="full" autoplay="autoplay" preload="load">
+              <source :src="monitorStream" type="video/ogg" />
+            </video>
+          </div>
+        </div>
+      </SimpleBorder6>
+    </AttachDialog>
     <ArrowedDrawer top="[calc(50vh-100px)]" :value="true" direction="left">
       <SimpleBorder6
         min="w-6rem"
@@ -76,10 +114,10 @@
           p="x-4 y-4"
         >
           <el-form-item label="" style="pointer-events: auto">
-            <el-button>设备状态</el-button>
+            <el-button @click="currentMode = ModeEnum.DEVICE">设备状态</el-button>
           </el-form-item>
           <el-form-item label="" style="pointer-events: auto">
-            <el-button>视频监控</el-button>
+            <el-button @click="currentMode = ModeEnum.MONITOR">视频监控</el-button>
           </el-form-item>
         </el-form>
       </SimpleBorder6>
@@ -116,7 +154,7 @@
         </el-form>
       </SimpleBorder6>
     </ArrowedDrawer>
-    <ArrowedDrawer :value="true">
+    <ArrowedDrawer :value="true" v-if="currentMode === ModeEnum.DEVICE">
       <SimpleBorder6
         bg="gradient-to-b"
         via="bluegray-700/10"
@@ -197,8 +235,16 @@ import {
   INITIAL_CAMERA_Z,
 } from "~/digital-twin/components/axes.js";
 import { useDeviceStatusStore } from "~/store";
+import { useKinStatusStore } from "~/store/kin-status";
 
 const namespace = inject(NameSpaceInjectKey);
+
+//切换模式
+const ModeEnum = {
+  DEVICE: 1,
+  MONITOR: 2,
+};
+const currentMode = ref(ModeEnum.DEVICE);
 
 //数据部分
 const ViewModelData = ref(ModelData);
@@ -219,6 +265,57 @@ function handleSelect({ event, selectedObject }) {
     position: selectedObject.position,
   });
 }
+
+const showMonitor = ref(false);
+const monitorStream = ref(null);
+const monitorPosition = ref(null);
+function handleSelectMonitor({ event, selectedObject }) {
+  monitorPosition.value = selectedObject.position;
+  monitorStream.value = selectedObject.userData.viewData.stream;
+  showMonitor.value = true;
+  const { camera: cameraRef, control: controlRef } = useThree(namespace);
+  const camera = cameraRef.value;
+  const controls = controlRef.value;
+
+  const position = selectedObject.position;
+  //向量计算
+  //物体位置--> 相机位置向量
+  const vector = new THREE.Vector3(
+    camera.position.x - position.x,
+    camera.position.y - position.y,
+    camera.position.z - position.z
+  );
+  //向量缩放到3-6m
+  vector.clampLength(3, 6);
+  //视角动画
+  const tweenCamera = new TWEEN.Tween(camera.position);
+  const tweenControl = new TWEEN.Tween(controls.target);
+  tweenCamera.to(
+    {
+      x: position.x + vector.x,
+      y: position.y + vector.y,
+      z: position.z + vector.z,
+    },
+    animateDuration
+  );
+  tweenControl.to(
+    {
+      x: position.x,
+      y: position.y,
+      z: position.z,
+    },
+    animateDuration
+  );
+  tweenCamera.start();
+  tweenControl.start();
+}
+function unselectMonitor() {
+  showMonitor.value = false;
+  monitorPosition.value = null;
+  monitorStream.value = null;
+  resetCamera();
+}
+
 const showOther = ref(true);
 
 const showAxesHelper = ref(false);
@@ -343,6 +440,20 @@ const {
 //       .filter((it) => it);
 //   }
 // });
+
+//窑速计算
+const kinStatusStore = useKinStatusStore();
+const { animationScale } = toRefs(kinStatusStore);
+const scaleMap = reactive({
+  T2: 1,
+  DY_BODY2: 1,
+  DY_BODY3: 1,
+});
+watch(animationScale, (scale) => {
+  scaleMap.T2 = scale;
+  scaleMap.DY_BODY2 = scale;
+  scaleMap.DY_BODY3 = scale;
+});
 </script>
 
 <style lang="scss">

@@ -32,6 +32,9 @@ const props = defineProps({
   position: {
     type: Object,
   },
+  animateScale: {
+    type: Number,
+  },
 });
 
 const emit = defineEmits(["update:model"]);
@@ -40,8 +43,17 @@ const gltfLoader = new GLTFLoader();
 const textureLoader = new THREE.TextureLoader();
 
 const model = ref();
+const animationMixer = ref();
 
 watch(() => props.path, loadModel, { immediate: true });
+watch(
+  () => props.animateScale,
+  function (scale) {
+    if (animationMixer.value) {
+      animationMixer.value.timeScale = scale;
+    }
+  }
+);
 
 function loadModel() {
   unload();
@@ -78,8 +90,10 @@ function loadModel() {
     });
     if (gltf.animations && gltf.animations.length) {
       const mixer = new THREE.AnimationMixer(gltf.scene);
+      animationMixer.value = mixer;
       // console.log(gltf.animations);
       const clock = new THREE.Clock();
+      mixer.timeScale = props.animateScale ?? 1;
       function animate() {
         requestAnimationFrame(animate);
         const mixerUpdateDelta = clock.getDelta();

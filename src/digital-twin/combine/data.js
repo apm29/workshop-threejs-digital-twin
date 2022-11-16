@@ -868,7 +868,7 @@ export const ModelData = [
     key: "C_ZQJ",
   },
   {
-    path: "./glb/皮带机.glb",
+    path: "./animated/皮带机.glb",
     position: {
       x: 23,
       z: -43.2,

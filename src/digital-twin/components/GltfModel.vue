@@ -72,7 +72,6 @@ function loadModel() {
 
     gltf.scene.traverse(function (obj) {
       if (obj instanceof THREE.Mesh) {
-        // console.log(obj);
         const oldTexture = obj.material.map;
         const defaultMaterial = new THREE.MeshLambertMaterial({
           color: obj.material.color,
@@ -80,6 +79,7 @@ function loadModel() {
         });
         // obj.material = defaultMaterial;
         // obj.material.map = oldTexture;
+        
         obj.material.side = THREE.DoubleSide;
         obj.castShadow = true;
         // obj.receiveShadow = true;
@@ -88,10 +88,11 @@ function loadModel() {
         // selectableGroup.add(frameObj)
       }
     });
+    console.log(props.path, gltf.scene);
     if (gltf.animations && gltf.animations.length) {
       const mixer = new THREE.AnimationMixer(gltf.scene);
       animationMixer.value = mixer;
-      // console.log(gltf.animations);
+      console.log(props.path, gltf.animations);
       const clock = new THREE.Clock();
       mixer.timeScale = props.animateScale ?? 1;
       function animate() {

@@ -40,6 +40,14 @@
       >
       </SpriteLabel>
     </template>
+    <!-- <GltfModel
+      path="./animated/animated-cube.glb"
+      :position="{
+        x: 15,
+        y: 0,
+        z: -33,
+      }"
+    ></GltfModel> -->
 
     <AttachDialog v-if="selectedPosition" :attach="selectedPosition">
       <MaterialDelivery

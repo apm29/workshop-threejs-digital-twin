@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 工厂 -->
-    <CustomGltfModel v-if="showOther" path="./glb/建筑.glb"></CustomGltfModel>
+    <GltfModel v-if="showOther" path="./glb/建筑.glb"></GltfModel>
     <AxesHelper v-if="showAxesHelper"></AxesHelper>
     <template v-for="modelData of ViewModelData">
       <GltfModel

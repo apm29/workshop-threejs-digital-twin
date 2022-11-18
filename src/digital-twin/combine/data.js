@@ -841,7 +841,7 @@ export const ModelData = [
     key: "C_LDJ",
   },
   {
-    path: "./glb/致密机.glb",
+    path: "./animated/致密机.glb",
     position: {
       x: 13.2,
       z: -46.2,
@@ -993,23 +993,23 @@ export const ModelData = [
     },
     key: "C_WJZL",
   },
+  // {
+  //   path: "./glb/干磨机支撑.glb",
+  //   position: {
+  //     x: 23.5,
+  //     z: -24.5,
+  //     y: 0,
+  //   },
+  //   key: "C_CMJ",
+  // },
   {
-    path: "./glb/干磨机支撑.glb",
+    path: "./animated/干磨机.glb",
     position: {
       x: 23.5,
       z: -24.5,
       y: 0,
     },
     key: "C_CMJ",
-  },
-  {
-    path: "./animated/干磨机滚筒.glb",
-    position: {
-      x: 24.5,
-      z: -28.65,
-      y: 1.95,
-    },
-    key: "C_CMJ_GT",
   },
   {
     path: "./glb/称量包装机.glb",

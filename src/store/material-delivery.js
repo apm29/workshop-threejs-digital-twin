@@ -128,16 +128,16 @@ export const useMaterialDeliveryStore = defineStore("material-delivery", () => {
     //测试
     const formulaData = res?.data ?? []
 
-
+    console.log(formulaData);
 
     const result = {}
 
     //P1 - P5 产地/原料
-    result.P1 = formulaData.find(it => it.bucketNum === '1')
-    result.P2 = formulaData.find(it => it.bucketNum === '2')
-    result.P3 = formulaData.find(it => it.bucketNum === '3')
-    result.P4 = formulaData.find(it => it.bucketNum === '4')
-    result.P5 = formulaData.find(it => it.bucketNum === '5')
+    result.P1 = formulaData.find(it => it.bucketNum === '1') || {}
+    result.P2 = formulaData.find(it => it.bucketNum === '2') || {}
+    result.P3 = formulaData.find(it => it.bucketNum === '3') || {}
+    result.P4 = formulaData.find(it => it.bucketNum === '4') || {}
+    result.P5 = formulaData.find(it => it.bucketNum === '5') || {}
     let progressData = []
     try {
       progressData = await Promise.all(Object.keys(querys).map((key) => {

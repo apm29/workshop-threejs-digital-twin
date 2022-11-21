@@ -223,6 +223,53 @@
         </div>
       </SimpleBorder6>
     </ArrowedDrawer>
+    <div fixed="~" top="20" left="2" flex="~" gap="3" v-if="false">
+      <SimpleBorder6
+        z="30"
+        bg="gradient-to-b"
+        via="blue-700/70"
+        from="blue-500/70"
+        to="blue-500/70"
+      >
+        <div p="x-3 y-2">
+          <SimpleNumber
+            text="4xl white"
+            prefix="当前生产型号"
+            :value="1434329"
+          ></SimpleNumber>
+        </div>
+      </SimpleBorder6>
+      <SimpleBorder6
+        z="30"
+        bg="gradient-to-b"
+        via="blue-700/70"
+        from="blue-500/70"
+        to="blue-500/70"
+      >
+        <div p="x-3 y-2">
+          <SimpleNumber
+            text="4xl white"
+            prefix="当前生产型号"
+            :value="1434329"
+          ></SimpleNumber>
+        </div>
+      </SimpleBorder6>
+      <SimpleBorder6
+        z="30"
+        bg="gradient-to-b"
+        via="blue-700/70"
+        from="blue-500/70"
+        to="blue-500/70"
+      >
+        <div p="x-3 y-2">
+          <SimpleNumber
+            text="4xl white"
+            prefix="当前生产型号"
+            :value="1434329"
+          ></SimpleNumber>
+        </div>
+      </SimpleBorder6>
+    </div>
   </div>
 </template>
 
@@ -244,6 +291,7 @@ import AxesHelper from "~/digital-twin/components/AxesHelper.vue";
 import TimeSeriesChart from "~/digital-twin/combine/TimeSeriesChart.vue";
 import MaterialDelivery from "~/digital-twin/combine/MaterialDelivery.vue";
 import SimpleBorder6 from "~/svg/border/SimpleBorder6.vue";
+import SimpleNumber from "~/svg/SimpleNumber.vue";
 import TWEEN from "@tweenjs/tween.js";
 import { useThree } from "~/digital-twin/components/three";
 import { useModels } from "~/digital-twin/components/models.js";

@@ -264,7 +264,7 @@
         to="dark-500/70"
       >
         <div p="x-3 y-2">
-          <SimpleNumber text="4xl white" prefix="当前生产型号" value="--"></SimpleNumber>
+          <SimpleNumber text="4xl white" prefix="当前生产型号" value="- -"></SimpleNumber>
         </div>
       </SimpleBorder6>
       <SimpleBorder6
@@ -317,6 +317,46 @@
                 :value="deliveryAmount.P5"
               ></SimpleNumber>
             </div>
+            <div>
+              <h1 text="white lg">配料桶数</h1>
+              <SimpleNumber
+                text="4xl white"
+                suffix="桶"
+                :value="materialDeliveryData.NP"
+              ></SimpleNumber>
+            </div>
+          </div>
+        </div>
+      </SimpleBorder6>
+
+      <SimpleBorder6
+        z="30"
+        bg="gradient-to-b"
+        via="dark-700/70"
+        from="dark-500/70"
+        to="dark-500/70"
+      >
+        <div flex="~" p="x-3 y-2" gap="3">
+          <h1 text="blue-400 xl" m="r-2">出料</h1>
+          <div flex="~" gap="6">
+            <div>
+              <h1 text="white lg">日出料</h1>
+              <SimpleNumber
+                text="4xl white"
+                suffix="kg"
+                :value="coarsePowderOutput.day"
+              ></SimpleNumber>
+            </div>
+          </div>
+          <div flex="~" gap="6">
+            <div>
+              <h1 text="white lg">月出料</h1>
+              <SimpleNumber
+                text="4xl white"
+                suffix="kg"
+                :value="coarsePowderOutput.month"
+              ></SimpleNumber>
+            </div>
           </div>
         </div>
       </SimpleBorder6>
@@ -332,7 +372,7 @@
       >
         <iframe
           id="iframe"
-          src="http://atcc-workshop.ciih.net/charts/#/factory-3/material/daily"
+          src="http://atcc-workshop.ciih.net/charts/#/presentation/material/daily"
           frameborder="0"
           width="100%"
           height="100%"
@@ -602,7 +642,9 @@ const { naturalGasTotal, electricityGasTotal } = toRefs(energyStore); //能耗
 
 //投料数据
 const materialDeliveryStore = useMaterialDeliveryStore();
-const { deliveryAmount } = toRefs(materialDeliveryStore);
+const { materialDeliveryData, deliveryAmount, coarsePowderOutput } = toRefs(
+  materialDeliveryStore
+);
 </script>
 
 <style lang="scss">

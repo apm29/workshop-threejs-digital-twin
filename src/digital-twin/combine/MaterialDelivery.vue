@@ -86,7 +86,14 @@
               border="~ bluegray-500"
             >
               <span text="blue-300">产地</span>
-              <span text="4xl green-500" font="bold" p="x-3"> {{ data?.place }} </span>
+              <span text="4xl green-500" font="bold" p="x-3">
+                {{
+                  data?.place
+                    ?.split("")
+                    ?.map(() => "*")
+                    ?.join(" ")
+                }}
+              </span>
             </div>
             <div
               flex="~ col"
@@ -97,7 +104,12 @@
             >
               <span text="blue-300">原料</span>
               <span text="4xl green-500" font="bold" p="x-3">
-                {{ data?.warehouse }}
+                {{
+                  data?.warehouse
+                    ?.split("")
+                    ?.map(() => "*")
+                    ?.join(" ")
+                }}
               </span>
             </div>
           </div>

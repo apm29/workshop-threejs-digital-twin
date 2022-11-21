@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { queryCurrentUsedFormula } from "~/api/formula";
 import { queryInfluxDb } from "~/api/influx";
+import { getCoarsePowderLineOutput } from "~/api/coarse-powder";
 
 /**
  * 设备状态Store, 定期更新进料数据
@@ -160,11 +161,23 @@ export const useMaterialDeliveryStore = defineStore("material-delivery", () => {
   //定时更新
   useIntervalFn(getDeliveryAmount, 60_000);
 
+
+  //出料数据
+  const coarsePowderOutput = ref({})
+  async function getCoarsePowderLineOutputData() {
+    const res = await getCoarsePowderLineOutput()
+    coarsePowderOutput.value = res.data
+  }
+  onMounted(getCoarsePowderLineOutputData);
+  //定时更新
+  useIntervalFn(getCoarsePowderLineOutputData, 60_000);
+
   return {
     //ref
     lastUpdateTime,
     materialDeliveryData,
     deliveryAmount,
+    coarsePowderOutput
     //computed
 
     //function

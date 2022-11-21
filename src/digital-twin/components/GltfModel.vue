@@ -79,10 +79,10 @@ function loadModel() {
         });
         // obj.material = defaultMaterial;
         // obj.material.map = oldTexture;
-        
+
         obj.material.side = THREE.DoubleSide;
         obj.castShadow = true;
-        // obj.receiveShadow = true;
+        obj.receiveShadow = true;
         //线框
         // const frameObj = new THREE.Mesh(obj.geometry, wireframeMaterial);
         // selectableGroup.add(frameObj)

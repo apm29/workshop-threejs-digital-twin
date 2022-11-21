@@ -6,8 +6,8 @@
           <PostProcess>
             <Controls></Controls>
             <Sky></Sky>
-            <Ground></Ground>
-            <CementGround></CementGround>
+            <!-- <Ground></Ground> -->
+            <!-- <CementGround></CementGround> -->
             <Light></Light>
             <Loading></Loading>
             <Models></Models>

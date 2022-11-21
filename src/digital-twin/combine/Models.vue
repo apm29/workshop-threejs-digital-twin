@@ -2,6 +2,18 @@
   <div>
     <!-- 工厂 -->
     <GltfModel v-if="showOther" path="./glb/建筑.glb"></GltfModel>
+    <GltfModel
+      path="./glb/海岸草地.glb"
+      :position="{
+        y: -0.15,
+      }"
+    ></GltfModel>
+    <GltfModel
+      path="./glb/地面.glb"
+      :position="{
+        y: -0.15,
+      }"
+    ></GltfModel>
     <AxesHelper v-if="showAxesHelper"></AxesHelper>
     <template v-for="modelData of ViewModelData">
       <GltfModel
@@ -41,7 +53,7 @@
       </SpriteLabel>
     </template>
     <!-- <GltfModel
-      path="./animated/animated-cube.glb"
+      path="./glb/黑色横纹金属.glb"
       :position="{
         x: 15,
         y: 0,

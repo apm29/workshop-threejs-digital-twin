@@ -14,69 +14,7 @@ export const useMaterialDeliveryStore = defineStore("material-delivery", () => {
   onMounted(getData);
   //定时更新
   useIntervalFn(getData, 30_000);
-  //测试数据
-  const test = [
-    {
-      "id": 132,
-      "formulaId": 73,
-      "warehouse": "铁红",
-      "warehouseId": "5",
-      "place": "柳钢",
-      "placeId": "71",
-      "batchNo": "",
-      "bucketNum": "1",
-      "formula": "219",
-      "deviation": "0.2"
-    },
-    {
-      "id": 133,
-      "formulaId": 73,
-      "warehouse": "铁红",
-      "warehouseId": "5",
-      "place": "柳钢",
-      "placeId": "71",
-      "batchNo": "",
-      "bucketNum": "2",
-      "formula": "219",
-      "deviation": "0.2"
-    },
-    {
-      "id": 134,
-      "formulaId": 73,
-      "warehouse": "碳酸锶",
-      "warehouseId": "3",
-      "place": "墨西哥",
-      "placeId": "57",
-      "batchNo": "",
-      "bucketNum": "3",
-      "formula": "74",
-      "deviation": "0.2"
-    },
-    {
-      "id": 135,
-      "formulaId": 73,
-      "warehouse": "无水氯化锶",
-      "warehouseId": "6",
-      "place": "元和",
-      "placeId": "76",
-      "batchNo": "",
-      "bucketNum": "4",
-      "formula": "8",
-      "deviation": "0.2"
-    },
-    {
-      "id": 136,
-      "formulaId": 73,
-      "warehouse": "氧化铋",
-      "warehouseId": "7",
-      "place": "铋融汇",
-      "placeId": "81",
-      "batchNo": "",
-      "bucketNum": "5",
-      "formula": "2.5",
-      "deviation": "0.2"
-    }
-  ]
+
   const querys = {
     //桶数
     NP: {
@@ -144,7 +82,7 @@ export const useMaterialDeliveryStore = defineStore("material-delivery", () => {
         const { org, bucket, measurement } = querys[key]
         return queryInfluxDb({
           org, bucket, measurement, range: "-15m"
-        }).then(res => Math.floor(res.data.reverse()[0]?._value ?? 0))
+        }).then(res => Math.floor(res.data.reverse()?.[0]?._value ?? 0))
       }))
     } catch (error) {
       console.log(error);
@@ -170,11 +108,63 @@ export const useMaterialDeliveryStore = defineStore("material-delivery", () => {
 
   }
 
+  //进料数据
+  const querysDelivery = {
+    P1: {
+      org: "atcc",
+      bucket: "JLKZQ",
+      measurement: "N_P1",
+    },
+    P2: {
+      org: "atcc",
+      bucket: "JLKZQ",
+      measurement: "N_P2",
+    },
+    P3: {
+      org: "atcc",
+      bucket: "JLKZQ",
+      measurement: "N_P3",
+    },
+    P4: {
+      org: "atcc",
+      bucket: "JLKZQ",
+      measurement: "N_P4",
+    },
+    P5: {
+      org: "atcc",
+      bucket: "JLKZQ",
+      measurement: "N_P5",
+    },
+  }
+  const deliveryAmount = reactive({})
+  async function getDeliveryAmount() {
+    let progressData = []
+    try {
+      progressData = await Promise.all(Object.keys(querysDelivery).map((key) => {
+        const { org, bucket, measurement } = querysDelivery[key]
+        return queryInfluxDb({
+          org, bucket, measurement, range: "-20m"
+        }).then(res => Math.floor(res.data.reverse()?.[0]?._value ?? 0))
+      }))
+    } catch (error) {
+      console.log(error);
+    }
+    console.log(progressData);
+    deliveryAmount.P1 = progressData[0];
+    deliveryAmount.P2 = progressData[1];
+    deliveryAmount.P3 = progressData[2];
+    deliveryAmount.P4 = progressData[3];
+    deliveryAmount.P5 = progressData[4];
+  }
+  onMounted(getDeliveryAmount);
+  //定时更新
+  useIntervalFn(getDeliveryAmount, 60_000);
+
   return {
     //ref
     lastUpdateTime,
     materialDeliveryData,
-
+    deliveryAmount,
     //computed
 
     //function

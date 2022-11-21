@@ -11,7 +11,7 @@ import GUI from "lil-gui";
 
 const scene = inject(SceneInjectKey);
 const hemiLight = new THREE.HemisphereLight(0xffffff, 0x808080, 0.5);
-hemiLight.position.set(0, 500, 0);
+hemiLight.position.set(0, 300, 0);
 hemiLight.visible = true;
 hemiLight.castShadow = false;
 scene.add(hemiLight);

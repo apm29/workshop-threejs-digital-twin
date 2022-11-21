@@ -174,7 +174,7 @@
         </el-form>
       </SimpleBorder6>
     </ArrowedDrawer>
-    <ArrowedDrawer :value="true" v-if="currentMode === ModeEnum.DEVICE">
+    <ArrowedDrawer :value="false" v-if="currentMode === ModeEnum.DEVICE">
       <SimpleBorder6
         bg="gradient-to-b"
         via="bluegray-700/10"
@@ -223,51 +223,120 @@
         </div>
       </SimpleBorder6>
     </ArrowedDrawer>
-    <div fixed="~" top="20" left="2" flex="~" gap="3" v-if="false">
+    <div fixed="~" top="20" left="2" flex="~" gap="3">
       <SimpleBorder6
         z="30"
         bg="gradient-to-b"
-        via="blue-700/70"
-        from="blue-500/70"
-        to="blue-500/70"
+        via="dark-700/70"
+        from="dark-500/70"
+        to="dark-500/70"
       >
         <div p="x-3 y-2">
           <SimpleNumber
             text="4xl white"
-            prefix="当前生产型号"
-            :value="1434329"
+            prefix="天然气用量"
+            suffix="m³"
+            :value="naturalGasTotal"
           ></SimpleNumber>
         </div>
       </SimpleBorder6>
       <SimpleBorder6
         z="30"
         bg="gradient-to-b"
-        via="blue-700/70"
-        from="blue-500/70"
-        to="blue-500/70"
+        via="dark-700/70"
+        from="dark-500/70"
+        to="dark-500/70"
       >
         <div p="x-3 y-2">
           <SimpleNumber
             text="4xl white"
-            prefix="当前生产型号"
-            :value="1434329"
+            prefix="电力消耗"
+            :value="electricityGasTotal"
+            suffix="kWh"
           ></SimpleNumber>
         </div>
       </SimpleBorder6>
       <SimpleBorder6
         z="30"
         bg="gradient-to-b"
-        via="blue-700/70"
-        from="blue-500/70"
-        to="blue-500/70"
+        via="dark-700/70"
+        from="dark-500/70"
+        to="dark-500/70"
       >
         <div p="x-3 y-2">
-          <SimpleNumber
-            text="4xl white"
-            prefix="当前生产型号"
-            :value="1434329"
-          ></SimpleNumber>
+          <SimpleNumber text="4xl white" prefix="当前生产型号" value="--"></SimpleNumber>
         </div>
+      </SimpleBorder6>
+      <SimpleBorder6
+        z="30"
+        bg="gradient-to-b"
+        via="dark-700/70"
+        from="dark-500/70"
+        to="dark-500/70"
+      >
+        <div flex="~" p="x-3 y-2">
+          <h1 text="blue-400 xl" m="r-2">进料</h1>
+          <div flex="~" gap="6">
+            <div>
+              <h1 text="white xl">P1</h1>
+              <SimpleNumber
+                text="4xl white"
+                suffix="kg"
+                :value="deliveryAmount.P1"
+              ></SimpleNumber>
+            </div>
+            <div>
+              <h1 text="white xl">P2</h1>
+              <SimpleNumber
+                text="4xl white"
+                suffix="kg"
+                :value="deliveryAmount.P2"
+              ></SimpleNumber>
+            </div>
+            <div>
+              <h1 text="white xl">P3</h1>
+              <SimpleNumber
+                text="4xl white"
+                suffix="kg"
+                :value="deliveryAmount.P3"
+              ></SimpleNumber>
+            </div>
+            <div>
+              <h1 text="white xl">P4</h1>
+              <SimpleNumber
+                text="4xl white"
+                suffix="kg"
+                :value="deliveryAmount.P4"
+              ></SimpleNumber>
+            </div>
+            <div>
+              <h1 text="white xl">P5</h1>
+              <SimpleNumber
+                text="4xl white"
+                suffix="kg"
+                :value="deliveryAmount.P5"
+              ></SimpleNumber>
+            </div>
+          </div>
+        </div>
+      </SimpleBorder6>
+    </div>
+    <div fixed="~" bottom="2" left="2" right="2" flex="~" gap="3">
+      <SimpleBorder6
+        z="30"
+        w="full"
+        bg="gradient-to-b"
+        via="dark-300/70"
+        from="dark-500/70"
+        to="dark-500/70"
+      >
+        <iframe
+          id="iframe"
+          src="http://atcc-workshop.ciih.net/charts/#/factory-3/material/daily"
+          frameborder="0"
+          width="100%"
+          height="100%"
+        />
       </SimpleBorder6>
     </div>
   </div>
@@ -302,8 +371,12 @@ import {
   INITIAL_CAMERA_Y,
   INITIAL_CAMERA_Z,
 } from "~/digital-twin/components/axes.js";
-import { useDeviceStatusStore } from "~/store";
-import { useKinStatusStore } from "~/store/kin-status";
+import {
+  useDeviceStatusStore,
+  useKinStatusStore,
+  useEnergyStore,
+  useMaterialDeliveryStore,
+} from "~/store";
 
 const namespace = inject(NameSpaceInjectKey);
 
@@ -522,9 +595,21 @@ watch(animationScale, (scale) => {
   scaleMap.DY_BODY2 = scale;
   scaleMap.DY_BODY3 = scale;
 });
+
+//能耗
+const energyStore = useEnergyStore();
+const { naturalGasTotal, electricityGasTotal } = toRefs(energyStore); //能耗
+
+//投料数据
+const materialDeliveryStore = useMaterialDeliveryStore();
+const { deliveryAmount } = toRefs(materialDeliveryStore);
 </script>
 
 <style lang="scss">
+@font-face {
+  font-family: "DS-DIGI";
+  src: url("./fonts/DS-DIGI.ttf") format("truetype");
+}
 .atcc-workshop {
   .el-form-item__label {
     color: white !important;

@@ -221,7 +221,7 @@ c242.8,0,554.3,0,554.3,0S641.6,21.6,641.6,24.3z"
 <script setup>
 const wrapper = ref();
 const { width, height } = useElementSize(wrapper);
-const color = ref("#235fa7");
+const color = ref("rgba(31, 31, 31, 0.7)");
 const svgStyle = computed(() => {
   const w = width.value;
   return {
@@ -231,7 +231,7 @@ const svgStyle = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-$--dv-shadow: 0 2px 4px rgba(34, 109, 174, 0.45), 0 0 6px rgba(199, 223, 220, 0.35) !default;
+$--dv-shadow: 0 2px 4px rgba(31, 31, 31, 0.7), 0 0 6px rgba(199, 223, 220, 0.35) !default;
 .st0 {
   fill: url(#my-dv-header6-SVGID_1_);
 }

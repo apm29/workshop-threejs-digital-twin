@@ -116,7 +116,8 @@ export default {
   computed: {
     displayValue() {
       if (!this.isNumber(this.value)) {
-        return this.defaultValue ? this.getPercent(this.defaultValue) : "";
+        // return this.defaultValue ? this.getPercent(this.defaultValue) : "";
+        return this.value;
       }
 
       if (this.percentage) {

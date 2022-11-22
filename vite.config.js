@@ -42,7 +42,7 @@ export default defineConfig({
     AutoImport({
       imports: ["vue", "vue/macros", "@vueuse/core", "pinia"],
       dts: true,
-      dirs: ["./src/composables"],
+      dirs: ["src/composables"],
       vueTemplate: true,
     }),
     // Components({

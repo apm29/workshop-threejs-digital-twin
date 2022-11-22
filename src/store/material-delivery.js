@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { queryCurrentUsedFormula } from "~/api/formula";
+import { queryCurrentUsedFormula, getFactory3CoarsePowderLineFormula } from "~/api/formula";
 import { queryInfluxDb } from "~/api/influx";
 import { getCoarsePowderLineOutput } from "~/api/coarse-powder";
 
@@ -172,12 +172,23 @@ export const useMaterialDeliveryStore = defineStore("material-delivery", () => {
   //定时更新
   useIntervalFn(getCoarsePowderLineOutputData, 60_000);
 
+  //当前生产型号
+  const currentProducingFormula = ref()
+  async function getFactory3CoarsePowderLineFormulaData() {
+    const res = await getFactory3CoarsePowderLineFormula()
+    currentProducingFormula.value = res
+  }
+  onMounted(getFactory3CoarsePowderLineFormulaData);
+  //定时更新
+  useIntervalFn(getFactory3CoarsePowderLineFormulaData, 60_000);
+
   return {
     //ref
     lastUpdateTime,
     materialDeliveryData,
     deliveryAmount,
-    coarsePowderOutput
+    coarsePowderOutput,
+    currentProducingFormula
     //computed
 
     //function

@@ -264,7 +264,11 @@
         to="dark-500/70"
       >
         <div p="x-3 y-2">
-          <SimpleNumber text="4xl white" prefix="当前生产型号" value="- -"></SimpleNumber>
+          <SimpleNumber
+            text="4xl white"
+            prefix="当前生产型号"
+            :value="sensitive(currentProducingFormula?.productNo) ?? '- -'"
+          ></SimpleNumber>
         </div>
       </SimpleBorder6>
       <SimpleBorder6
@@ -372,7 +376,7 @@
       >
         <iframe
           id="iframe"
-          src="http://atcc-workshop.ciih.net/charts/#/presentation/material/daily"
+          src="http://atcc-workshop.ciih.net/charts/#/factory-3/material/daily"
           frameborder="0"
           width="100%"
           height="100%"
@@ -406,6 +410,7 @@ import { useThree } from "~/digital-twin/components/three";
 import { useModels } from "~/digital-twin/components/models.js";
 import { ModelData, SpriteData } from "./data.js";
 import { DeviceStatusEnum } from "~/definition";
+import { sensitive } from "~/composables";
 import {
   INITIAL_CAMERA_X,
   INITIAL_CAMERA_Y,
@@ -642,9 +647,12 @@ const { naturalGasTotal, electricityGasTotal } = toRefs(energyStore); //能耗
 
 //投料数据
 const materialDeliveryStore = useMaterialDeliveryStore();
-const { materialDeliveryData, deliveryAmount, coarsePowderOutput } = toRefs(
-  materialDeliveryStore
-);
+const {
+  materialDeliveryData,
+  deliveryAmount,
+  coarsePowderOutput,
+  currentProducingFormula,
+} = toRefs(materialDeliveryStore);
 </script>
 
 <style lang="scss">

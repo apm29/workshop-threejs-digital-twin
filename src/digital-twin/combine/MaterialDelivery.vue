@@ -87,12 +87,7 @@
             >
               <span text="blue-300">产地</span>
               <span text="4xl green-500" font="bold" p="x-3">
-                {{
-                  data?.place
-                    ?.split("")
-                    ?.map(() => "*")
-                    ?.join(" ")
-                }}
+                {{ sensitive(data?.place) }}
               </span>
             </div>
             <div
@@ -104,12 +99,7 @@
             >
               <span text="blue-300">原料</span>
               <span text="4xl green-500" font="bold" p="x-3">
-                {{
-                  data?.warehouse
-                    ?.split("")
-                    ?.map(() => "*")
-                    ?.join(" ")
-                }}
+                {{ sensitive(data?.warehouse) }}
               </span>
             </div>
           </div>
@@ -128,6 +118,7 @@
 
 <script setup>
 import { useMaterialDeliveryStore } from "~/store/material-delivery";
+import { sensitive } from "~/composables";
 import SimpleBorder6 from "~/svg/border/SimpleBorder6.vue";
 import DeviceStatus from "./DeviceStatus.vue";
 import ModelGallery from "./ModelGallery.vue";

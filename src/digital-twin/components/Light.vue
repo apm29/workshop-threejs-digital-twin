@@ -10,18 +10,18 @@ import { SceneInjectKey } from "./inject-keys";
 import GUI from "lil-gui";
 
 const scene = inject(SceneInjectKey);
-const hemiLight = new THREE.HemisphereLight(0xffffff, 0x808080, 0.5);
+const hemiLight = new THREE.HemisphereLight(0xffffff, 0x808080, 0.3);
 hemiLight.position.set(0, 300, 0);
 hemiLight.visible = true;
 hemiLight.castShadow = false;
 scene.add(hemiLight);
 
-const ambientLight = new THREE.AmbientLight(0x909090, 0.7);
+const ambientLight = new THREE.AmbientLight(0x909090, 1);
 ambientLight.castShadow = false;
 scene.add(ambientLight);
 
 const dirLight = new THREE.DirectionalLight(0x909090, 0.7);
-dirLight.position.set(100, 300, 100);
+dirLight.position.set(-100, 300, -100);
 dirLight.visible = true;
 dirLight.castShadow = true;
 dirLight.shadow.mapSize.width = 2048;

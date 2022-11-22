@@ -75,6 +75,7 @@ function loadModel() {
         const oldTexture = obj.material.map;
         const defaultMaterial = new THREE.MeshLambertMaterial({
           color: obj.material.color,
+          map: oldTexture,
           // transparent: false,
         });
         // obj.material = defaultMaterial;

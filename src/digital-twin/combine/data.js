@@ -568,6 +568,36 @@ export const SpriteData = [
   {
     path: "./sprite/3.png",
     position: {
+      x: 23,
+      z: -41.5,
+      y: 12,
+    },
+    viewData: {
+      title: "回转窑-窑尾负压",
+      org: "atcc",
+      bucket: "ControlRoom",
+      measurement: "SJ_YWFY_YL_Get_Pa",
+      range: "-1m",
+      key: "SJ_YWFY_YL_Get_Pa",
+      status: {
+        org: "atcc",
+        bucket: "3fc_cf_sbzt",
+        measurement: "SJ_YWFY_YL_Get_Pa",
+      },
+
+      model: {
+        path: "./centered/窑头.glb",
+        cameraPosition: {
+          x: 8,
+          y: 2,
+          z: 8
+        }
+      }
+    },
+  },
+  {
+    path: "./sprite/3.png",
+    position: {
       x: 23.5,
       z: -1.8,
       y: 2.5,

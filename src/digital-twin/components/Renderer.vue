@@ -25,6 +25,11 @@ const renderer = new THREE.WebGLRenderer({
   alpha: true,
 });
 renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.physicallyCorrectLights = true;
+renderer.toneMappingExposure = 2.5;
+renderer.toneMapping = THREE.ReinhardToneMapping;
+// renderer.environmentMap.encoding = THREE.sRGBEncoding;
 onMounted(() => {
   // renderer.setClearColor(new THREE.Color());
   // renderer.setPixelRatio(Math.max(window.devicePixelRatio, 2));

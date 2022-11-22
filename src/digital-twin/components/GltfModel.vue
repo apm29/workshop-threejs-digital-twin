@@ -69,7 +69,6 @@ function loadModel() {
     emit("update:model", root);
 
     root.name = props.name;
-
     gltf.scene.traverse(function (obj) {
       if (obj instanceof THREE.Mesh) {
         const oldTexture = obj.material.map;

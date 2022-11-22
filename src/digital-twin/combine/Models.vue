@@ -53,7 +53,7 @@
       </SpriteLabel>
     </template>
     <!-- <GltfModel
-      path="./glb/黑色横纹金属.glb"
+      path="./glb/银色点状纹金属.glb"
       :position="{
         x: 15,
         y: 0,

@@ -20,7 +20,7 @@ const ambientLight = new THREE.AmbientLight(0x909090, 1);
 ambientLight.castShadow = false;
 scene.add(ambientLight);
 
-const dirLight = new THREE.DirectionalLight(0x909090, 0.7);
+const dirLight = new THREE.DirectionalLight(0xffffff, 1);
 dirLight.position.set(-100, 300, -100);
 dirLight.visible = true;
 dirLight.castShadow = true;

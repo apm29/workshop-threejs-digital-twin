@@ -1,16 +1,6 @@
 <template>
   <!-- <SimpleBorder fixed="~" top="0" left="0" w="100" h="100"></SimpleBorder> -->
-  <SimpleHeader
-    fixed="~"
-    top="0"
-    left="0"
-    p="b-12"
-    w="100vw"
-    h="auto"
-    bg="gradient-to-b"
-    from="teal-900/70"
-    to="transparent"
-  >
+  <SimpleHeader fixed="~" top="0" left="0" p="b-12" w="auto" h="18">
     安特磁材三分厂数字化
   </SimpleHeader>
 </template>

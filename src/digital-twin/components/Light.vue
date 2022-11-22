@@ -16,16 +16,16 @@ hemiLight.visible = true;
 hemiLight.castShadow = false;
 scene.add(hemiLight);
 
-const ambientLight = new THREE.AmbientLight(0x909090, 1);
+const ambientLight = new THREE.AmbientLight(0x909090, 0.6);
 ambientLight.castShadow = false;
 scene.add(ambientLight);
 
-const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+const dirLight = new THREE.DirectionalLight(0xffffff, 2.5);
 dirLight.position.set(-100, 300, -100);
 dirLight.visible = true;
 dirLight.castShadow = true;
-dirLight.shadow.mapSize.width = 2048;
-dirLight.shadow.mapSize.height = 2048;
+dirLight.shadow.mapSize.width = 2048 * 2;
+dirLight.shadow.mapSize.height = 2048 * 2;
 
 const d2 = 100;
 dirLight.shadow.camera.left = -d2;
@@ -38,9 +38,9 @@ dirLight.shadow.bias = -0.0001;
 scene.add(dirLight);
 
 onBeforeUnmount(() => {
-  // scene.remove(dirLight);
-  // scene.remove(ambientLight);
-  // scene.remove(hemiLight);
+  scene.remove(dirLight);
+  scene.remove(ambientLight);
+  scene.remove(hemiLight);
 });
 </script>
 

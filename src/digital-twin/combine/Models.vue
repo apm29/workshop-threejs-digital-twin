@@ -640,6 +640,16 @@ watch(animationScale, (scale) => {
   scaleMap.DY_BODY2 = scale;
   scaleMap.DY_BODY3 = scale;
 });
+watch(deviceStatus, (deviceStatus) => {
+  scaleMap.C_ZMJ =
+    deviceStatus.find((it) => it.key === "C_ZMJ")?.status === DeviceStatusEnum.NORMAL
+      ? 1
+      : 0;
+  scaleMap.C_CMJ =
+    deviceStatus.find((it) => it.key === "C_CMJ")?.status === DeviceStatusEnum.NORMAL
+      ? 1
+      : 0;
+});
 
 //能耗
 const energyStore = useEnergyStore();

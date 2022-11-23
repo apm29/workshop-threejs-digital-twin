@@ -640,15 +640,18 @@ watch(animationScale, (scale) => {
   scaleMap.DY_BODY2 = scale;
   scaleMap.DY_BODY3 = scale;
 });
-watch(deviceStatus, (deviceStatus) => {
-  scaleMap.C_ZMJ =
-    deviceStatus.find((it) => it.key === "C_ZMJ")?.status === DeviceStatusEnum.NORMAL
+
+function changeAnimationScaleWithKey(key) {
+  scaleMap[key] =
+    deviceStatus.value.find((it) => it.key === key)?.status === DeviceStatusEnum.NORMAL
       ? 1
       : 0;
-  scaleMap.C_CMJ =
-    deviceStatus.find((it) => it.key === "C_CMJ")?.status === DeviceStatusEnum.NORMAL
-      ? 1
-      : 0;
+}
+
+watch(deviceStatus, () => {
+  changeAnimationScaleWithKey("C_ZMJ");
+  changeAnimationScaleWithKey("C_CMJ");
+  changeAnimationScaleWithKey("C_PDJ");
 });
 
 //能耗

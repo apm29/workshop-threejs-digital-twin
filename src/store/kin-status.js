@@ -21,6 +21,7 @@ export const useKinStatusStore = defineStore("kin-status", () => {
     animationScale.value = rpm / animationRpm;
   }
   onMounted(getRotateSpeed)
+  useIntervalFn(getRotateSpeed, 60_000)
   return {
     //ref
     animationScale

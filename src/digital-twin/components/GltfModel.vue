@@ -49,6 +49,7 @@ watch(() => props.path, loadModel, { immediate: true });
 watch(
   () => props.animateScale,
   function (scale) {
+    console.log(props.path, scale);
     if (animationMixer.value) {
       animationMixer.value.timeScale = scale;
     }
@@ -57,7 +58,7 @@ watch(
 
 function loadModel() {
   unload();
-  console.log("load", props.path);
+  // console.log("load", props.path);
   gltfLoader.load(props.path, (gltf) => {
     const root = gltf.scene;
     model.value = root;
@@ -88,7 +89,7 @@ function loadModel() {
         // selectableGroup.add(frameObj)
       }
     });
-    console.log(props.path, gltf.scene);
+    // console.log(props.path, gltf.scene);
     if (gltf.animations && gltf.animations.length) {
       const mixer = new THREE.AnimationMixer(gltf.scene);
       animationMixer.value = mixer;

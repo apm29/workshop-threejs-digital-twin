@@ -376,7 +376,7 @@
       >
         <iframe
           id="iframe"
-          src="http://atcc-workshop.ciih.net/charts/#/factory-3/material/daily"
+          src="http://atcc-workshop.autopaddle.com/charts/#/factory-3/material/daily"
           frameborder="0"
           width="100%"
           height="100%"

@@ -49,12 +49,15 @@ watch(() => props.path, loadModel, { immediate: true });
 watch(
   () => props.animateScale,
   function (scale) {
-    console.log(props.path, scale);
     if (animationMixer.value) {
       animationMixer.value.timeScale = scale;
     }
   }
 );
+
+const parentContainer = computed(() => {
+  return props.selectable ? selectableGroup : scene;
+});
 
 function loadModel() {
   unload();
@@ -62,38 +65,19 @@ function loadModel() {
   gltfLoader.load(props.path, (gltf) => {
     const root = gltf.scene;
     model.value = root;
-    // const wireframeMaterial = new THREE.MeshBasicMaterial({
-    //   color: 0x5356ff,
-    //   wireframe: true,
-    //   transparent: true,
-    // });
     emit("update:model", root);
 
     root.name = props.name;
     gltf.scene.traverse(function (obj) {
       if (obj instanceof THREE.Mesh) {
-        const oldTexture = obj.material.map;
-        const defaultMaterial = new THREE.MeshLambertMaterial({
-          color: obj.material.color,
-          map: oldTexture,
-          // transparent: false,
-        });
-        // obj.material = defaultMaterial;
-        // obj.material.map = oldTexture;
-
         obj.material.side = THREE.DoubleSide;
         obj.castShadow = true;
         obj.receiveShadow = true;
-        //线框
-        // const frameObj = new THREE.Mesh(obj.geometry, wireframeMaterial);
-        // selectableGroup.add(frameObj)
       }
     });
-    // console.log(props.path, gltf.scene);
     if (gltf.animations && gltf.animations.length) {
       const mixer = new THREE.AnimationMixer(gltf.scene);
       animationMixer.value = mixer;
-      console.log(props.path, gltf.animations);
       const clock = new THREE.Clock();
       mixer.timeScale = props.animateScale ?? 1;
       function animate() {
@@ -110,22 +94,14 @@ function loadModel() {
     root.position.y = (props.position?.y ?? 0) + BASE_Y;
     root.position.z = (props.position?.z ?? 0) + BASE_Z;
 
-    if (props.selectable) {
-      selectableGroup.add(root);
-    } else {
-      scene.add(root);
-    }
+    parentContainer.value?.add(root);
   });
 }
 
 function unload() {
   if (model.value) {
     const root = model.value;
-    if (props.selectable) {
-      selectableGroup.remove(root);
-    } else {
-      scene.remove(root);
-    }
+    parentContainer.value?.remove(root);
   }
 }
 

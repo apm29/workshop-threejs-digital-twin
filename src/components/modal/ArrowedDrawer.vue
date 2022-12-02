@@ -72,7 +72,9 @@ const close = {
 const tweenProperty = reactive({
   percent: props.value ? open[props.direction] : close[props.direction],
 });
+console.log(tweenProperty.percent, props.value, props.direction);
 const style = computed(() => {
+  console.log(tweenProperty.percent, props.value, props.direction);
   return {
     transform: `${isVerticalInitial.value ? "translateY" : "translateX"}(${
       tweenProperty.percent

@@ -29,7 +29,6 @@
 import * as THREE from "three";
 import { useThree } from "./three";
 
-
 const props = defineProps({
   namespace: {
     type: String,
@@ -39,7 +38,6 @@ const props = defineProps({
 
 const loaded = ref(0);
 const total = ref(0);
-
 
 const { loading } = useThree(props.namespace);
 

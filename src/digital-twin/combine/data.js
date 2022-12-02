@@ -759,35 +759,35 @@ export const SpriteData = [
       }
     },
   },
-  {
-    path: "./sprite/3.png",
-    position: {
-      x: 20,
-      z: -31.7,
-      y: 2,
-    },
-    viewData: {
-      title: "输送",
-      org: "atcc",
-      bucket: "CFCL",
-      measurement: "C_BZLX",
-      range: "-1m",
-      key: "C_BZLX",
-      status: {
-        org: "atcc",
-        bucket: "3fc_cf_sbzt",
-        measurement: "BZLX_A",
-      },
-      model: {
-        path: "./centered/称量包装机.glb",
-        cameraPosition: {
-          x: 8,
-          y: 1,
-          z: 8
-        }
-      }
-    },
-  },
+  // {
+  //   path: "./sprite/3.png",
+  //   position: {
+  //     x: 20,
+  //     z: -31.7,
+  //     y: 2,
+  //   },
+  //   viewData: {
+  //     title: "输送",
+  //     org: "atcc",
+  //     bucket: "CFCL",
+  //     measurement: "C_BZLX",
+  //     range: "-1m",
+  //     key: "C_BZLX",
+  //     status: {
+  //       org: "atcc",
+  //       bucket: "3fc_cf_sbzt",
+  //       measurement: "BZLX_A",
+  //     },
+  //     model: {
+  //       path: "./centered/称量包装机.glb",
+  //       cameraPosition: {
+  //         x: 8,
+  //         y: 1,
+  //         z: 8
+  //       }
+  //     }
+  //   },
+  // },
   {
     path: "./sprite/3.png",
     position: {

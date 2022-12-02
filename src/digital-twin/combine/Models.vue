@@ -28,6 +28,7 @@
     <template v-if="currentMode === ModeEnum.DEVICE">
       <SpriteLabel
         v-for="spriteData of ViewSpriteData"
+        :key="spriteData.viewData.key"
         :path="`./status/${
           deviceStatus.find((it) => it.key === spriteData.viewData.key)?.status ??
           DeviceStatusEnum.UNKNOWN
@@ -46,7 +47,7 @@
           y: 9.2,
         }"
         :viewData="{
-          stream: 'http://192.168.88.6:8080/stream',
+          stream: 'http://localhost:8080/stream',
         }"
         @click="handleSelectMonitor"
       >
@@ -174,7 +175,7 @@
         </el-form>
       </SimpleBorder6>
     </ArrowedDrawer>
-    <ArrowedDrawer :value="false" v-if="currentMode === ModeEnum.DEVICE">
+    <ArrowedDrawer :value="false" v-if="false">
       <SimpleBorder6
         bg="gradient-to-b"
         via="bluegray-700/10"

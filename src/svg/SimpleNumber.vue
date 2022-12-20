@@ -197,7 +197,7 @@ export default {
 <style lang="scss">
 @font-face {
   font-family: "DS-DIGI";
-  src: url("./fonts/DS-DIGI.ttf") format("truetype");
+  src: url("~/assets/fonts/DS-DIGI.ttf") format("truetype");
 }
 
 .my-number {

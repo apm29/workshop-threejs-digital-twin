@@ -26,7 +26,6 @@
 </template>
 
 <script setup>
-import * as THREE from "three";
 import { useThree } from "./three";
 
 const props = defineProps({
@@ -41,7 +40,8 @@ const total = ref(0);
 
 const { loading } = useThree(props.namespace);
 
-THREE.DefaultLoadingManager.onStart = function (url, itemsLoaded, itemsTotal) {
+const loadingManager = inject("LoadingManager")
+loadingManager.onStart = function (url, itemsLoaded, itemsTotal) {
   // console.log(
   //   "Started loading file: " +
   //     url +
@@ -56,12 +56,12 @@ THREE.DefaultLoadingManager.onStart = function (url, itemsLoaded, itemsTotal) {
   total.value = itemsTotal;
 };
 
-THREE.DefaultLoadingManager.onLoad = function () {
+loadingManager.onLoad = function () {
   console.log("Loading Complete!");
   loading.value = false;
 };
 
-THREE.DefaultLoadingManager.onProgress = function (url, itemsLoaded, itemsTotal) {
+loadingManager.onProgress = function (url, itemsLoaded, itemsTotal) {
   // console.log(
   //   "Loading file: " + url + ".\nLoaded " + itemsLoaded + " of " + itemsTotal + " files."
   // );
@@ -70,7 +70,7 @@ THREE.DefaultLoadingManager.onProgress = function (url, itemsLoaded, itemsTotal)
   total.value = itemsTotal;
 };
 
-THREE.DefaultLoadingManager.onError = function (url) {
+loadingManager.onError = function (url) {
   console.log("There was an error loading " + url);
 };
 </script>

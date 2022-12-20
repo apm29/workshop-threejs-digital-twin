@@ -12,7 +12,6 @@ import {
   GltfLoaderKey,
   TextureLoaderKey,
 } from "./inject-keys";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { BASE_X, BASE_Y, BASE_Z } from "./axes.js";
 
 const selectableGroup = inject(SelectableGroupInjectKey);

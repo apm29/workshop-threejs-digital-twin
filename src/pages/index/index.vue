@@ -6,30 +6,32 @@
     class="atcc-workshop"
     ref="digitalTwinRef"
   >
-    <Renderer h="screen" w="screen">
-      <Camera>
-        <Scene>
-          <PostProcess>
-            <Controls></Controls>
-            <Sky></Sky>
-            <!-- <Ground></Ground> -->
-            <!-- <CementGround></CementGround> -->
-            <Light></Light>
-            <Loading></Loading>
-            <DataProvider>
-              <CoarsePowderLineModels></CoarsePowderLineModels>
-              <FinePowderLineModels></FinePowderLineModels>
-            </DataProvider>
-            <GltfModel
-              path="./glb/海岸草地.glb"
-              :position="{
-                y: -0.15,
-              }"
-            ></GltfModel>
-          </PostProcess>
-        </Scene>
-      </Camera>
-    </Renderer>
+    <LoadingManagerProvider>
+      <Renderer h="screen" w="screen">
+        <Camera>
+          <Scene>
+            <PostProcess>
+              <Controls></Controls>
+              <Sky></Sky>
+              <!-- <Ground></Ground> -->
+              <!-- <CementGround></CementGround> -->
+              <Light></Light>
+              <Loading></Loading>
+              <DataProvider>
+                <CoarsePowderLineModels></CoarsePowderLineModels>
+                <FinePowderLineModels></FinePowderLineModels>
+              </DataProvider>
+              <GltfModel
+                path="./glb/海岸草地.glb"
+                :position="{
+                  y: -0.15,
+                }"
+              ></GltfModel>
+            </PostProcess>
+          </Scene>
+        </Camera>
+      </Renderer>
+    </LoadingManagerProvider>
     <Frame></Frame>
     <el-tooltip content="全屏">
       <button @click="toggleFullscreen" v-if="!isFullscreen" class="fixed right-4 top-4">
@@ -54,6 +56,7 @@ import Controls from "~/digital-twin/components/Controls.vue";
 import PostProcess from "~/digital-twin/components/PostProcess.vue";
 import NameSpace from "~/digital-twin/components/NameSpace.vue";
 import GltfModel from "~/digital-twin/components/GltfModel.vue";
+import LoadingManagerProvider from "~/digital-twin/components/LoadingManagerProvider.vue";
 
 const digitalTwinRef = ref();
 const { isFullscreen, toggle: toggleFullscreen } = useFullscreen(digitalTwinRef);

@@ -1,24 +1,27 @@
 <template>
   <SimpleBorder6 w="48" h="100" p="2">
     <NameSpace h="full" w="full" class="bg-network" namespace="demo">
-      <Renderer h="full" w="full">
-        <Camera :position="cameraPosition">
-          <Scene>
-            <Controls auto-rotate></Controls>
-            <Light></Light>
-            <!-- <AxesHelper></AxesHelper> -->
-            <GltfModel
-              :path="modelPath"
-              :position="{
-                x: -BASE_X,
-                y: -BASE_Y,
-                z: -BASE_Z,
-              }"
-            >
-            </GltfModel>
-          </Scene>
-        </Camera>
-      </Renderer>
+      <LoadingManagerProvider>
+        <Renderer h="full" w="full">
+          <Camera :position="cameraPosition">
+            <Scene>
+              <Controls auto-rotate></Controls>
+              <Light></Light>
+              <!-- <AxesHelper></AxesHelper> -->
+
+              <GltfModel
+                :path="modelPath"
+                :position="{
+                  x: -BASE_X,
+                  y: -BASE_Y,
+                  z: -BASE_Z,
+                }"
+              >
+              </GltfModel>
+            </Scene>
+          </Camera>
+        </Renderer>
+      </LoadingManagerProvider>
     </NameSpace>
   </SimpleBorder6>
 </template>
@@ -34,6 +37,7 @@ import GltfModel from "~/digital-twin/components/GltfModel.vue";
 import Light from "~/digital-twin/components/Light.vue";
 import { BASE_X, BASE_Y, BASE_Z } from "~/digital-twin/components/axes.js";
 import AxesHelper from "~/digital-twin/components/AxesHelper.vue";
+import LoadingManagerProvider from "../components/LoadingManagerProvider.vue";
 
 defineProps({
   cameraPosition: {

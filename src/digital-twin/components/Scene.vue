@@ -37,8 +37,9 @@ const props = defineProps({
 
 const namespace = inject(NameSpaceInjectKey);
 
+const loadingManager = inject("LoadingManager")
 //loaders
-const gltfLoader = new GLTFLoader();
+const gltfLoader = new GLTFLoader(loadingManager);
 provide(GltfLoaderKey, gltfLoader)
 
 const textureLoader = new THREE.TextureLoader()

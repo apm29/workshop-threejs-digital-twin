@@ -6,7 +6,12 @@
 
 <script setup>
 import * as THREE from "three";
-import { SceneInjectKey, SelectableGroupInjectKey } from "./inject-keys";
+import {
+  SceneInjectKey,
+  SelectableGroupInjectKey,
+  GltfLoaderKey,
+  TextureLoaderKey,
+} from "./inject-keys";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { BASE_X, BASE_Y, BASE_Z } from "./axes.js";
 
@@ -32,6 +37,9 @@ const props = defineProps({
   position: {
     type: Object,
   },
+  rotation: {
+    type: Object,
+  },
   animateScale: {
     type: Number,
   },
@@ -39,8 +47,8 @@ const props = defineProps({
 
 const emit = defineEmits(["update:model"]);
 
-const gltfLoader = new GLTFLoader();
-const textureLoader = new THREE.TextureLoader();
+const gltfLoader = inject(GltfLoaderKey);
+const textureLoader = inject(TextureLoaderKey);
 
 const model = ref();
 const animationMixer = ref();
@@ -90,12 +98,26 @@ function loadModel() {
       animate();
     }
 
-    root.position.x = (props.position?.x ?? 0) + BASE_X;
-    root.position.y = (props.position?.y ?? 0) + BASE_Y;
-    root.position.z = (props.position?.z ?? 0) + BASE_Z;
-
+    resetPosition();
+    resetRotation();
     parentContainer.value?.add(root);
   });
+}
+
+function resetPosition() {
+  const root = model.value
+  //位置设置
+  root.position.x = (props.position?.x ?? 0) + BASE_X;
+  root.position.y = (props.position?.y ?? 0) + BASE_Y;
+  root.position.z = (props.position?.z ?? 0) + BASE_Z;
+}
+
+function resetRotation() {
+  const root = model.value
+  //旋转设置
+  root.rotation.x = props.rotation?.x ?? 0;
+  root.rotation.y = props.rotation?.y ?? 0;
+  root.rotation.z = props.rotation?.z ?? 0;
 }
 
 function unload() {
@@ -111,10 +133,16 @@ watch(
   () => props.position,
   () => {
     if (model.value) {
-      const root = model.value;
-      root.position.x = (props.position?.x ?? 0) + BASE_X;
-      root.position.y = (props.position?.y ?? 0) + BASE_Y;
-      root.position.z = (props.position?.z ?? 0) + BASE_Z;
+     resetPosition()
+    }
+  },
+  { deep: true }
+);
+watch(
+  () => props.rotation,
+  () => {
+    if (model.value) {
+     resetRotation()
     }
   },
   { deep: true }

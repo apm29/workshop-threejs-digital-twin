@@ -10,6 +10,7 @@ import {
   SelectableGroupInjectKey,
   RenderLoopInjectKey,
   RegisterSelectHandler,
+  TextureLoaderKey,
 } from "./inject-keys";
 import { useModels } from "~/digital-twin/components/models.js";
 import { BASE_X, BASE_Y, BASE_Z } from "./axes.js";
@@ -36,7 +37,7 @@ const props = defineProps({
 });
 const emit = defineEmits(["click"]);
 
-const textureLoader = new THREE.TextureLoader();
+const textureLoader = inject(TextureLoaderKey);
 
 const texture = textureLoader.load(props.path);
 const material = new THREE.SpriteMaterial({
@@ -46,17 +47,17 @@ const material = new THREE.SpriteMaterial({
 const label = new THREE.Sprite(material);
 label.center.set(0.5, 1);
 label.scale.set(props.size, props.size, 1);
-if (props.position) {
-  label.position.x = (props.position.x || 0) + BASE_X;
-  label.position.y = (props.position.y || 0) + BASE_Y;
-  label.position.z = (props.position.z || 0) + BASE_Z;
-} else {
-  label.position.x = BASE_X;
-  label.position.y = BASE_Y;
-  label.position.z = BASE_Z;
-}
+resetPosition();
 label.userData.viewData = props.viewData;
 selectableGroup.add(label);
+
+watch(() => props.position, resetPosition, { deep: true });
+
+function resetPosition() {
+  label.position.x = (props.position?.x ?? 0) + BASE_X;
+  label.position.y = (props.position?.y ?? 0) + BASE_Y;
+  label.position.z = (props.position?.z ?? 0) + BASE_Z;
+}
 
 // const oldY = label.position.y;
 // let down = true;

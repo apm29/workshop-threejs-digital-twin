@@ -17,7 +17,10 @@ import {
   SelectableGroupInjectKey,
   WidthInjectKey,
   HeightInjectKey,
+  GltfLoaderKey,
+  TextureLoaderKey
 } from "./inject-keys";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 
 import { useThree } from "./three";
@@ -33,6 +36,13 @@ const props = defineProps({
 });
 
 const namespace = inject(NameSpaceInjectKey);
+
+//loaders
+const gltfLoader = new GLTFLoader();
+provide(GltfLoaderKey, gltfLoader)
+
+const textureLoader = new THREE.TextureLoader()
+provide(TextureLoaderKey, textureLoader)
 
 const { setScene, setControl } = useThree(namespace);
 const scene = new THREE.Scene();

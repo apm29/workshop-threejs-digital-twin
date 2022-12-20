@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { DeviceStatus } from "~/digital-twin/combine/data";
+import { DeviceStatus } from "~/digital-twin/combine/device-status";
 import { queryInfluxDb } from "~/api/influx";
 import { DeviceStatusEnum, CraftStatusEnum } from "~/definition";
 
@@ -90,7 +90,6 @@ export const useDeviceStatusStore = defineStore("device-status", () => {
     );
     deviceStatus.value = res;
     lastUpdateTime.value = new Date().getTime();
-    console.log(res);
   }
 
   function getSingleDeviceStatus(key) {

@@ -14,3 +14,6 @@ export const ErrorDeviceGroups = Symbol("ErrorDeviceGroups")
 export const ClosedDeviceGroups = Symbol("ClosedDeviceGroups")
 //注册选择事件
 export const RegisterSelectHandler = Symbol("RegisterSelectHandler")
+//gltf loader
+export const GltfLoaderKey = Symbol("GltfLoader")
+export const TextureLoaderKey = Symbol("TextureLoader")
